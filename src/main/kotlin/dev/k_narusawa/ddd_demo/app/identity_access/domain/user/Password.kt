@@ -1,31 +1,27 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import jakarta.persistence.Embeddable
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 
 @Embeddable
 data class Password private constructor(
   val value: String,
 
   @Transient
-  private var consumed: Boolean
+  private var hashed: Boolean = false,
 ) {
-  init {
-    require(value.isNotBlank()) { "Password cannot be blank." }
-    require(value.length >= 8) { "Password must be at least 8 characters long." }
-  }
-
   companion object {
     fun of(value: String): Password {
-      return Password(value, false)
+      val encoder = Argon2PasswordEncoder(
+        16, // memory cost
+        32, // parallelism
+        1, // iterations
+        64, // hash length
+        32 // salt length
+      )
+      val hashedValue = encoder.encode(value)
+      return Password(value = hashedValue, hashed = true)
     }
-  }
-
-  fun get(): String {
-    if (consumed) {
-      throw IllegalStateException("Password has already been consumed.")
-    }
-    this.consumed = true
-    return value
   }
 
   override fun toString(): String {

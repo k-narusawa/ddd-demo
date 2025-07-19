@@ -40,4 +40,10 @@ class User private constructor(
   ) {
     this.username = newUsername
   }
+
+  fun changePassword(
+    newPassword: Password,
+  ) {
+    this.password = newPassword
+  }
 }

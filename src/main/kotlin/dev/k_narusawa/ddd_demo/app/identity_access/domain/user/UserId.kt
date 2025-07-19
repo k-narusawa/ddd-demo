@@ -16,7 +16,5 @@ data class UserId(
 
   fun get() = value
 
-  override fun toString(): String {
-    return value.toString()
-  }
+  override fun toString() = value
 }
