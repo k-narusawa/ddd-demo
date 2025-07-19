@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ddd-demo
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/ddd
+    username: user
+    password: password
+  flyway:
+    user: user
+    password: password
