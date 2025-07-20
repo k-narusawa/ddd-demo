@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository : JpaRepository<User, UserId> {
   fun save(user: User)
+  fun findByUsername(username: Username): User?
 }

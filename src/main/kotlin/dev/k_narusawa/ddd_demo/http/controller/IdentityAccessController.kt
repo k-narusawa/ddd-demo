@@ -1,6 +1,8 @@
 package dev.k_narusawa.ddd_demo.http.controller
 
+import dev.k_narusawa.ddd_demo.app.identity_access.application.port.LoginInputBoundary
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.RegisterUserInputBoundary
+import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login.LoginInputData
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.registerUser.RegisterUserInputData
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationRequest
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationResponse
@@ -11,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 class IdentityAccessController(
-  private val registerUserInputBoundary: RegisterUserInputBoundary
+  private val registerUserInputBoundary: RegisterUserInputBoundary,
+  private val loginInputBoundary: LoginInputBoundary
 ) {
-  @PostMapping
-  suspend fun post(
+  @PostMapping("/users")
+  suspend fun postUsers(
     @RequestBody
     userRegistrationRequest: UserRegistrationRequest
   ): ResponseEntity<UserRegistrationResponse> {
@@ -31,5 +34,18 @@ class IdentityAccessController(
       username = outputData.username
     )
     return ResponseEntity.ok(response)
+  }
+
+  @PostMapping("/login")
+  suspend fun postLogin(
+    @RequestBody
+    userLoginRequest: UserRegistrationRequest
+  ): ResponseEntity<Void> {
+    val inputData = LoginInputData.of(
+      username = userLoginRequest.username,
+      password = userLoginRequest.password
+    )
+    loginInputBoundary.handle(input = inputData)
+    return ResponseEntity.ok(null)
   }
 }

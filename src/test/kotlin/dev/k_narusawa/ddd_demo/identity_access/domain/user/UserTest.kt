@@ -6,52 +6,84 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserId
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
 class UserTest {
-  @Test
-  @DisplayName("同じIDを持つUserは等価である")
-  fun `test equals and hashCode with same ID`() {
-    // Arrange
-    val userId = UserId.new()
-    val user1 = createUserInstance(userId, "Taro")
-    val user2 = createUserInstance(userId, "Jiro") // 名前が違う
+  @Nested
+  inner class Identifierd {
+    @Test
+    @DisplayName("同じIDを持つUserは等価である")
+    fun `test equals and hashCode with same ID`() {
+      val userId = UserId.new()
+      val user1 = createUserInstance(userId, "Taro")
+      val user2 = createUserInstance(userId, "Jiro")
 
-    // Assert
-    assertEquals(user1, user2, "同じIDを持つUserは等価であるべき")
-    assertEquals(user1.hashCode(), user2.hashCode(), "同じIDを持つUserのhashCodeは同じであるべき")
+      assertEquals(user1, user2, "同じIDを持つUserは等価であるべき")
+      assertEquals(user1.hashCode(), user2.hashCode(), "同じIDを持つUserのhashCodeは同じであるべき")
+    }
+
+    @Test
+    @DisplayName("異なるIDを持つUserは等価ではない")
+    fun `test equals with different IDs`() {
+      val user1 = createUserInstance(UserId.new(), "Taro")
+      val user2 = createUserInstance(UserId.new(), "Taro") // 名前は同じ
+
+      assertNotEquals(user1, user2, "異なるIDを持つUserは等価ではないべき")
+    }
   }
 
-  @Test
-  @DisplayName("異なるIDを持つUserは等価ではない")
-  fun `test equals with different IDs`() {
-    // Arrange
-    val user1 = createUserInstance(UserId.new(), "Taro")
-    val user2 = createUserInstance(UserId.new(), "Taro") // 名前は同じ
+  @Nested
+  inner class Registration {
+    @Test
+    @DisplayName("ユーザー登録ができる")
+    fun `test register`() {
+      val username = Username.of("Taro")
+      val passwordString = "!Password0"
+      val password = Password.of(passwordString)
+      val user = User.register(username, password)
 
-    // Assert
-    assertNotEquals(user1, user2, "異なるIDを持つUserは等価ではないべき")
+      assertEquals(username, user.getUsername(), "ユーザー名が正しく設定されているべき")
+      assertTrue(user.matchPassword(passwordString), "パスワードが正しく設定されているべき")
+    }
   }
 
   @Test
   @DisplayName("ユーザー名を変更できる")
   fun `test changeUsername`() {
-    // Arrange
     val user = createUserInstance(UserId.new(), "Taro")
     val newUsername = Username.of("Jiro")
-
-    // Act
     user.changeUsername(newUsername)
 
-    // Assert
-    assertEquals(newUsername, user.username, "ユーザー名が正しく変更されているべき")
+    assertEquals(newUsername, user.getUsername(), "ユーザー名が正しく変更されているべき")
   }
 
-  /**
-   * リフレクションを使用してUserのインスタンスを生成するヘルパー関数
-   */
+  @Nested
+  inner class PasswordMatching {
+    @Test
+    @DisplayName("パスワードが一致する")
+    fun `test password matches`() {
+      val rawPassword = "!Password0"
+      val password = Password.of(rawPassword)
+      val user = User.register(Username.of("Taro"), password)
+
+      assertTrue(user.matchPassword(rawPassword), "同じパスワードであればtrueを返すべき")
+    }
+
+    @Test
+    @DisplayName("パスワードが一致しない")
+    fun `test password does not match`() {
+      val rawPassword = "!Password0"
+      val anotherRawPassword = "!Password1"
+      val password = Password.of(rawPassword)
+      val user = User.register(Username.of("Taro"), password)
+
+      assertFalse(user.matchPassword(anotherRawPassword), "異なるパスワードであればfalseを返すべき")
+    }
+  }
+
   private fun createUserInstance(id: UserId, name: String): User {
     val constructor = User::class.primaryConstructor!!
     constructor.isAccessible = true

@@ -35,6 +35,14 @@ class User private constructor(
     }
   }
 
+  fun getUsername() = this.username
+
+  fun matchPassword(
+    rawPassword: String,
+  ): Boolean {
+    return this.password.matches(rawPassword)
+  }
+
   fun changeUsername(
     newUsername: Username,
   ) {
@@ -45,5 +53,18 @@ class User private constructor(
     newPassword: Password,
   ) {
     this.password = newPassword
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is User) return false
+
+    if (userId != other.userId) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    return userId.hashCode()
   }
 }

@@ -7,21 +7,26 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 data class Password private constructor(
   val value: String,
 
-  @Transient
-  private var hashed: Boolean = false,
+  @Transient()
+  private var hashed: Boolean = true,
 ) {
   companion object {
+    private val encoder = Argon2PasswordEncoder(
+      16, // memory cost
+      32, // parallelism
+      1, // iterations
+      64, // hash length
+      32 // salt length
+    )
+
     fun of(value: String): Password {
-      val encoder = Argon2PasswordEncoder(
-        16, // memory cost
-        32, // parallelism
-        1, // iterations
-        64, // hash length
-        32 // salt length
-      )
       val hashedValue = encoder.encode(value)
       return Password(value = hashedValue, hashed = true)
     }
+  }
+
+  fun matches(rawPassword: String): Boolean {
+    return encoder.matches(rawPassword, value)
   }
 
   override fun toString(): String {
