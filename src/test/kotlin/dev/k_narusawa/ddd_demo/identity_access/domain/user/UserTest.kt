@@ -13,7 +13,7 @@ import kotlin.reflect.jvm.isAccessible
 
 class UserTest {
   @Nested
-  inner class Identifierd {
+  inner class Identifier {
     @Test
     @DisplayName("同じIDを持つUserは等価である")
     fun `test equals and hashCode with same ID`() {
@@ -46,7 +46,7 @@ class UserTest {
       val user = User.register(username, password)
 
       assertEquals(username, user.getUsername(), "ユーザー名が正しく設定されているべき")
-      assertTrue(user.matchPassword(passwordString), "パスワードが正しく設定されているべき")
+      assertTrue(user.verifyPassword(passwordString), "パスワードが正しく設定されているべき")
     }
   }
 
@@ -69,7 +69,7 @@ class UserTest {
       val password = Password.of(rawPassword)
       val user = User.register(Username.of("Taro"), password)
 
-      assertTrue(user.matchPassword(rawPassword), "同じパスワードであればtrueを返すべき")
+      assertTrue(user.verifyPassword(rawPassword), "同じパスワードであればtrueを返すべき")
     }
 
     @Test
@@ -80,7 +80,10 @@ class UserTest {
       val password = Password.of(rawPassword)
       val user = User.register(Username.of("Taro"), password)
 
-      assertFalse(user.matchPassword(anotherRawPassword), "異なるパスワードであればfalseを返すべき")
+      assertFalse(
+        user.verifyPassword(anotherRawPassword),
+        "異なるパスワードであればfalseを返すべき"
+      )
     }
   }
 

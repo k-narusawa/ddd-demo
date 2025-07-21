@@ -9,3 +9,6 @@ spring:
   flyway:
     user: user
     password: password
+
+  jpa:
+    show-sql: true

@@ -1,11 +1,18 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttempt
+import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import jakarta.persistence.Version
 
 @Entity
 @Table(name = "ddd_user")
@@ -20,7 +27,19 @@ class User private constructor(
 
   @Embedded
   @AttributeOverride(name = "value", column = Column("password"))
-  private var password: Password
+  private var password: Password,
+
+  @OneToOne(
+    fetch = FetchType.EAGER,
+    cascade = [CascadeType.ALL],
+    orphanRemoval = true
+  )
+  @JoinColumn(name = "user_id")
+  private var attempt: LoginAttempt? = null,
+
+  @Version
+  @AttributeOverride(name = "value", column = Column("version"))
+  val version: Long? = null,
 ) {
   companion object {
     fun register(
@@ -37,10 +56,26 @@ class User private constructor(
 
   fun getUsername() = this.username
 
-  fun matchPassword(
+  fun verifyPassword(
     rawPassword: String,
-  ): Boolean {
-    return this.password.matches(rawPassword)
+  ) {
+    val isMatch = this.password.matches(rawPassword = rawPassword)
+    if (attempt == null) attempt = LoginAttempt.new(userId)
+    if (isMatch) {
+      this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
+      this.attempt?.authenticateSuccess()
+    } else {
+      this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
+      this.attempt?.authenticateFailure()
+      throw AuthenticationException(
+        message = "認証に失敗しました",
+        userId = userId
+      )
+    }
+  }
+
+  fun isLock(): Boolean {
+    return attempt?.isLocked() ?: LoginAttempt.new(userId = userId).isLocked()
   }
 
   fun changeUsername(

@@ -1,7 +1,8 @@
-CREATE TABLE ddd_user (
+CREATE TABLE ddd_login_attempt (
   user_id VARCHAR(36) PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
-  password TEXT NOT NULL,
+  failure_count Int NOT NULL,
+  last_attempt_timestamp TIMESTAMP,
+  lock_expiration_timestamp TIMESTAMP,
   version  BIGINT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -10,7 +11,7 @@ CREATE TABLE ddd_user (
 );
 
 CREATE TRIGGER trigger_set_audit_columns
-    BEFORE INSERT OR UPDATE ON ddd_user
+    BEFORE INSERT OR UPDATE ON ddd_login_attempt
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();
 
