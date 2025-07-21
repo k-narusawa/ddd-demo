@@ -1,6 +1,9 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttempt
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationFailedEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationFailedEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationSuccessEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationSuccessEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -58,15 +61,29 @@ class User private constructor(
 
   fun verifyPassword(
     rawPassword: String,
+    userAgent: String,
+    ipAddress: String
   ) {
     val isMatch = this.password.matches(rawPassword = rawPassword)
     if (attempt == null) attempt = LoginAttempt.new(userId)
     if (isMatch) {
       this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
       this.attempt?.authenticateSuccess()
+      val event = AuthenticationSuccessEvent(
+        user = this,
+        userAgent = userAgent,
+        ipAddress = ipAddress
+      )
+      AuthenticationSuccessEventPublisher.publish(event = event)
     } else {
       this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
       this.attempt?.authenticateFailure()
+      val event = AuthenticationFailedEvent(
+        user = this,
+        userAgent = userAgent,
+        ipAddress = ipAddress
+      )
+      AuthenticationFailedEventPublisher.publish(event = event)
       throw AuthenticationException(
         message = "認証に失敗しました",
         userId = userId

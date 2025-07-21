@@ -1,16 +1,16 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login
 
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.LoginInputBoundary
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttemptRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.transaction.Transactional
+import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.stereotype.Service
 
 @Service
+@EnableAsync
 class LoginInteractor(
   private val userRepository: UserRepository,
-  private val loginAttemptRepository: LoginAttemptRepository,
 ) : LoginInputBoundary {
   @Transactional
   override suspend fun handle(input: LoginInputData) {
@@ -18,7 +18,11 @@ class LoginInteractor(
       ?: throw AuthenticationException(message = "認証に失敗しました")
 
     try {
-      user.verifyPassword(rawPassword = input.password)
+      user.verifyPassword(
+        rawPassword = input.password,
+        userAgent = input.userAgent,
+        ipAddress = input.ipAddress
+      )
     } catch (ex: AuthenticationException) {
       if (user.isLock()) {
         throw AuthenticationException(
@@ -30,7 +34,6 @@ class LoginInteractor(
       }
       throw ex
     } finally {
-      println("ほぞんしたい")
       userRepository.save(user = user)
     }
   }

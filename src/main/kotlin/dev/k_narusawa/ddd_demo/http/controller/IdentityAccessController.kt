@@ -6,9 +6,12 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login.Log
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.registerUser.RegisterUserInputData
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationRequest
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationResponse
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -38,12 +41,17 @@ class IdentityAccessController(
 
   @PostMapping("/login")
   suspend fun postLogin(
+    request: HttpServletRequest,
+    @RequestHeader(name = HttpHeaders.USER_AGENT, required = false)
+    userAgent: String,
     @RequestBody
     userLoginRequest: UserRegistrationRequest
   ): ResponseEntity<Void> {
     val inputData = LoginInputData.of(
       username = userLoginRequest.username,
-      password = userLoginRequest.password
+      password = userLoginRequest.password,
+      userAgent = userAgent,
+      remoteAddr = request.remoteAddr
     )
     loginInputBoundary.handle(input = inputData)
     return ResponseEntity.ok(null)

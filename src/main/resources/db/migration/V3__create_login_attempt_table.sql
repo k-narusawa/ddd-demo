@@ -14,4 +14,3 @@ CREATE TRIGGER trigger_set_audit_columns
     BEFORE INSERT OR UPDATE ON ddd_login_attempt
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();
-
