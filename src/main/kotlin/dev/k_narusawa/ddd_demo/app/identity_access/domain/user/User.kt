@@ -44,7 +44,7 @@ class User private constructor(
 
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
-  val version: Long? = null,
+  private val version: Long? = null,
 ) {
   companion object {
     fun register(

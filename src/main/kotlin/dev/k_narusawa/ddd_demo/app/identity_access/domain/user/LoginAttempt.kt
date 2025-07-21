@@ -25,7 +25,7 @@ class LoginAttempt private constructor(
   private var lockExpirationTimestamp: LocalDateTime? = null,
 
   @Version
-  val version: Long? = null,
+  private val version: Long? = null,
 ) {
   companion object {
     private const val LOGIN_ATTEMPT_LIMIT = 5
