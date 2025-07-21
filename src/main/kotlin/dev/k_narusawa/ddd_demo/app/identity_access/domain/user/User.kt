@@ -1,9 +1,11 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationFailedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationFailedEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationSuccessEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationSuccessEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.ChangeUsernameEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationFailedEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationSuccessEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -97,8 +99,17 @@ class User private constructor(
 
   fun changeUsername(
     newUsername: Username,
+    userAgent: String,
+    ipAddress: String
   ) {
     this.username = newUsername
+
+    val event = ChangeUsernameEvent(
+      user = this,
+      ipAddress = ipAddress,
+      userAgent = userAgent
+    )
+    ChangeUsernameEventPublisher.publish(event = event)
   }
 
   fun changePassword(
