@@ -1,30 +1,45 @@
-package dev.k_narusawa.ddd_demo.identity_access.domain.user
+package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.LoginAttempt
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Password
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserId
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationFailedEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationSuccessEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
-import org.junit.jupiter.api.Assertions.*
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkAll
+import io.mockk.verify
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
-@SpringBootTest(
-  classes = kotlin.arrayOf(
-    AuthenticationSuccessEventPublisher::class,
-    AuthenticationFailedEventPublisher::class,
-    ChangeUsernameEventPublisher::class
-  )
-)
 class UserTest {
+  companion object {
+    private const val DUMMY_UA = "dummy_agent"
+    private const val DUMMY_IP = "127.0.0.1"
+  }
+
+  @BeforeEach
+  fun setup() {
+    mockkObject(
+      ChangeUsernameEventPublisher.Companion,
+      AuthenticationSuccessEventPublisher.Companion,
+      AuthenticationFailedEventPublisher.Companion
+    )
+    every { ChangeUsernameEventPublisher.Companion.publish(any()) } returns Unit
+    every { AuthenticationSuccessEventPublisher.Companion.publish(any()) } returns Unit
+    every { AuthenticationFailedEventPublisher.Companion.publish(any()) } returns Unit
+  }
+
+  @AfterEach
+  fun teardown() {
+    unmockkAll()
+  }
+
   @Nested
   inner class Identifier {
     @Test
@@ -40,8 +55,8 @@ class UserTest {
         Username.of("Jiro")
       )
 
-      assertEquals(user1, user2, "同じIDを持つUserは等価であるべき")
-      assertEquals(user1.hashCode(), user2.hashCode(), "同じIDを持つUserのhashCodeは同じであるべき")
+      Assertions.assertEquals(user1, user2)
+      Assertions.assertEquals(user1.hashCode(), user2.hashCode())
     }
 
     @Test
@@ -56,7 +71,7 @@ class UserTest {
         Username.of("Taro")
       )
 
-      assertNotEquals(user1, user2, "異なるIDを持つUserは等価ではないべき")
+      Assertions.assertNotEquals(user1, user2)
     }
   }
 
@@ -64,19 +79,15 @@ class UserTest {
   inner class Registration {
     @Test
     @DisplayName("ユーザー登録ができる")
-    fun `test register`() {
+    fun user_can_create_new_account() {
       val username = Username.of("Taro")
       val passwordString = "!Password0"
       val password = Password.of(passwordString)
       val user = User.register(username, password)
 
-      assertEquals(username, user.getUsername(), "ユーザー名が正しく設定されているべき")
-      assertDoesNotThrow {
-        user.verifyPassword(
-          passwordString,
-          "test-agent",
-          "127.0.0.1"
-        )
+      Assertions.assertEquals(username, user.getUsername())
+      Assertions.assertDoesNotThrow {
+        user.verifyPassword(passwordString, DUMMY_UA, DUMMY_IP)
       }
     }
   }
@@ -85,15 +96,29 @@ class UserTest {
   inner class ChangeUsername {
     @Test
     @DisplayName("ユーザー名を変更できる")
-    fun `test changeUsername`() {
+    fun user_can_change_username() {
       val user = createUserInstance(
         UserId.new(),
         Username.of("Taro")
       )
       val newUsername = Username.of("Jiro")
-      user.changeUsername(newUsername, "test-agent", "127.0.0.1")
+      user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
 
-      assertEquals(newUsername, user.getUsername(), "ユーザー名が正しく変更されているべき")
+      Assertions.assertEquals(newUsername, user.getUsername())
+    }
+
+    @Test
+    @DisplayName("ユーザー名を変更した場合にイベントが発行される")
+    fun when_user_change_username_publish_event() {
+      val user = createUserInstance(
+        UserId.new(),
+        Username.of("Taro")
+      )
+      val newUsername = Username.of("Jiro")
+
+      user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
+
+      verify(exactly = 1) { ChangeUsernameEventPublisher.Companion.publish(any()) }
     }
   }
 
@@ -101,35 +126,27 @@ class UserTest {
   inner class PasswordMatching {
     @Test
     @DisplayName("パスワードが一致する")
-    fun `test password matches`() {
+    fun user_can_verify_password() {
       val rawPassword = "!Password0"
       val password = Password.of(rawPassword)
       val user = User.register(Username.of("Taro"), password)
       createUserInstance()
 
-      assertDoesNotThrow {
-        user.verifyPassword(
-          rawPassword,
-          "test-agent",
-          "127.0.0.1"
-        )
+      Assertions.assertDoesNotThrow {
+        user.verifyPassword(rawPassword, DUMMY_UA, DUMMY_IP)
       }
     }
 
     @Test
-    @DisplayName("パスワードが一致しない")
-    fun `test password does not match`() {
+    @DisplayName("パスワードが一致しない場合に例外が投げられる")
+    fun when_user_mistake_password_throw_exception() {
       val rawPassword = "!Password0"
       val anotherRawPassword = "!Password1"
       val password = Password.of(rawPassword)
       val user = User.register(Username.of("Taro"), password)
 
-      assertThrows(AuthenticationException::class.java) {
-        user.verifyPassword(
-          anotherRawPassword,
-          "test-agent",
-          "127.0.0.1"
-        )
+      Assertions.assertThrows(AuthenticationException::class.java) {
+        user.verifyPassword(anotherRawPassword, DUMMY_UA, DUMMY_IP)
       }
     }
   }
