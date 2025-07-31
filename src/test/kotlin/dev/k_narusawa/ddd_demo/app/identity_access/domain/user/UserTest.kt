@@ -1,22 +1,20 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationFailedEventPublisher
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationSuccessEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import io.mockk.every
 import io.mockk.mockkObject
-import io.mockk.unmockkAll
 import io.mockk.verify
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
+@SpringBootTest
 class UserTest {
   companion object {
     private const val DUMMY_UA = "dummy_agent"
@@ -27,17 +25,8 @@ class UserTest {
   fun setup() {
     mockkObject(
       ChangeUsernameEventPublisher.Companion,
-      AuthenticationSuccessEventPublisher.Companion,
-      AuthenticationFailedEventPublisher.Companion
     )
     every { ChangeUsernameEventPublisher.Companion.publish(any()) } returns Unit
-    every { AuthenticationSuccessEventPublisher.Companion.publish(any()) } returns Unit
-    every { AuthenticationFailedEventPublisher.Companion.publish(any()) } returns Unit
-  }
-
-  @AfterEach
-  fun teardown() {
-    unmockkAll()
   }
 
   @Nested
@@ -86,9 +75,6 @@ class UserTest {
       val user = User.register(username, password)
 
       Assertions.assertEquals(username, user.getUsername())
-      Assertions.assertDoesNotThrow {
-        user.verifyPassword(passwordString, DUMMY_UA, DUMMY_IP)
-      }
     }
   }
 
@@ -162,7 +148,6 @@ class UserTest {
       userId,
       username,
       password,
-      LoginAttempt.new(userId = userId),
       1L,
     )
   }

@@ -1,21 +1,13 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationFailedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.AuthenticationSuccessEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.ChangeUsernameEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationFailedEventPublisher
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.AuthenticationSuccessEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 
@@ -33,14 +25,6 @@ class User private constructor(
   @Embedded
   @AttributeOverride(name = "value", column = Column("password"))
   private var password: Password,
-
-  @OneToOne(
-    fetch = FetchType.EAGER,
-    cascade = [CascadeType.ALL],
-    orphanRemoval = true
-  )
-  @JoinColumn(name = "user_id")
-  private var attempt: LoginAttempt? = null,
 
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
@@ -67,34 +51,12 @@ class User private constructor(
     ipAddress: String
   ) {
     val isMatch = this.password.matches(rawPassword = rawPassword)
-    if (attempt == null) attempt = LoginAttempt.new(userId)
-    if (isMatch) {
-      this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
-      this.attempt?.authenticateSuccess()
-      val event = AuthenticationSuccessEvent(
-        user = this,
-        userAgent = userAgent,
-        ipAddress = ipAddress
-      )
-      AuthenticationSuccessEventPublisher.publish(event = event)
-    } else {
-      this.attempt = (attempt ?: LoginAttempt.new(userId = userId))
-      this.attempt?.authenticateFailure()
-      val event = AuthenticationFailedEvent(
-        user = this,
-        userAgent = userAgent,
-        ipAddress = ipAddress
-      )
-      AuthenticationFailedEventPublisher.publish(event = event)
+    if (!isMatch) {
       throw AuthenticationException(
         message = "認証に失敗しました",
         userId = userId
       )
     }
-  }
-
-  fun isLock(): Boolean {
-    return attempt?.isLocked() ?: LoginAttempt.new(userId = userId).isLocked()
   }
 
   fun changeUsername(

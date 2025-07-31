@@ -14,13 +14,14 @@ data class Password private constructor(
     private val encoder = Argon2PasswordEncoder(
       16, // memory cost
       32, // parallelism
-      1, // iterations
+      100, // iterations
       64, // hash length
       32 // salt length
     )
 
     fun of(value: String): Password {
       val hashedValue = encoder.encode(value)
+        ?: throw IllegalStateException("本来ありえないはずだけどパスワードがNullの可能性がある")
       return Password(value = hashedValue, hashed = true)
     }
   }

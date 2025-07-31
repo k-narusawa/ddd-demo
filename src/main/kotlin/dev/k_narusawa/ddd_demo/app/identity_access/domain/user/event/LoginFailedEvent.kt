@@ -4,7 +4,7 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
 import org.springframework.context.ApplicationEvent
 import java.time.LocalDateTime
 
-data class AuthenticationFailedEvent(
+data class LoginFailedEvent(
   val user: User,
   val userAgent: String,
   val ipAddress: String,
