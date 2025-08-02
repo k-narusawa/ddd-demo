@@ -4,6 +4,8 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.port.LoginInputBo
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.RegisterUserInputBoundary
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login.LoginInputData
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.registerUser.RegisterUserInputData
+import dev.k_narusawa.ddd_demo.http.model.LoginRequest
+import dev.k_narusawa.ddd_demo.http.model.LoginResponse
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationRequest
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationResponse
 import jakarta.servlet.http.HttpServletRequest
@@ -45,15 +47,15 @@ class IdentityAccessController(
     @RequestHeader(name = HttpHeaders.USER_AGENT, required = false)
     userAgent: String,
     @RequestBody
-    userLoginRequest: UserRegistrationRequest
-  ): ResponseEntity<Void> {
-    val inputData = LoginInputData.of(
-      username = userLoginRequest.username,
-      password = userLoginRequest.password,
+    requestBody: LoginRequest
+  ): ResponseEntity<LoginResponse> {
+    val input = LoginInputData.of(
+      username = requestBody.username,
+      password = requestBody.password,
       userAgent = userAgent,
       remoteAddr = request.remoteAddr
     )
-    loginInputBoundary.handle(input = inputData)
-    return ResponseEntity.ok(null)
+    val output = loginInputBoundary.handle(input = input)
+    return ResponseEntity.ok(output.response)
   }
 }

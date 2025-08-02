@@ -2,6 +2,8 @@ package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttempt
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttemptRepository
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.TokenService
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.LoginFailedEventPublisher
@@ -14,14 +16,15 @@ import org.springframework.stereotype.Service
 @Transactional
 class UserService(
   private val userRepository: UserRepository,
-  private val loginAttemptRepository: LoginAttemptRepository
+  private val loginAttemptRepository: LoginAttemptRepository,
+  private val tokenService: TokenService,
 ) {
   fun login(
     username: Username,
     password: String,
     userAgent: String,
     ipAddress: String,
-  ) {
+  ): Token {
     val user = userRepository.findByUsername(username = username)
       ?: throw AuthenticationException(message = "認証に失敗しました")
 
@@ -57,5 +60,7 @@ class UserService(
       ipAddress = ipAddress
     )
     LoginSucceededEventPublisher.publish(event = event)
+
+    return tokenService.generateToken(userId = user.userId)
   }
 }

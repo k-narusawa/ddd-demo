@@ -12,3 +12,12 @@ spring:
 
   jpa:
     show-sql: true
+
+environment:
+  identity_access:
+    access_token:
+      secret: secret
+      expires_in: 3600 # 1時間
+    refresh_token:
+      secret: secret
+      expires_in: 3456000 # 30日

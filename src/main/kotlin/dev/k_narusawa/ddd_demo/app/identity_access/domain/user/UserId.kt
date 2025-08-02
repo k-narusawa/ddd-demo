@@ -12,6 +12,8 @@ data class UserId(
     fun new(): UserId {
       return UserId(value = UUID.randomUUID().toString())
     }
+
+    fun from(value: String) = UserId(value = value)
   }
 
   fun get() = value
