@@ -51,11 +51,13 @@ class Token private constructor(
         tokenId = TokenId.generate(),
         userId = userId,
         accessToken = AccessToken.generate(
+          tokenId = TokenId.generate(),
           userId = userId,
           secret = accessTokenSecret,
           expiresIn = accessTokenExpiresIn
         ),
         refreshToken = RefreshToken.generate(
+          tokenId = TokenId.generate(),
           userId = userId,
           secret = refreshTokenSecret,
           expiresIn = refreshTokenExpiresIn

@@ -9,7 +9,7 @@ import jakarta.persistence.Embeddable
 import java.util.*
 
 @Embeddable
-class RefreshToken private constructor(
+data class RefreshToken private constructor(
   private val value: String,
 
   @Transient()
@@ -19,6 +19,7 @@ class RefreshToken private constructor(
     private val log = logger()
 
     fun generate(
+      tokenId: TokenId,
       userId: UserId,
       secret: String,
       expiresIn: Long
@@ -27,6 +28,7 @@ class RefreshToken private constructor(
       val expiration = Date(now.time + (expiresIn * 1000))
       val algorithm = Algorithm.HMAC256(secret)
       val tokenString = JWT.create()
+        .withJWTId(tokenId.get())
         .withSubject(userId.get())
         .withExpiresAt(expiration)
         .sign(algorithm)

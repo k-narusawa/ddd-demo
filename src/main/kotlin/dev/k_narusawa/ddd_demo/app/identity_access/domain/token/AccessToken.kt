@@ -10,7 +10,7 @@ import java.util.*
 
 
 @Embeddable
-class AccessToken(
+data class AccessToken private constructor(
   private val value: String,
 
   @Transient()
@@ -20,6 +20,7 @@ class AccessToken(
     private val log = logger()
 
     fun generate(
+      tokenId: TokenId,
       userId: UserId,
       secret: String,
       expiresIn: Long
@@ -28,6 +29,7 @@ class AccessToken(
       val expiration = Date(now.time + (expiresIn * 1000))
       val algorithm = Algorithm.HMAC256(secret)
       val tokenString = JWT.create()
+        .withJWTId(tokenId.get())
         .withSubject(userId.get())
         .withExpiresAt(expiration)
         .sign(algorithm)
