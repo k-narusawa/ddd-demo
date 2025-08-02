@@ -7,7 +7,10 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 class DatabaseCleanupListener : AbstractTestExecutionListener() {
   companion object {
     private val targetTables = listOf(
-      "ddd_users"
+      "ddd_user",
+      "ddd_login_attempt",
+      "ddd_activity_log",
+      "ddd_token"
     )
   }
 
