@@ -45,11 +45,7 @@ class User private constructor(
 
   fun getUsername() = this.username
 
-  fun verifyPassword(
-    rawPassword: String,
-    userAgent: String,
-    ipAddress: String
-  ) {
+  fun verifyPassword(rawPassword: String) {
     val isMatch = this.password.matches(rawPassword = rawPassword)
     if (!isMatch) {
       throw AuthenticationException(

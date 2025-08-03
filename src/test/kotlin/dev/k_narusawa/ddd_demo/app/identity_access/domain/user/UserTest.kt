@@ -119,7 +119,7 @@ class UserTest {
       createUserInstance()
 
       Assertions.assertDoesNotThrow {
-        user.verifyPassword(rawPassword, DUMMY_UA, DUMMY_IP)
+        user.verifyPassword(rawPassword)
       }
     }
 
@@ -132,7 +132,7 @@ class UserTest {
       val user = User.register(Username.of("Taro"), password)
 
       Assertions.assertThrows(AuthenticationException::class.java) {
-        user.verifyPassword(anotherRawPassword, DUMMY_UA, DUMMY_IP)
+        user.verifyPassword(anotherRawPassword)
       }
     }
   }

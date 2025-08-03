@@ -29,11 +29,7 @@ class UserService(
       ?: throw AuthenticationException(message = "認証に失敗しました")
 
     try {
-      user.verifyPassword(
-        rawPassword = password,
-        userAgent = userAgent,
-        ipAddress = ipAddress
-      )
+      user.verifyPassword(rawPassword = password)
     } catch (ex: AuthenticationException) {
       val event = LoginFailedEvent(
         user = user,
