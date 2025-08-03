@@ -1,10 +1,10 @@
 plugins {
-  kotlin("jvm") version "2.2.0"
-  kotlin("plugin.spring") version "2.2.0"
-  id("org.springframework.boot") version "4.0.0-SNAPSHOT"
-  id("io.spring.dependency-management") version "1.1.7"
-  kotlin("plugin.jpa") version "2.2.0"
-  id("org.flywaydb.flyway") version "11.10.2"
+  alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.kotlin.spring)
+  alias(libs.plugins.spring.boot)
+  alias(libs.plugins.spring.dependency.management)
+  alias(libs.plugins.kotlin.jpa)
+  alias(libs.plugins.flyway)
 }
 
 group = "dev.k-narusawa"
@@ -23,36 +23,36 @@ repositories {
 }
 
 dependencies {
-  implementation("org.flywaydb:flyway-core")
-  implementation("org.flywaydb:flyway-database-postgresql")
-  runtimeOnly("org.postgresql:postgresql")
-  implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.security:spring-security-crypto")
-  implementation("org.bouncycastle:bcprov-jdk18on:1.81")
-  implementation("com.auth0:java-jwt:4.5.0")
+  implementation(libs.flyway.core)
+  implementation(libs.flyway.database.postgresql)
+  runtimeOnly(libs.postgresql)
+  implementation(libs.spring.boot.starter.data.jdbc)
+  implementation(libs.spring.boot.starter.data.jpa)
+  implementation(libs.spring.boot.starter.web)
+  implementation(libs.spring.security.crypto)
+  implementation(libs.bouncycastle.prov)
+  implementation(libs.java.jwt)
 
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+  implementation(libs.jackson.module.kotlin)
+  implementation(libs.kotlin.reflect)
+  implementation(libs.kotlin.stdlib)
+  implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.coroutines.reactive)
+  implementation(libs.kotlinx.coroutines.reactor)
 
-  runtimeOnly("org.flywaydb:flyway-core:11.10.2")
-  runtimeOnly("org.flywaydb:flyway-database-postgresql:11.10.2")
+  runtimeOnly(libs.flyway.core)
+  runtimeOnly(libs.flyway.database.postgresql)
 
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-  testImplementation("org.springframework.security:spring-security-test")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-  testImplementation("io.mockk:mockk:1.14.5")
+  testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.kotlin.test.junit5)
+  testImplementation(libs.spring.security.test)
+  testRuntimeOnly(libs.junit.platform.launcher)
+  testImplementation(libs.mockk)
 }
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:11.10.2")
+    classpath(libs.flyway.database.postgresql)
   }
 }
 
