@@ -18,6 +18,7 @@ import org.springframework.test.context.TestExecutionListeners
 
 @SpringBootTest
 @TestExecutionListeners(listeners = [DatabaseCleanupListener::class])
+@DisplayName("ユースケース_ログイン")
 class LoginInteractorTest @Autowired constructor(
   private val userRepository: UserRepository,
   private val loginInteractor: LoginInteractor

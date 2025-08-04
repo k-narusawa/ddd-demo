@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
 
+@DisplayName("ドメイン_値オブジェクト_ユーザID")
 class UserIdTest {
   @Nested
   @DisplayName("インスタンス化")

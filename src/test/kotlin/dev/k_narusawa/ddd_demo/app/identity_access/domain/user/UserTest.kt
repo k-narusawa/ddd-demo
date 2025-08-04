@@ -12,6 +12,7 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 import kotlin.test.assertEquals
 
+@DisplayName("ドメイン_集約_ユーザ")
 class UserTest {
   companion object {
     private const val DUMMY_UA = "dummy_agent"
