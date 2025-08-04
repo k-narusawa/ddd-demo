@@ -6,10 +6,9 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.TokenService
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.LoginFailedEventPublisher
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.LoginSucceededEventPublisher
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.transaction.Transactional
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,6 +17,7 @@ class UserService(
   private val userRepository: UserRepository,
   private val loginAttemptRepository: LoginAttemptRepository,
   private val tokenService: TokenService,
+  private val applicationEventPublisher: ApplicationEventPublisher
 ) {
   fun canSignup(username: Username): Boolean {
     val existsUser = userRepository.findByUsername(username = username)
@@ -41,7 +41,7 @@ class UserService(
         userAgent = userAgent,
         ipAddress = ipAddress
       )
-      LoginFailedEventPublisher.publish(event = event)
+      applicationEventPublisher.publishEvent(event)
       val attempt = loginAttemptRepository.findByUserId(userId = user.userId)
         ?: LoginAttempt.new(userId = user.userId)
       if (attempt.isLocked()) {
@@ -60,7 +60,7 @@ class UserService(
       userAgent = userAgent,
       ipAddress = ipAddress
     )
-    LoginSucceededEventPublisher.publish(event = event)
+    applicationEventPublisher.publishEvent(event)
 
     return tokenService.generateToken(userId = user.userId)
   }
