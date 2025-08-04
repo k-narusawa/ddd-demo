@@ -60,7 +60,7 @@ class LoginInteractorTest @Autowired constructor(
   }
 
   private fun createUser(username: String, password: String) {
-    val user = User.register(
+    val user = User.signup(
       username = Username.of(value = username),
       password = Password.of(value = password)
     )

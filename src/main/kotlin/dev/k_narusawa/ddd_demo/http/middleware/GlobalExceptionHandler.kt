@@ -1,6 +1,7 @@
 package dev.k_narusawa.ddd_demo.http.middleware
 
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
+import dev.k_narusawa.ddd_demo.app.identity_access.exception.SignupException
 import dev.k_narusawa.ddd_demo.http.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.http.ResponseEntity
@@ -11,6 +12,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
   companion object {
     private val log = logger()
+  }
+
+  @ExceptionHandler(SignupException::class)
+  fun handleSignupException(ex: SignupException): ResponseEntity<ErrorResponse> {
+    log.warn("ユーザのサインアップに失敗しました", ex)
+    val response = ErrorResponse(
+      title = "ユーザのサインアップに失敗",
+      detail = ex.message ?: "An error occurred due to invalid input",
+    )
+
+    return ResponseEntity
+      .status(400)
+      .header("Content-Type", "application/problem+json")
+      .body(response)
   }
 
   @ExceptionHandler(AuthenticationException::class)

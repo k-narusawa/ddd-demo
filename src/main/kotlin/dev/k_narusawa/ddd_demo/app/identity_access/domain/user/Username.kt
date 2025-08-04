@@ -19,7 +19,5 @@ data class Username private constructor(
 
   fun get() = value
 
-  override fun toString(): String {
-    return value
-  }
+  override fun toString() = "********"
 }

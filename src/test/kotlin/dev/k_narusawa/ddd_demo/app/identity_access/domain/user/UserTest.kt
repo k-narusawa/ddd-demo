@@ -1,32 +1,21 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
-import io.mockk.every
-import io.mockk.mockkObject
-import io.mockk.verify
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+import org.junit.jupiter.api.assertInstanceOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
+import kotlin.test.assertEquals
 
-@SpringBootTest
 class UserTest {
   companion object {
     private const val DUMMY_UA = "dummy_agent"
     private const val DUMMY_IP = "127.0.0.1"
-  }
-
-  @BeforeEach
-  fun setup() {
-    mockkObject(
-      ChangeUsernameEventPublisher.Companion,
-    )
-    every { ChangeUsernameEventPublisher.Companion.publish(any()) } returns Unit
   }
 
   @Nested
@@ -72,7 +61,7 @@ class UserTest {
       val username = Username.of("Taro")
       val passwordString = "!Password0"
       val password = Password.of(passwordString)
-      val user = User.register(username, password)
+      val user = User.signup(username, password)
 
       Assertions.assertEquals(username, user.getUsername())
     }
@@ -90,7 +79,7 @@ class UserTest {
       val newUsername = Username.of("Jiro")
       user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
 
-      Assertions.assertEquals(newUsername, user.getUsername())
+      assertEquals(newUsername, user.getUsername())
     }
 
     @Test
@@ -103,8 +92,9 @@ class UserTest {
       val newUsername = Username.of("Jiro")
 
       user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
-
-      verify(exactly = 1) { ChangeUsernameEventPublisher.Companion.publish(any()) }
+      val events = user.getEvents()
+      assertEquals(events.size, 1)
+      assertInstanceOf<UsernameChangedEvent>(events[0])
     }
   }
 
@@ -115,7 +105,7 @@ class UserTest {
     fun user_can_verify_password() {
       val rawPassword = "!Password0"
       val password = Password.of(rawPassword)
-      val user = User.register(Username.of("Taro"), password)
+      val user = User.signup(Username.of("Taro"), password)
       createUserInstance()
 
       Assertions.assertDoesNotThrow {
@@ -129,7 +119,7 @@ class UserTest {
       val rawPassword = "!Password0"
       val anotherRawPassword = "!Password1"
       val password = Password.of(rawPassword)
-      val user = User.register(Username.of("Taro"), password)
+      val user = User.signup(Username.of("Taro"), password)
 
       Assertions.assertThrows(AuthenticationException::class.java) {
         user.verifyPassword(anotherRawPassword)
@@ -149,6 +139,7 @@ class UserTest {
       username,
       password,
       1L,
+      mutableListOf<DomainEvent>()
     )
   }
 }

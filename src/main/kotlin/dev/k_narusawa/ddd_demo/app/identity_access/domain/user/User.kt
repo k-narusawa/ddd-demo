@@ -1,7 +1,7 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.ChangeUsernameEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.publisher.ChangeUsernameEventPublisher
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -29,9 +29,12 @@ class User private constructor(
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
+
+  @Transient
+  private val events: MutableList<DomainEvent> = mutableListOf()
 ) {
   companion object {
-    fun register(
+    fun signup(
       username: Username,
       password: Password
     ): User {
@@ -44,6 +47,7 @@ class User private constructor(
   }
 
   fun getUsername() = this.username
+  fun getEvents() = this.events.toList()
 
   fun verifyPassword(rawPassword: String) {
     val isMatch = this.password.matches(rawPassword = rawPassword)
@@ -62,12 +66,12 @@ class User private constructor(
   ) {
     this.username = newUsername
 
-    val event = ChangeUsernameEvent(
+    val event = UsernameChangedEvent(
       user = this,
       ipAddress = ipAddress,
       userAgent = userAgent
     )
-    ChangeUsernameEventPublisher.publish(event = event)
+    events.add(element = event)
   }
 
   fun changePassword(

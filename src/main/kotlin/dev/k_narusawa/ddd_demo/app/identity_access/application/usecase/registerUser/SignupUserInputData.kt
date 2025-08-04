@@ -3,15 +3,15 @@ package dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.register
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Password
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
 
-data class RegisterUserInputData private constructor(
+data class SignupUserInputData private constructor(
   val username: Username,
-  val password: String
+  val password: Password
 ) {
   companion object {
-    fun of(username: String, password: String): RegisterUserInputData {
-      return RegisterUserInputData(
+    fun of(username: String, password: String): SignupUserInputData {
+      return SignupUserInputData(
         username = Username.of(value = username),
-        password = password
+        password = Password.of(value = password)
       )
     }
   }

@@ -19,6 +19,11 @@ class UserService(
   private val loginAttemptRepository: LoginAttemptRepository,
   private val tokenService: TokenService,
 ) {
+  fun canSignup(username: Username): Boolean {
+    val existsUser = userRepository.findByUsername(username = username)
+    return existsUser == null
+  }
+
   fun login(
     username: Username,
     password: String,
