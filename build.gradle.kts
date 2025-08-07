@@ -25,6 +25,8 @@ repositories {
 dependencies {
   implementation(libs.flyway.core)
   implementation(libs.flyway.database.postgresql)
+  implementation(libs.spring.boot.starter.kafka)
+  testImplementation("org.springframework.kafka:spring-kafka-test")
   runtimeOnly(libs.postgresql)
   implementation(libs.spring.boot.starter.data.jdbc)
   implementation(libs.spring.boot.starter.data.jpa)
@@ -44,6 +46,7 @@ dependencies {
   runtimeOnly(libs.flyway.database.postgresql)
 
   testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.spring.boot.starter.kafka)
   testImplementation(libs.kotlin.test.junit5)
   testImplementation(libs.spring.security.test)
   testRuntimeOnly(libs.junit.platform.launcher)
