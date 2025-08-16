@@ -81,7 +81,7 @@ class UsernameTest {
   inner class Equality {
     @Test
     @DisplayName("同じ値を持つインスタンスは等価である")
-    fun `instances with same value are equal`() {
+    fun instances_with_same_value_are_equal() {
       val username1 = Username.of("test@example.com")
       val username2 = Username.of("test@example.com")
 
@@ -91,7 +91,7 @@ class UsernameTest {
 
     @Test
     @DisplayName("異なる値を持つインスタンスは等価ではない")
-    fun `instances with different values are not equal`() {
+    fun instances_with_different_values_are_not_equal() {
       val username1 = Username.of("test1@example.com")
       val username2 = Username.of("test2@example.com")
 

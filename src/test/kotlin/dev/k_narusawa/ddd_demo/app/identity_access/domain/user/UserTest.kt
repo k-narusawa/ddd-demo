@@ -130,7 +130,7 @@ class UserTest {
   private fun createUserInstance(
     userId: UserId = UserId.new(),
     username: Username = Username.of("dummy@example.com"),
-    password: Password = Password.of("dummy")
+    password: Password = Password.of("!Password0")
   ): User {
     val constructor = User::class.primaryConstructor!!
     constructor.isAccessible = true

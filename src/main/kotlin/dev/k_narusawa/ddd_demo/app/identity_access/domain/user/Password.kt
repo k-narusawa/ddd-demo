@@ -20,6 +20,9 @@ data class Password private constructor(
     )
 
     fun of(value: String): Password {
+      require(value = value.isNotBlank()) { "Password can not be blank." }
+      require(value = value.length >= 8) { "Password more than 8 words." }
+
       val hashedValue = encoder.encode(value)
         ?: throw IllegalStateException("本来ありえないはずだけどパスワードがNullの可能性がある")
       return Password(value = hashedValue, hashed = true)
@@ -30,7 +33,18 @@ data class Password private constructor(
     return encoder.matches(rawPassword, value)
   }
 
-  override fun toString(): String {
-    return "********"
+  override fun toString() = "********"
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Password) return false
+
+    if (this.value === other.value) return true
+    if (this.hashed === other.hashed) return true
+    return false
+  }
+
+  override fun hashCode(): Int {
+    return this.hashed.hashCode()
   }
 }
