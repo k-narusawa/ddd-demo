@@ -1,8 +1,8 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -121,7 +121,7 @@ class UserTest {
       val password = Password.of(rawPassword)
       val user = User.signup(Username.of("taro@example.com"), password)
 
-      Assertions.assertThrows(AuthenticationException::class.java) {
+      Assertions.assertThrows(LoginFailed::class.java) {
         user.verifyPassword(anotherRawPassword)
       }
     }

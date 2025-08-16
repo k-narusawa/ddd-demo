@@ -1,12 +1,13 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.AccountLock
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttempt
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttemptRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.TokenService
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.transaction.Transactional
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -19,7 +20,7 @@ class UserService(
   private val tokenService: TokenService,
   private val applicationEventPublisher: ApplicationEventPublisher
 ) {
-  fun canSignup(username: Username): Boolean {
+  fun isExists(username: Username): Boolean {
     val existsUser = userRepository.findByUsername(username = username)
     return existsUser == null
   }
@@ -31,11 +32,11 @@ class UserService(
     ipAddress: String,
   ): Token {
     val user = userRepository.findByUsername(username = username)
-      ?: throw AuthenticationException(message = "認証に失敗しました")
+      ?: throw LoginFailed(message = "認証に失敗しました")
 
     try {
       user.verifyPassword(rawPassword = password)
-    } catch (ex: AuthenticationException) {
+    } catch (ex: LoginFailed) {
       val event = LoginFailedEvent(
         user = user,
         userAgent = userAgent,
@@ -45,11 +46,9 @@ class UserService(
       val attempt = loginAttemptRepository.findByUserId(userId = user.userId)
         ?: LoginAttempt.new(userId = user.userId)
       if (attempt.isLocked()) {
-        throw AuthenticationException(
-          message = "アカウントロック中",
+        throw AccountLock(
           cause = ex,
           userId = user.userId,
-          isLock = true
         )
       }
       throw ex

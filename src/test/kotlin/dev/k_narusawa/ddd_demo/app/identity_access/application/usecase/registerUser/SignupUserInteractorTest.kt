@@ -1,11 +1,11 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.registerUser
 
+import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.UsernameAlreadyExists
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Password
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserService
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.SignupException
 import dev.k_narusawa.ddd_demo.executionListener.DatabaseCleanupListener
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
@@ -47,7 +47,7 @@ class SignupUserInteractorTest @Autowired constructor(
       createUser(username = "test@example.com", password = "!Password0")
       val input = SignupUserInputData.of(username.get(), "!Password0")
 
-      assertThrows(SignupException::class.java) {
+      assertThrows(UsernameAlreadyExists::class.java) {
         runBlocking {
           signupUserInteractor.handle(input)
         }

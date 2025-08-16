@@ -1,10 +1,10 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login
 
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Password
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import dev.k_narusawa.ddd_demo.executionListener.DatabaseCleanupListener
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
@@ -54,7 +54,7 @@ class LoginInteractorTest @Autowired constructor(
         remoteAddr = "192.168.0.1"
       )
 
-      Assertions.assertThrows(AuthenticationException::class.java) {
+      Assertions.assertThrows(LoginFailed::class.java) {
         runBlocking { loginInteractor.handle(input = input) }
       }
     }

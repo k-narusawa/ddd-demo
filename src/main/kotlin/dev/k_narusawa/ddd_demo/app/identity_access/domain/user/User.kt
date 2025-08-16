@@ -1,8 +1,8 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -52,7 +52,7 @@ class User private constructor(
   fun verifyPassword(rawPassword: String) {
     val isMatch = this.password.matches(rawPassword = rawPassword)
     if (!isMatch) {
-      throw AuthenticationException(
+      throw LoginFailed(
         message = "認証に失敗しました",
         userId = userId
       )

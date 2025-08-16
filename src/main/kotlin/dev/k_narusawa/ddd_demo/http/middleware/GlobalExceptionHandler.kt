@@ -1,7 +1,10 @@
 package dev.k_narusawa.ddd_demo.http.middleware
 
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.AuthenticationException
-import dev.k_narusawa.ddd_demo.app.identity_access.exception.SignupException
+import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.IdentityAccessApplicationException
+import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.UsernameAlreadyExists
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.AccountLock
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.IdentityAccessDomainException
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.http.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.http.ResponseEntity
@@ -14,37 +17,79 @@ class GlobalExceptionHandler {
     private val log = logger()
   }
 
-  @ExceptionHandler(SignupException::class)
-  fun handleSignupException(ex: SignupException): ResponseEntity<ErrorResponse> {
-    log.warn("ユーザのサインアップに失敗しました", ex)
-    val response = ErrorResponse(
-      title = "ユーザのサインアップに失敗",
-      detail = ex.message ?: "An error occurred due to invalid input",
-    )
+  @ExceptionHandler(IdentityAccessDomainException::class)
+  fun handleDomainException(ex: IdentityAccessDomainException): ResponseEntity<ErrorResponse> {
+    when (ex) {
+      is LoginFailed -> {
+        log.warn("ログインに失敗しました", ex.message)
+        val response = ErrorResponse(
+          title = "ログインに失敗",
+          detail = ex.message ?: "An error occurred due to invalid input",
+        )
 
-    return ResponseEntity
-      .status(400)
-      .header("Content-Type", "application/problem+json")
-      .body(response)
+        return ResponseEntity
+          .status(401)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+
+      is AccountLock -> {
+        log.warn("アカウントがロックされています", ex.message)
+        val response = ErrorResponse(
+          title = "アカウントロック中",
+          detail = ex.message ?: "An error occurred due to invalid input",
+        )
+
+        return ResponseEntity
+          .status(401)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+
+      else -> {
+        log.error("予期せぬエラーが発生しました", ex.message)
+        val response = ErrorResponse(
+          title = "予期せぬエラーが発生しました",
+          detail = ex.message ?: "An error occurred due to invalid input",
+        )
+
+        return ResponseEntity
+          .status(500)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+    }
   }
 
-  @ExceptionHandler(AuthenticationException::class)
-  fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ErrorResponse> {
-    log.warn("認証に失敗しました", ex)
-    val response = ErrorResponse(
-      title = "Authentication Failed",
-      detail = ex.message ?: "An error occurred due to invalid input",
-      code = when (ex.isLock) {
-        true -> ""
-        false -> ""
-        null -> ""
-      }
-    )
+  @ExceptionHandler(IdentityAccessApplicationException::class)
+  fun handleApplicationException(ex: IdentityAccessApplicationException): ResponseEntity<ErrorResponse> {
+    when (ex) {
+      is UsernameAlreadyExists -> {
+        log.warn("すでに登録ずみのUsernameです", ex.message)
+        val response = ErrorResponse(
+          title = "サインアップに失敗しました",
+          detail = "サインアップに失敗しました"
+        )
 
-    return ResponseEntity
-      .status(401)
-      .header("Content-Type", "application/problem+json")
-      .body(response)
+        return ResponseEntity
+          .status(400)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+
+      else -> {
+        log.error("予期せぬエラーが発生しました", ex.message)
+        val response = ErrorResponse(
+          title = "予期せぬエラーが発生しました",
+          detail = ex.message ?: "An error occurred due to invalid input",
+        )
+
+        return ResponseEntity
+          .status(500)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+    }
   }
 
   @ExceptionHandler(IllegalArgumentException::class)
