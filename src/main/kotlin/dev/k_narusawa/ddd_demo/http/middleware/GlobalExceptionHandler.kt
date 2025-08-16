@@ -5,6 +5,7 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.Usernam
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.AccountLock
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.IdentityAccessDomainException
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.TokenUnauthorized
 import dev.k_narusawa.ddd_demo.http.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.http.ResponseEntity
@@ -23,8 +24,8 @@ class GlobalExceptionHandler {
       is LoginFailed -> {
         log.warn("ログインに失敗しました", ex.message)
         val response = ErrorResponse(
-          title = "ログインに失敗",
-          detail = ex.message ?: "An error occurred due to invalid input",
+          title = "unauthorized",
+          detail = "unauthorized",
         )
 
         return ResponseEntity
@@ -36,8 +37,21 @@ class GlobalExceptionHandler {
       is AccountLock -> {
         log.warn("アカウントがロックされています", ex.message)
         val response = ErrorResponse(
-          title = "アカウントロック中",
-          detail = ex.message ?: "An error occurred due to invalid input",
+          title = "account is locked.",
+          detail = "account id locked.",
+        )
+
+        return ResponseEntity
+          .status(401)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+
+      is TokenUnauthorized -> {
+        log.warn("認証に失敗しました", ex.message)
+        val response = ErrorResponse(
+          title = "token is invalid.",
+          detail = "token is invalid.",
         )
 
         return ResponseEntity
@@ -67,8 +81,8 @@ class GlobalExceptionHandler {
       is UsernameAlreadyExists -> {
         log.warn("すでに登録ずみのUsernameです", ex.message)
         val response = ErrorResponse(
-          title = "サインアップに失敗しました",
-          detail = "サインアップに失敗しました"
+          title = "signup failed.",
+          detail = "signup failed."
         )
 
         return ResponseEntity

@@ -9,6 +9,7 @@ javaJwt = "4.5.0"
 mockk = "1.14.5"
 jakartaMail = "2.1.3"
 angusMail = "2.0.3"
+kotlinResult = "2.1.0"
 
 [libraries]
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
@@ -29,6 +30,7 @@ kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutin
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
 jakarta-mail-api = { module = "jakarta.mail:jakarta.mail-api", version.ref = "jakartaMail" }
 angus-mail = { module = "org.eclipse.angus:angus-mail", version.ref = "angusMail" }
+kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version.ref = "kotlinResult" }
 
 # Test dependencies
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }

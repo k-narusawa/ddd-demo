@@ -76,6 +76,13 @@ class Token private constructor(
     return duration.toSeconds()
   }
 
+  fun isActive(): Boolean {
+    if (this.isRevoked !== false) return false
+
+    val duration = Duration.between(LocalDateTime.now(), this.accessTokenExpiration)
+    return duration.toSeconds() > 0
+  }
+
   fun revoke() {
     this.isRevoked = true
   }

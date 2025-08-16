@@ -3,6 +3,7 @@ package dev.k_narusawa.ddd_demo.app.identity_access.domain.token
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.TokenUnauthorized
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserId
 import dev.k_narusawa.ddd_demo.util.logger
 import jakarta.persistence.Embeddable
@@ -45,7 +46,7 @@ data class AccessToken private constructor(
         return AccessToken(value = jwt, userId = UserId.from(value = decoded.subject))
       } catch (ex: JWTVerificationException) {
         log.warn("アクセストークンの検証に失敗", ex)
-        throw ex
+        throw TokenUnauthorized(cause = ex)
       }
     }
   }

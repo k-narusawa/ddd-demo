@@ -36,6 +36,7 @@ dependencies {
   implementation(libs.java.jwt)
   implementation(libs.jakarta.mail.api)
   runtimeOnly(libs.angus.mail)
+  implementation(libs.kotlin.result)
 
   implementation(libs.jackson.module.kotlin)
   implementation(libs.kotlin.reflect)
