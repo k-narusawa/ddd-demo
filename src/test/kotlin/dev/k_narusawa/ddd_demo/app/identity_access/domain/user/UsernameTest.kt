@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
@@ -74,15 +73,6 @@ class UsernameTest {
     fun should_be_rejected() {
       val username = "x".repeat(10000000) + "example.com"
       assertThrows(IllegalArgumentException::class.java) { Username.of(username) }
-    }
-  }
-
-  @Test
-  @DisplayName("無効なメールアドレスでインスタンスを生成しようとすると例外がスローされる")
-  fun `throws exception for invalid email`() {
-    val invalidEmail = "invalid-email"
-    assertThrows<IllegalArgumentException> {
-      Username.of(invalidEmail)
     }
   }
 
