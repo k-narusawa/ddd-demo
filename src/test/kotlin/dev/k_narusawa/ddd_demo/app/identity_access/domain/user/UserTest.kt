@@ -23,7 +23,7 @@ class UserTest {
   inner class Identifier {
     @Test
     @DisplayName("同じUserIdを持つUserは等価である")
-    fun `test equals and hashCode with same ID`() {
+    fun test_equals_and_hashCode_with_same_ID() {
       val userId = UserId.new()
       val user1 = createUserInstance(
         userId,
@@ -40,7 +40,7 @@ class UserTest {
 
     @Test
     @DisplayName("異なるUserIdを持つUserは等価ではない")
-    fun `test equals with different IDs`() {
+    fun test_equals_with_different_IDs() {
       val user1 = createUserInstance(
         UserId.new(),
         Username.of("taro@example.com")
