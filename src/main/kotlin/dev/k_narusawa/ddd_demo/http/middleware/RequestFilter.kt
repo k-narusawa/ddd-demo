@@ -47,5 +47,4 @@ class RequestFilter : OncePerRequestFilter() {
     val path = request.requestURI
     return excludeUrlRegexList.any { path.matches(it) }
   }
-
 }

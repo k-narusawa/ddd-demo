@@ -1,4 +1,4 @@
-package dev.k_narusawa.ddd_demo.http.model
+package dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

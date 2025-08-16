@@ -1,12 +1,12 @@
 package dev.k_narusawa.ddd_demo.http.middleware
 
+import dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.IdentityAccessApplicationException
 import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.UsernameAlreadyExists
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.AccountLock
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.IdentityAccessDomainException
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.TokenUnauthorized
-import dev.k_narusawa.ddd_demo.http.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
