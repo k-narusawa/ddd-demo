@@ -5,7 +5,11 @@ CREATE TABLE ddd_task_event (
     occurred_by VARCHAR(36) NOT NULL,
     occurred_on TIMESTAMP NOT NULL,
     version BIGINT,
-    FOREIGN KEY (task_id) REFERENCES ddd_task(task_id),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_by TEXT NOT NULL DEFAULT CURRENT_USER,
+    updated_by TEXT NOT NULL DEFAULT CURRENT_USER,
+    FOREIGN KEY (task_id) REFERENCES ddd_task(task_id)
 );
 
 CREATE TRIGGER trigger_set_audit_columns
