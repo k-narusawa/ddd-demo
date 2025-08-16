@@ -1,28 +1,26 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
+import jakarta.mail.internet.AddressException
+import jakarta.mail.internet.InternetAddress
 import jakarta.persistence.Embeddable
 import java.io.Serializable
-import jakarta.mail.internet.InternetAddress
-import jakarta.mail.internet.AddressException
 
 @Embeddable
 data class Username private constructor(
   private val value: String
 ) : Serializable {
   init {
-    require(value.isNotBlank()) { "Username cannot be blank." }
+    require(value.isNotBlank()) { "Usernameは空にできません" }
     try {
       val emailAddr = InternetAddress(value)
       emailAddr.validate()
     } catch (e: AddressException) {
-      throw IllegalArgumentException("Invalid email address format.")
+      throw IllegalArgumentException("メールアドレスの形式が不正です")
     }
   }
 
   companion object {
-    fun of(value: String): Username {
-      return Username(value)
-    }
+    fun of(value: String) = Username(value)
   }
 
   fun get() = value

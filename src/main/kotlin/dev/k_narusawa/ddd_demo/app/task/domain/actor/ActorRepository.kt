@@ -1,0 +1,8 @@
+package dev.k_narusawa.ddd_demo.app.task.domain.actor
+
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface ActorRepository : JpaRepository<Actor, ActorId> {
+}

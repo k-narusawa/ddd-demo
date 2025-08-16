@@ -1,0 +1,22 @@
+package dev.k_narusawa.ddd_demo.app.task.domain.team
+
+import jakarta.persistence.Embeddable
+import java.io.Serializable
+import java.util.*
+
+@Embeddable
+data class TeamId(
+  private val value: String
+) : Serializable {
+  companion object {
+    fun new(): TeamId {
+      return TeamId(value = UUID.randomUUID().toString())
+    }
+
+    fun from(value: String) = TeamId(value = value)
+  }
+
+  fun get() = value
+
+  override fun toString() = value
+}
