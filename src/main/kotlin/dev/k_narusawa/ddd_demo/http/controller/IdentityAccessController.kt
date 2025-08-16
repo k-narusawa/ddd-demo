@@ -3,7 +3,7 @@ package dev.k_narusawa.ddd_demo.http.controller
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.LoginInputBoundary
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.SignupUserInputBoundary
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.login.LoginInputData
-import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.registerUser.SignupUserInputData
+import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInputData
 import dev.k_narusawa.ddd_demo.http.model.LoginRequest
 import dev.k_narusawa.ddd_demo.http.model.LoginResponse
 import dev.k_narusawa.ddd_demo.http.model.UserRegistrationRequest

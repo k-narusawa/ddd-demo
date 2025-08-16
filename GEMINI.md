@@ -59,3 +59,19 @@
 ##### 実装例
 
 - `package dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UsernameTest`を参考にしてください。
+
+### 結合テスト
+
+- 他のクラスに依存するクラスは全て統合テストとして扱います。
+- 基本的にはテストダブルの利用はせずに、実際の依存を利用してテストを実装してください。
+- 統合テストの対象になるのは、ドメインサービス、アプリケーションサービスなどの他のクラス（リポジトリなど）に依存するクラスです。
+- テスト対象のクラスには`@SpringBootTest`を付与してください。
+- またDBへの依存（リポジトリやクエリサービスへの依存）がある場合には、DBの初期化を行うために`@TestExecutionListeners(listeners = [DatabaseCleanupListener::class])
+  `を利用してください。
+
+#### 実装例
+
+-
+
+`dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInteractorTest`
+を参考にしてください。
