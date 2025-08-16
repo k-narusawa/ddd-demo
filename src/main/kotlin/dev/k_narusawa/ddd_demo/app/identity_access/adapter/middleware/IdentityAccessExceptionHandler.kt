@@ -1,4 +1,4 @@
-package dev.k_narusawa.ddd_demo.http.middleware
+package dev.k_narusawa.ddd_demo.app.identity_access.adapter.middleware
 
 import dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model.ErrorResponse
 import dev.k_narusawa.ddd_demo.app.identity_access.application.exception.IdentityAccessApplicationException
@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-@RestControllerAdvice
-class GlobalExceptionHandler {
+@RestControllerAdvice(basePackages = ["dev.k_narusawa.ddd_demo.app.identity_access"])
+class IdentityAccessExceptionHandler {
   companion object {
     private val log = logger()
   }
@@ -22,7 +22,7 @@ class GlobalExceptionHandler {
   fun handleDomainException(ex: IdentityAccessDomainException): ResponseEntity<ErrorResponse> {
     when (ex) {
       is LoginFailed -> {
-        log.warn("ログインに失敗しました", ex.message)
+        log.warn("ログインに失敗しました userId: ${ex.userId?.get()}")
         val response = ErrorResponse(
           title = "unauthorized",
           detail = "unauthorized",
@@ -35,7 +35,7 @@ class GlobalExceptionHandler {
       }
 
       is AccountLock -> {
-        log.warn("アカウントがロックされています", ex.message)
+        log.warn("アカウントがロックされています userId: ${ex.userId?.get()}")
         val response = ErrorResponse(
           title = "account is locked.",
           detail = "account id locked.",
@@ -48,7 +48,7 @@ class GlobalExceptionHandler {
       }
 
       is TokenUnauthorized -> {
-        log.warn("認証に失敗しました", ex.message)
+        log.warn("認証に失敗しました", ex)
         val response = ErrorResponse(
           title = "token is invalid.",
           detail = "token is invalid.",
@@ -61,7 +61,7 @@ class GlobalExceptionHandler {
       }
 
       else -> {
-        log.error("予期せぬエラーが発生しました", ex.message)
+        log.error("予期せぬエラーが発生しました", ex)
         val response = ErrorResponse(
           title = "予期せぬエラーが発生しました",
           detail = ex.message ?: "An error occurred due to invalid input",
