@@ -1,29 +1,6 @@
-# 実でDDDを参考に実装をしてみるプロジェクト
+# テスト
 
-## 実装
-
-### エンティティ
-
-#### 概要
-
-- エンティティには、`jakarta.persistence.Entity`の`@Entity`の付与が必須である。
-- エンティティは、識別子を持つことが必須であり、識別子は値オブジェクトとして、`@EmbeddedId`の付与が必須である。
-- エンティティは、識別子が同一であれば同一のエンティティとみなされる必要があるため、`equals`と
-  `hashCode`のオーバーライドが必須である。
-- エンティティは、`src/main/kotlin/dev/k_narusawa/ddd_demo/app/identity_access/domain/user/User.kt`
-  を参考に作成すること。
-
-### 値オブジェクト
-
-- 値オブジェクトには、`jakarta.persistence.Embeddable`の`@Embeddable`の付与が必須である。
-- data classを利用してクラスを作成する。
-- 必要な条件があれば、initの中でrequireで値のチェックを行う。
-- クラスのコンストラクタはprivateにして、プロパティは基本的には`value`
-  のみとする。また、valueの可視性はprivateにし、専用のgetterを用意する。
-
-## テスト
-
-### 単体テスト
+## 単体テスト
 
 - テストはAAA(3A)パターンにしてください。AAAパターンとは以下の3つのパターンで構成されるテストケースになります。
     - 準備(Arrange)フェーズ
@@ -38,16 +15,16 @@
     - 空行を挿入はしてください。
 - テスト対象システムの変数名はsut(System Under Test)にしてください。
 
-#### 集約・エンティティ
+### 集約・エンティティ
 
 - 対象のエンティティの持つ振る舞いについてのテストを行う
 - イベントの発行機能を行う場合にには、`@SpringBootTest`をクラスに付与して実施する
 
-##### 実装例
+#### 実装例
 
 - `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserTest`を参考にしてください。
 
-#### 値オブジェクト
+### 値オブジェクト
 
 - コンストラクタに同じ値を設定して作成したインスタンスが同一のものであることを確認する。
 - 初期化に伴う以下のパターンをテストをこなうこと
@@ -56,11 +33,11 @@
     - 異常値テスト
     - 極端値テスト
 
-##### 実装例
+#### 実装例
 
 - `package dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UsernameTest`を参考にしてください。
 
-### 結合テスト
+## 結合テスト
 
 - 他のクラスに依存するクラスは全て統合テストとして扱います。
 - 基本的にはテストダブルの利用はせずに、実際の依存を利用してテストを実装してください。
@@ -69,9 +46,7 @@
 - またDBへの依存（リポジトリやクエリサービスへの依存）がある場合には、DBの初期化を行うために`@TestExecutionListeners(listeners = [DatabaseCleanupListener::class])
   `を利用してください。
 
-#### 実装例
+### 実装例
 
--
-
-`dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInteractorTest`
-を参考にしてください。
+- `dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInteractorTest`
+  を参考にしてください。
