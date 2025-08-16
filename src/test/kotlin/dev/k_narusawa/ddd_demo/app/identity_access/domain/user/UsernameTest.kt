@@ -5,26 +5,84 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class UsernameTest {
   @Nested
-  @DisplayName("インスタンス化")
-  inner class Instantiation {
-    @Test
-    @DisplayName("有効なメールアドレスでインスタンスを生成できる")
-    fun `can instantiate with valid email`() {
-      val email = "test@example.com"
-      val username = Username.of(email)
-      assertEquals(email, username.get())
+  @DisplayName("正常値テスト")
+  inner class Normal {
+    @ParameterizedTest
+    @DisplayName("正常系")
+    @ValueSource(
+      strings = [
+        "test@exmaple.com",
+        "test01@example.com",
+      ]
+    )
+    fun should_be_valid_username(username: String) {
+      assertDoesNotThrow { Username.of(username) }
+    }
+  }
+
+  @Nested
+  @DisplayName("境界値テスト")
+  inner class BoundaryValue {
+    @DisplayName("正常系")
+    @ParameterizedTest
+    @ValueSource(
+      strings = [
+        "1234567890123456789012345678901234567890123456789012345678901234" + "@example.com"
+      ]
+    )
+    fun should_be_accepted(username: String) {
+      assertDoesNotThrow { Username.of(username) }
     }
 
+    @DisplayName("異常系")
+    @ParameterizedTest
+    @ValueSource(
+      strings = [
+        "()@example.com",
+      ]
+    )
+    fun should_be_rejected(username: String) {
+      assertThrows(IllegalArgumentException::class.java) { Username.of(username) }
+    }
+  }
+
+  @Nested
+  @DisplayName("異常値テスト")
+  inner class Abnormal {
+    @DisplayName("異常系")
+    @ParameterizedTest
+    @ValueSource(
+      strings = [
+        "08012345678",
+      ]
+    )
+    fun should_be_rejected(username: String) {
+      assertThrows(IllegalArgumentException::class.java) { Username.of(username) }
+    }
+  }
+
+  @Nested
+  @DisplayName("極端値テスト")
+  inner class ExtremeValue {
+    @DisplayName("異常系")
     @Test
-    @DisplayName("無効なメールアドレスでインスタンスを生成しようとすると例外がスローされる")
-    fun `throws exception for invalid email`() {
-      val invalidEmail = "invalid-email"
-      assertThrows<IllegalArgumentException> {
-        Username.of(invalidEmail)
-      }
+    fun should_be_rejected() {
+      val username = "x".repeat(10000000) + "example.com"
+      assertThrows(IllegalArgumentException::class.java) { Username.of(username) }
+    }
+  }
+
+  @Test
+  @DisplayName("無効なメールアドレスでインスタンスを生成しようとすると例外がスローされる")
+  fun `throws exception for invalid email`() {
+    val invalidEmail = "invalid-email"
+    assertThrows<IllegalArgumentException> {
+      Username.of(invalidEmail)
     }
   }
 
