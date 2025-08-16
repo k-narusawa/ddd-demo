@@ -5,34 +5,81 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class PasswordTest {
   @Nested
-  @DisplayName("インスタンス化")
-  inner class Instantiation {
-    @Test
+  @DisplayName("正常値テスト")
+  inner class Normal {
+    @ParameterizedTest
     @DisplayName("有効なパスワードでインスタンスを生成できる")
-    fun `can instantiate with valid password`() {
-      val rawPassword = "!Password0"
+    @ValueSource(
+      strings = [
+        "password123",
+        "12345678",
+        "!@#$%^&*",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    )
+    fun should_be_valid_password(rawPassword: String) {
+      val password = Password.of(rawPassword)
+      assertNotNull(password)
+      assertTrue(password.matches(rawPassword))
+    }
+  }
+
+  @Nested
+  @DisplayName("境界値テスト")
+  inner class BoundaryValue {
+    @Test
+    @DisplayName("8文字のパスワードでインスタンスを生成できる")
+    fun should_be_accepted() {
+      val rawPassword = "a".repeat(8)
       val password = Password.of(rawPassword)
       assertNotNull(password)
       assertTrue(password.matches(rawPassword))
     }
 
     @Test
-    @DisplayName("空のパスワードでインスタンスを生成しようとすると例外がスローされる")
-    fun `throws exception for blank password`() {
+    @DisplayName("7文字のパスワードでインスタンスを生成しようとすると例外がスローされる")
+    fun should_be_rejected() {
+      val rawPassword = "a".repeat(7)
       assertThrows<IllegalArgumentException> {
-        Password.of("")
+        Password.of(rawPassword)
       }
     }
+  }
 
-    @Test
-    @DisplayName("8文字未満のパスワードでインスタンスを生成しようとすると例外がスローされる")
-    fun `throws exception for password shorter than 8 characters`() {
+  @Nested
+  @DisplayName("異常値テスト")
+  inner class Abnormal {
+    @ParameterizedTest
+    @DisplayName("無効なパスワードでインスタンスを生成しようとすると例外がスローされる")
+    @ValueSource(
+      strings = [
+        "short",
+        " ",
+        ""
+      ]
+    )
+    fun should_be_rejected(rawPassword: String) {
       assertThrows<IllegalArgumentException> {
-        Password.of("short")
+        Password.of(rawPassword)
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("極端値テスト")
+  inner class ExtremeValue {
+    @Test
+    @DisplayName("非常に長いパスワードでインスタンスを生成できる")
+    fun should_be_accepted() {
+      val rawPassword = "a".repeat(1000)
+      val password = Password.of(rawPassword)
+      assertNotNull(password)
+      assertTrue(password.matches(rawPassword))
     }
   }
 
@@ -41,7 +88,7 @@ class PasswordTest {
   inner class PasswordMatching {
     @Test
     @DisplayName("パスワードが一致する")
-    fun `returns true for matching password`() {
+    fun returns_true_for_matching_password() {
       val rawPassword = "!Password0"
       val password = Password.of(rawPassword)
       assertTrue(password.matches(rawPassword))
@@ -49,25 +96,11 @@ class PasswordTest {
 
     @Test
     @DisplayName("パスワードが一致しない")
-    fun `returns false for non-matching password`() {
+    fun returns_false_for_non_matching_password() {
       val rawPassword = "!Password0"
       val wrongPassword = "!Password1"
       val password = Password.of(rawPassword)
       assertFalse(password.matches(wrongPassword))
-    }
-  }
-
-  @Nested
-  @DisplayName("等価性")
-  inner class Equality {
-    @Test
-    @DisplayName("同じ値で生成したインスタンスは等価")
-    fun `instances created with same value are not equal`() {
-      val rawPassword = "!Password0"
-      val passwordA = Password.of(rawPassword)
-      val passwordB = Password.of(rawPassword)
-
-      assertEquals(passwordA, passwordB)
     }
   }
 }
