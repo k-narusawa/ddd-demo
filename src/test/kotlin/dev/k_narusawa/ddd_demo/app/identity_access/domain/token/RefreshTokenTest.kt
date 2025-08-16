@@ -1,6 +1,6 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.token
 
-import com.auth0.jwt.exceptions.JWTVerificationException
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.TokenUnauthorized
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserId
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -52,7 +52,7 @@ class RefreshTokenTest {
     @Test
     @DisplayName("不正なJWTでfromJwtを呼び出すと例外がスローされる")
     fun `fromJwt with invalid jwt throws exception`() {
-      assertThrows(JWTVerificationException::class.java) {
+      assertThrows(TokenUnauthorized::class.java) {
         RefreshToken.fromJwt("invalid_jwt", SECRET)
       }
     }
