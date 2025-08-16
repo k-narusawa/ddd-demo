@@ -7,6 +7,8 @@ postgresql = "42.7.3"
 bouncycastle = "1.81"
 javaJwt = "4.5.0"
 mockk = "1.14.5"
+jakartaMail = "2.1.3"
+angusMail = "2.0.3"
 
 [libraries]
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
@@ -25,6 +27,8 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
 kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive" }
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
+jakarta-mail-api = { module = "jakarta.mail:jakarta.mail-api", version.ref = "jakartaMail" }
+angus-mail = { module = "org.eclipse.angus:angus-mail", version.ref = "angusMail" }
 
 # Test dependencies
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }

@@ -27,11 +27,11 @@ class UserTest {
       val userId = UserId.new()
       val user1 = createUserInstance(
         userId,
-        Username.of("Taro")
+        Username.of("taro@example.com")
       )
       val user2 = createUserInstance(
         userId,
-        Username.of("Jiro")
+        Username.of("jiro@example.com")
       )
 
       Assertions.assertEquals(user1, user2)
@@ -43,11 +43,11 @@ class UserTest {
     fun `test equals with different IDs`() {
       val user1 = createUserInstance(
         UserId.new(),
-        Username.of("Taro")
+        Username.of("taro@example.com")
       )
       val user2 = createUserInstance(
         UserId.new(),
-        Username.of("Taro")
+        Username.of("taro@example.com")
       )
 
       Assertions.assertNotEquals(user1, user2)
@@ -59,7 +59,7 @@ class UserTest {
     @Test
     @DisplayName("ユーザー登録ができる")
     fun user_can_create_new_account() {
-      val username = Username.of("Taro")
+      val username = Username.of("taro@example.com")
       val passwordString = "!Password0"
       val password = Password.of(passwordString)
       val user = User.signup(username, password)
@@ -75,9 +75,9 @@ class UserTest {
     fun user_can_change_username() {
       val user = createUserInstance(
         UserId.new(),
-        Username.of("Taro")
+        Username.of("taro@example.com")
       )
-      val newUsername = Username.of("Jiro")
+      val newUsername = Username.of("jiro@example.com")
       user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
 
       assertEquals(newUsername, user.getUsername())
@@ -88,9 +88,9 @@ class UserTest {
     fun when_user_change_username_publish_event() {
       val user = createUserInstance(
         UserId.new(),
-        Username.of("Taro")
+        Username.of("taro@example.com")
       )
-      val newUsername = Username.of("Jiro")
+      val newUsername = Username.of("jiro@example.com")
 
       user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
       val events = user.getEvents()
@@ -106,8 +106,7 @@ class UserTest {
     fun user_can_verify_password() {
       val rawPassword = "!Password0"
       val password = Password.of(rawPassword)
-      val user = User.signup(Username.of("Taro"), password)
-      createUserInstance()
+      val user = User.signup(Username.of("taro@example.com"), password)
 
       Assertions.assertDoesNotThrow {
         user.verifyPassword(rawPassword)
@@ -120,7 +119,7 @@ class UserTest {
       val rawPassword = "!Password0"
       val anotherRawPassword = "!Password1"
       val password = Password.of(rawPassword)
-      val user = User.signup(Username.of("Taro"), password)
+      val user = User.signup(Username.of("taro@example.com"), password)
 
       Assertions.assertThrows(AuthenticationException::class.java) {
         user.verifyPassword(anotherRawPassword)
@@ -130,7 +129,7 @@ class UserTest {
 
   private fun createUserInstance(
     userId: UserId = UserId.new(),
-    username: Username = Username.of("dummy"),
+    username: Username = Username.of("dummy@example.com"),
     password: Password = Password.of("dummy")
   ): User {
     val constructor = User::class.primaryConstructor!!

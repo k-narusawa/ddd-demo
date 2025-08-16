@@ -31,7 +31,7 @@ class SignupUserInteractorTest @Autowired constructor(
     @Test
     @DisplayName("ユーザー登録が成功する")
     fun signup_succeeds() = runBlocking {
-      val username = Username.of("testuser")
+      val username = Username.of("test@example.com")
       val input = SignupUserInputData.of(username.get(), "!Password0")
 
       val sut = signupUserInteractor.handle(input)
@@ -43,8 +43,8 @@ class SignupUserInteractorTest @Autowired constructor(
     @Test
     @DisplayName("既に存在するユーザー名を登録しようとすると例外がスローされる")
     fun signup_with_existing_username_throws_exception() {
-      val username = Username.of("testuser")
-      createUser(username = "testuser", password = "!Password0")
+      val username = Username.of("test@example.com")
+      createUser(username = "test@example.com", password = "!Password0")
       val input = SignupUserInputData.of(username.get(), "!Password0")
 
       assertThrows(SignupException::class.java) {

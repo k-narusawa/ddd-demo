@@ -34,6 +34,8 @@ dependencies {
   implementation(libs.spring.security.crypto)
   implementation(libs.bouncycastle.prov)
   implementation(libs.java.jwt)
+  implementation(libs.jakarta.mail.api)
+  runtimeOnly(libs.angus.mail)
 
   implementation(libs.jackson.module.kotlin)
   implementation(libs.kotlin.reflect)
