@@ -13,6 +13,10 @@ spring:
   jpa:
     show-sql: true
 
+services:
+  identity-access:
+    url: http://localhost:8080
+
 environment:
   identity_access:
     access_token:
