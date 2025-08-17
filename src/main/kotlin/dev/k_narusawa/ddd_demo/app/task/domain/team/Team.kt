@@ -27,4 +27,15 @@ class Team private constructor(
   @Transient
   private val events: MutableList<DomainEvent> = mutableListOf()
 ) {
+  companion object {
+    fun of(teamName: TeamName): Team {
+      return Team(
+        teamId = TeamId.new(),
+        teamName = teamName,
+      )
+    }
+  }
+
+  fun getTeamName() = this.teamName
+  fun getEvents() = this.events.toList()
 }

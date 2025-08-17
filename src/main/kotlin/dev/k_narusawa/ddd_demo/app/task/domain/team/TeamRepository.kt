@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TeamRepository : JpaRepository<Team, TeamId> {
+  fun save(team: Team)
 }
