@@ -1,12 +1,12 @@
-package dev.k_narusawa.ddd_demo.app.middleware
+package dev.k_narusawa.ddd_demo.middleware
 
 import dev.k_narusawa.ddd_demo.util.logger
-import org.aspectj.lang.JoinPoint
-import org.aspectj.lang.annotation.AfterReturning
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
-import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
 import org.springframework.stereotype.Component
+import kotlin.system.measureTimeMillis
 
 @Aspect
 @Component
@@ -19,27 +19,19 @@ class DomainEventHandlerLoggingAspect {
   fun eventHandlerMethod() {
   }
 
-  @Before("eventHandlerMethod() && args(event)")
-  fun beforeHandleEvent(joinPoint: JoinPoint, event: Any) {
-    val className = joinPoint.signature.declaringTypeName
-    val methodName = joinPoint.signature.name
-    log.info(
-      "ドメインイベントの処理を開始: {}#{} with event {}",
-      className,
-      methodName,
-      event.javaClass.simpleName
-    )
-  }
+  @Around("@annotation(org.springframework.context.event.EventListener)")
+  fun measureExecutionTime(joinPoint: ProceedingJoinPoint): Any? {
+    val className = joinPoint.signature.declaringTypeName.split(".").last()
+    val executionTime = measureTimeMillis {
+      joinPoint.proceed()
+    }
 
-  @AfterReturning("eventHandlerMethod() && args(event)")
-  fun afterHandleEvent(joinPoint: JoinPoint, event: Any) {
-    val className = joinPoint.signature.declaringTypeName
-    val methodName = joinPoint.signature.name
     log.info(
-      "ドメインイベントの処理が完了: {}#{} with event {}",
+      "イベントの処理時間: {} -> {}ms",
       className,
-      methodName,
-      event.javaClass.simpleName
+      executionTime
     )
+
+    return joinPoint.proceed()
   }
 }
