@@ -5,6 +5,7 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.port.SignupUserIn
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class SignupUserInteractor(
   private val userService: UserService,
   private val userRepository: UserRepository,
+  private val applicationEventPublisher: ApplicationEventPublisher,
 ) : SignupUserInputBoundary {
   @Transactional
   override suspend fun handle(input: SignupUserInputData): SignupUserOutputData {
@@ -20,6 +22,11 @@ class SignupUserInteractor(
 
     val user = User.signup(username = input.username, password = input.password)
     userRepository.save(user)
+
+    user.getEvents().forEach {
+      applicationEventPublisher.publishEvent(it)
+    }
+
     return SignupUserOutputData.of(
       userId = user.userId,
       username = input.username,

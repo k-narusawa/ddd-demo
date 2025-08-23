@@ -2,6 +2,7 @@ package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UserSignupCompletedDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedDomainEvent
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -38,11 +39,14 @@ class User private constructor(
       username: Username,
       password: Password
     ): User {
-      return User(
+      val user = User(
         userId = UserId.new(),
         username = username,
         password = password
       )
+      val event = UserSignupCompletedDomainEvent(user = user)
+      user.events.add(event)
+      return user
     }
   }
 

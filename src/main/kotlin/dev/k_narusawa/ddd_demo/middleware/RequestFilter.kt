@@ -1,4 +1,4 @@
-package dev.k_narusawa.ddd_demo.http.middleware
+package dev.k_narusawa.ddd_demo.app.middleware
 
 import dev.k_narusawa.ddd_demo.util.logger
 import jakarta.servlet.FilterChain
