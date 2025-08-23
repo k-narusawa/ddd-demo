@@ -1,7 +1,7 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.activityLog
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedDomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededDomainEvent
 import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
@@ -17,7 +17,7 @@ class ActivityLogEventListener(
 
   @EventListener
   @Async
-  fun listen(event: LoginFailedEvent) {
+  fun listen(event: LoginFailedDomainEvent) {
     log.info("${event}を受信")
     val log = ActivityLog.new(
       userId = event.user.userId,
@@ -31,7 +31,7 @@ class ActivityLogEventListener(
 
   @EventListener
   @Async
-  fun listen(event: LoginSucceededEvent) {
+  fun listen(event: LoginSucceededDomainEvent) {
     log.info("${event}を受信")
     val log = ActivityLog.new(
       userId = event.user.userId,

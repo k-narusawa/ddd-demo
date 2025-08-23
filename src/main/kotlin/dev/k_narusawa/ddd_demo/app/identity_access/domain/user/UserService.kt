@@ -6,8 +6,8 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAtte
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt.LoginAttemptRepository
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.TokenService
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedEvent
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedDomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededDomainEvent
 import jakarta.transaction.Transactional
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -37,7 +37,7 @@ class UserService(
     try {
       user.verifyPassword(rawPassword = password)
     } catch (ex: LoginFailed) {
-      val event = LoginFailedEvent(
+      val event = LoginFailedDomainEvent(
         user = user,
         userAgent = userAgent,
         ipAddress = ipAddress
@@ -54,7 +54,7 @@ class UserService(
       throw ex
     }
 
-    val event = LoginSucceededEvent(
+    val event = LoginSucceededDomainEvent(
       user = user,
       userAgent = userAgent,
       ipAddress = ipAddress

@@ -1,8 +1,8 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedDomainEvent
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -95,7 +95,7 @@ class UserTest {
       user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
       val events = user.getEvents()
       assertEquals(events.size, 1)
-      assertInstanceOf<UsernameChangedEvent>(events[0])
+      assertInstanceOf<UsernameChangedDomainEvent>(events[0])
     }
   }
 
@@ -139,7 +139,7 @@ class UserTest {
       username,
       password,
       1L,
-      mutableListOf<DomainEvent>()
+      mutableListOf<IdentityAccessDomainEvent>()
     )
   }
 }

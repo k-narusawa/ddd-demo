@@ -1,12 +1,10 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event
 
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
-import org.springframework.context.ApplicationEvent
-import java.time.LocalDateTime
 
-data class LoginSucceededEvent(
+data class LoginFailedDomainEvent(
   val user: User,
   val userAgent: String,
   val ipAddress: String,
-  val occurredOn: LocalDateTime = LocalDateTime.now()
-) : ApplicationEvent(user)
+) : IdentityAccessDomainEvent(source = user)

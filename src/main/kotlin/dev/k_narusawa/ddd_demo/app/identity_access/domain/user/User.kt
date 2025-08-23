@@ -1,8 +1,8 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.user
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.exception.LoginFailed
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UsernameChangedDomainEvent
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -31,7 +31,7 @@ class User private constructor(
   private val version: Long? = null,
 
   @Transient
-  private val events: MutableList<DomainEvent> = mutableListOf()
+  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf()
 ) {
   companion object {
     fun signup(
@@ -66,7 +66,7 @@ class User private constructor(
   ) {
     this.username = newUsername
 
-    val event = UsernameChangedEvent(
+    val event = UsernameChangedDomainEvent(
       user = this,
       ipAddress = ipAddress,
       userAgent = userAgent
