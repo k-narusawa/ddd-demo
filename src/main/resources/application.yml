@@ -17,6 +17,7 @@ logging:
   level:
     org.springframework.jdbc: INFO
     org.springframework.transaction: INFO
+    org.springframework.transaction.interceptor: INFO
     org.springframework.orm.jpa: INFO
 
 services:
