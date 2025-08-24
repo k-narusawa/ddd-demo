@@ -8,9 +8,9 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.TokenService
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginFailedDomainEvent
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.LoginSucceededDomainEvent
-import jakarta.transaction.Transactional
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
@@ -18,7 +18,7 @@ class UserService(
   private val userRepository: UserRepository,
   private val loginAttemptRepository: LoginAttemptRepository,
   private val tokenService: TokenService,
-  private val applicationEventPublisher: ApplicationEventPublisher
+  private val eventPublisher: ApplicationEventPublisher
 ) {
   fun isExists(username: Username): Boolean {
     val existsUser = userRepository.findByUsername(username = username)
@@ -42,7 +42,7 @@ class UserService(
         userAgent = userAgent,
         ipAddress = ipAddress
       )
-      applicationEventPublisher.publishEvent(event)
+      eventPublisher.publishEvent(event)
       val attempt = loginAttemptRepository.findByUserId(userId = user.userId)
         ?: LoginAttempt.new(userId = user.userId)
       if (attempt.isLocked()) {
@@ -59,7 +59,7 @@ class UserService(
       userAgent = userAgent,
       ipAddress = ipAddress
     )
-    applicationEventPublisher.publishEvent(event)
+    eventPublisher.publishEvent(event)
 
     return tokenService.generateToken(userId = user.userId)
   }

@@ -1,6 +1,7 @@
 package dev.k_narusawa.ddd_demo.app.identity_access.domain.loginAttempt
 
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserId
+import dev.k_narusawa.ddd_demo.util.logger
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.EmbeddedId
@@ -31,6 +32,7 @@ class LoginAttempt private constructor(
   companion object {
     private const val LOGIN_ATTEMPT_LIMIT = 5
     private const val LOCKOUT_DURATION_MINUTES = 5
+    private val log = logger()
 
     fun new(userId: UserId): LoginAttempt {
       return LoginAttempt(
@@ -43,6 +45,7 @@ class LoginAttempt private constructor(
   fun getFailureCount() = this.failureCount
 
   fun authenticateFailure() {
+    log.info("ログイン失敗 userId: ${this.userId.get()} failureCount: ${this.failureCount}")
     if (this.lockExpirationTimestamp != null) return
 
     this.failureCount = this.failureCount + 1

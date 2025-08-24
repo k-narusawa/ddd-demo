@@ -15,11 +15,11 @@ class DomainEventHandlerLoggingAspect {
     private val log = logger()
   }
 
-  @Pointcut("@annotation(org.springframework.context.event.EventListener)")
+  @Pointcut("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
   fun eventHandlerMethod() {
   }
 
-  @Around("@annotation(org.springframework.context.event.EventListener)")
+  @Around("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
   fun measureExecutionTime(joinPoint: ProceedingJoinPoint): Any? {
     val className = joinPoint.signature.declaringTypeName.split(".").last()
     val executionTime = measureTimeMillis {
