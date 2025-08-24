@@ -10,17 +10,17 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class TeamInteractor(
-  private val teamRepository: TeamRepository,
-  private val applicationEventPublisher: ApplicationEventPublisher,
+    private val teamRepository: TeamRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) : TeamInputBoundary {
-  override fun handle(input: CreateTeamInputData): CreateTeamOutputData {
-    val team = Team.of(teamName = input.teamName, actorId = input.actorId)
+    override fun handle(input: CreateTeamInputData): CreateTeamOutputData {
+        val team = Team.of(teamName = input.teamName, actorId = input.actorId)
 
-    teamRepository.save(team = team)
-    team.getEvents().forEach { event ->
-      applicationEventPublisher.publishEvent(event)
+        teamRepository.save(team = team)
+        team.getEvents().forEach { event ->
+            applicationEventPublisher.publishEvent(event)
+        }
+
+        return CreateTeamOutputData.of(team = team)
     }
-
-    return CreateTeamOutputData.of(team = team)
-  }
 }

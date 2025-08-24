@@ -7,25 +7,24 @@ import org.springframework.stereotype.Service
 
 @Service
 class TokenService(
-  private val environment: Environment
+    private val environment: Environment,
 ) {
-  fun generateToken(userId: UserId): Token {
-    val accessTokenSecret =
-      environment.getProperty<String>("environment.identity_access.access_token.secret")
-    val accessTokenExpiresIn =
-      environment.getProperty<Long>("environment.identity_access.access_token.expires_in")
-    val refreshTokenSecret =
-      environment.getProperty<String>("environment.identity_access.refresh_token.secret")
-    val refreshTokenExpiresIn =
-      environment.getProperty<Long>("environment.identity_access.refresh_token.expires_in")
+    fun generateToken(userId: UserId): Token {
+        val accessTokenSecret =
+            environment.getProperty<String>("environment.identity_access.access_token.secret")
+        val accessTokenExpiresIn =
+            environment.getProperty<Long>("environment.identity_access.access_token.expires_in")
+        val refreshTokenSecret =
+            environment.getProperty<String>("environment.identity_access.refresh_token.secret")
+        val refreshTokenExpiresIn =
+            environment.getProperty<Long>("environment.identity_access.refresh_token.expires_in")
 
-    return Token.of(
-      userId = userId,
-      accessTokenSecret = accessTokenSecret!!,
-      accessTokenExpiresIn = accessTokenExpiresIn!!,
-      refreshTokenSecret = refreshTokenSecret!!,
-      refreshTokenExpiresIn = refreshTokenExpiresIn!!
-    )
-
-  }
+        return Token.of(
+            userId = userId,
+            accessTokenSecret = accessTokenSecret!!,
+            accessTokenExpiresIn = accessTokenExpiresIn!!,
+            refreshTokenSecret = refreshTokenSecret!!,
+            refreshTokenExpiresIn = refreshTokenExpiresIn!!,
+        )
+    }
 }

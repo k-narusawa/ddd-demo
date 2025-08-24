@@ -9,17 +9,18 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional(
-  noRollbackFor = [IdentityAccessDomainException::class],
-  propagation = Propagation.REQUIRES_NEW
+    noRollbackFor = [IdentityAccessDomainException::class],
+    propagation = Propagation.REQUIRES_NEW,
 )
 class IncrementFailureCountWhenAuthenticateFailedHandler(
-  private val loginAttemptRepository: LoginAttemptRepository
+    private val loginAttemptRepository: LoginAttemptRepository,
 ) {
-  @EventListener
-  fun handle(event: LoginFailedDomainEvent) {
-    val loginAttempt = loginAttemptRepository.findByUserId(event.user.userId)
-      ?: LoginAttempt.new(userId = event.user.userId)
-    loginAttempt.authenticateFailure()
-    loginAttemptRepository.save(loginAttempt)
-  }
+    @EventListener
+    fun handle(event: LoginFailedDomainEvent) {
+        val loginAttempt =
+            loginAttemptRepository.findByUserId(event.user.userId)
+                ?: LoginAttempt.new(userId = event.user.userId)
+        loginAttempt.authenticateFailure()
+        loginAttemptRepository.save(loginAttempt)
+    }
 }

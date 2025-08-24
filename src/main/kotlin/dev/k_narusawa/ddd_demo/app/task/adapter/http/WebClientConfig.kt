@@ -7,13 +7,13 @@ import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 class WebClientConfig {
-  @Value("\${services.identity-access.url}")
-  private lateinit var identityAccessUrl: String
+    @Value("\${services.identity-access.url}")
+    private lateinit var identityAccessUrl: String
 
-  @Bean
-  fun identityAccessWebClient(): WebClient {
-    return WebClient.builder()
-      .baseUrl(identityAccessUrl)
-      .build()
-  }
+    @Bean
+    fun identityAccessWebClient(): WebClient =
+        WebClient
+            .builder()
+            .baseUrl(identityAccessUrl)
+            .build()
 }

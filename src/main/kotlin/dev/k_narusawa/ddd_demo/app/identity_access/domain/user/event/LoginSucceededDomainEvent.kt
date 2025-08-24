@@ -4,7 +4,7 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEv
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User
 
 data class LoginSucceededDomainEvent(
-  val user: User,
-  val userAgent: String,
-  val ipAddress: String,
+    val user: User,
+    val userAgent: String,
+    val ipAddress: String,
 ) : IdentityAccessDomainEvent(source = user)

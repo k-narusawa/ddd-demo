@@ -12,28 +12,29 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SignupUserInteractor(
-  private val userService: UserService,
-  private val userRepository: UserRepository,
-  private val applicationEventPublisher: ApplicationEventPublisher,
+    private val userService: UserService,
+    private val userRepository: UserRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) : SignupUserInputBoundary {
-  override fun handle(input: SignupUserInputData): SignupUserOutputData {
-    val canSignup = userService.isExists(username = input.username)
-    if (canSignup.not()) throw UsernameAlreadyExists(message = "", username = input.username)
+    override fun handle(input: SignupUserInputData): SignupUserOutputData {
+        val canSignup = userService.isExists(username = input.username)
+        if (canSignup.not()) throw UsernameAlreadyExists(message = "", username = input.username)
 
-    val user = User.signup(
-      username = input.username,
-      password = input.password,
-      personalName = input.personalName
-    )
-    userRepository.save(user)
+        val user =
+            User.signup(
+                username = input.username,
+                password = input.password,
+                personalName = input.personalName,
+            )
+        userRepository.save(user)
 
-    user.getEvents().forEach {
-      applicationEventPublisher.publishEvent(it)
+        user.getEvents().forEach {
+            applicationEventPublisher.publishEvent(it)
+        }
+
+        return SignupUserOutputData.of(
+            userId = user.userId,
+            username = input.username,
+        )
     }
-
-    return SignupUserOutputData.of(
-      userId = user.userId,
-      username = input.username,
-    )
-  }
 }

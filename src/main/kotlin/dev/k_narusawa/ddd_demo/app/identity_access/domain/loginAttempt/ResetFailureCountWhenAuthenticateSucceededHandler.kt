@@ -9,16 +9,17 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 @Transactional(
-  noRollbackFor = [IdentityAccessDomainException::class]
+    noRollbackFor = [IdentityAccessDomainException::class],
 )
 class ResetFailureCountWhenAuthenticateSucceededHandler(
-  private val loginAttemptRepository: LoginAttemptRepository
+    private val loginAttemptRepository: LoginAttemptRepository,
 ) {
-  @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-  fun handle(event: LoginSucceededDomainEvent) {
-    val loginAttempt = loginAttemptRepository.findByUserId(event.user.userId)
-      ?: return
-    loginAttempt.authenticateSuccess()
-    loginAttemptRepository.save(loginAttempt)
-  }
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    fun handle(event: LoginSucceededDomainEvent) {
+        val loginAttempt =
+            loginAttemptRepository.findByUserId(event.user.userId)
+                ?: return
+        loginAttempt.authenticateSuccess()
+        loginAttemptRepository.save(loginAttempt)
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface LoginAttemptRepository : JpaRepository<LoginAttempt, UserId> {
-  fun save(loginAttempt: LoginAttempt)
-  fun findByUserId(userId: UserId): LoginAttempt?
+    fun save(loginAttempt: LoginAttempt)
+
+    fun findByUserId(userId: UserId): LoginAttempt?
 }

@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("ドメイン_値オブジェクト_トークンID")
 class TokenIdTest {
-  @Nested
-  @DisplayName("インスタンス化")
-  inner class Instantiation {
-    @Test
-    @DisplayName("generateメソッドでインスタンスを生成できる")
-    fun `can instantiate with generate method`() {
-      val sut = TokenId.generate()
+    @Nested
+    @DisplayName("インスタンス化")
+    inner class Instantiation {
+        @Test
+        @DisplayName("generateメソッドでインスタンスを生成できる")
+        fun `can instantiate with generate method`() {
+            val sut = TokenId.generate()
 
-      assertNotNull(sut)
+            assertNotNull(sut)
+        }
     }
-  }
 }

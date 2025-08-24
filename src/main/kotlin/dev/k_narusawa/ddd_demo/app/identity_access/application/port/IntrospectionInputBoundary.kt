@@ -4,5 +4,5 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.introspec
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.introspection.IntrospectionOutputData
 
 interface IntrospectionInputBoundary {
-  suspend fun handle(input: IntrospectionInputData): IntrospectionOutputData
+    suspend fun handle(input: IntrospectionInputData): IntrospectionOutputData
 }

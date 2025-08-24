@@ -4,31 +4,29 @@ import jakarta.persistence.Embeddable
 
 @Embeddable
 data class Title private constructor(
-  private val value: String
+    private val value: String,
 ) {
-  init {
-    require(value.isNotBlank()) { "タイトルは空にできません" }
-    require(value.length >= 2) { "タイトルは2文字以上である必要があります" }
-  }
+    init {
+        require(value.isNotBlank()) { "タイトルは空にできません" }
+        require(value.length >= 2) { "タイトルは2文字以上である必要があります" }
+    }
 
-  companion object {
-    fun of(value: String) = Title(value)
-  }
+    companion object {
+        fun of(value: String) = Title(value)
+    }
 
-  fun get() = value
+    fun get() = value
 
-  override fun toString() = "********"
+    override fun toString() = "********"
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other !is Title) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Title) return false
 
-    if (other.get() != value) return false
+        if (other.get() != value) return false
 
-    return true
-  }
+        return true
+    }
 
-  override fun hashCode(): Int {
-    return value.hashCode()
-  }
+    override fun hashCode(): Int = value.hashCode()
 }

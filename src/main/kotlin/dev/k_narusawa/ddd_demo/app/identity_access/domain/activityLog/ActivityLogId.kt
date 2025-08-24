@@ -6,15 +6,13 @@ import java.util.*
 
 @Embeddable
 data class ActivityLogId private constructor(
-  private val value: String
+    private val value: String,
 ) : Serializable {
-  companion object {
-    fun new(): ActivityLogId {
-      return ActivityLogId(value = UUID.randomUUID().toString())
+    companion object {
+        fun new(): ActivityLogId = ActivityLogId(value = UUID.randomUUID().toString())
     }
-  }
 
-  fun get() = value
+    fun get() = value
 
-  override fun toString() = value
+    override fun toString() = value
 }

@@ -11,27 +11,31 @@ import kotlin.system.measureTimeMillis
 @Aspect
 @Component
 class DomainEventHandlerLoggingAspect {
-  companion object {
-    private val log = logger()
-  }
-
-  @Pointcut("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
-  fun eventHandlerMethod() {
-  }
-
-  @Around("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
-  fun measureExecutionTime(joinPoint: ProceedingJoinPoint): Any? {
-    val className = joinPoint.signature.declaringTypeName.split(".").last()
-    val executionTime = measureTimeMillis {
-      joinPoint.proceed()
+    companion object {
+        private val log = logger()
     }
 
-    log.info(
-      "イベントの処理時間: {} -> {}ms",
-      className,
-      executionTime
-    )
+    @Pointcut("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
+    fun eventHandlerMethod() {
+    }
 
-    return joinPoint.proceed()
-  }
+    @Around("@annotation(org.springframework.transaction.event.TransactionalEventListener)")
+    fun measureExecutionTime(joinPoint: ProceedingJoinPoint): Any? {
+        val className =
+            joinPoint.signature.declaringTypeName
+                .split(".")
+                .last()
+        val executionTime =
+            measureTimeMillis {
+                joinPoint.proceed()
+            }
+
+        log.info(
+            "イベントの処理時間: {} -> {}ms",
+            className,
+            executionTime,
+        )
+
+        return joinPoint.proceed()
+    }
 }

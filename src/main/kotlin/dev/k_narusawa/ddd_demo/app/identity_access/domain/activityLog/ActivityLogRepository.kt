@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ActivityLogRepository : JpaRepository<ActivityLog, ActivityLogId> {
-  fun save(log: ActivityLog)
+    fun save(log: ActivityLog)
 }

@@ -16,32 +16,33 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/task/teams")
 class TeamController(
-  private val identityAccessService: IdentityAccessService,
-  private val teamInputBoundary: TeamInputBoundary,
+    private val identityAccessService: IdentityAccessService,
+    private val teamInputBoundary: TeamInputBoundary,
 ) {
-  @PostMapping
-  suspend fun post(
-    @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false)
-    authorization: String?,
-    @RequestBody
-    requestBody: CreateTeamRequest,
-  ): ResponseEntity<CreateTeamResponse> {
-    val token = authorization?.split(" ")[1]
-    if (token == null) {
-      return ResponseEntity.badRequest().build()
+    @PostMapping
+    suspend fun post(
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false)
+        authorization: String?,
+        @RequestBody
+        requestBody: CreateTeamRequest,
+    ): ResponseEntity<CreateTeamResponse> {
+        val token = authorization?.split(" ")[1]
+        if (token == null) {
+            return ResponseEntity.badRequest().build()
+        }
+
+        val introspect = identityAccessService.introspect(token = token)
+        if (!introspect.active) {
+            return ResponseEntity.badRequest().build()
+        }
+
+        val input =
+            CreateTeamInputData.of(
+                actorId = introspect.sub!!,
+                teamName = requestBody.name,
+            )
+
+        val output = teamInputBoundary.handle(input = input)
+        return ResponseEntity.ok(output.response)
     }
-
-    val introspect = identityAccessService.introspect(token = token)
-    if (!introspect.active) {
-      return ResponseEntity.badRequest().build()
-    }
-
-    val input = CreateTeamInputData.of(
-      actorId = introspect.sub!!,
-      teamName = requestBody.name,
-    )
-
-    val output = teamInputBoundary.handle(input = input)
-    return ResponseEntity.ok(output.response)
-  }
 }

@@ -20,51 +20,52 @@ import org.springframework.test.context.TestExecutionListeners
 @SpringBootTest
 @DisplayName("ユースケース_サインアップ")
 @TestExecutionListeners(listeners = [DatabaseCleanupListener::class])
-class SignupUserInteractorTest @Autowired constructor(
-  private val userRepository: UserRepository,
-  private val sut: SignupUserInteractor,
+class SignupUserInteractorTest
+    @Autowired
+    constructor(
+        private val userRepository: UserRepository,
+        private val sut: SignupUserInteractor,
+        private val actorRepository: ActorRepository,
+        private val testUserFactory: TestUserFactory,
+    ) {
+        @Nested
+        @DisplayName("ユーザー登録")
+        inner class Signup {
+            @Test
+            @DisplayName("ユーザー登録が成功する")
+            fun signup_succeeds() =
+                runBlocking {
+                    val username = Username.of("test@example.com")
+                    val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
 
-  private val actorRepository: ActorRepository,
-  private val testUserFactory: TestUserFactory
-) {
+                    val sut = sut.handle(input)
 
-  @Nested
-  @DisplayName("ユーザー登録")
-  inner class Signup {
-    @Test
-    @DisplayName("ユーザー登録が成功する")
-    fun signup_succeeds() = runBlocking {
-      val username = Username.of("test@example.com")
-      val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
+                    assertNotNull(sut)
 
-      val sut = sut.handle(input)
+                    val user = userRepository.findByUsername(username = Username.of(sut.username))
+                    assertEquals(sut.userId, user?.userId?.get())
+                    assertEquals(username.get(), user?.getUsername()?.get())
+                    val actor = actorRepository.findByActorId(actorId = ActorId.from(value = sut.userId))
+                    assertNotNull(actor)
+                    assertEquals(input.personalName, actor?.getPersonalName()?.get())
+                }
 
-      assertNotNull(sut)
+            @Test
+            @DisplayName("既に存在するユーザー名を登録しようとすると例外がスローされる")
+            fun signup_with_existing_username_throws_exception() {
+                val username = Username.of("test@example.com")
+                testUserFactory.createUser(
+                    username = Username.of("test@example.com"),
+                    password = Password.of("!Password0"),
+                    personalName = "テスト氏名",
+                )
+                val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
 
-      val user = userRepository.findByUsername(username = Username.of(sut.username))
-      assertEquals(sut.userId, user?.userId?.get())
-      assertEquals(username.get(), user?.getUsername()?.get())
-      val actor = actorRepository.findByActorId(actorId = ActorId.from(value = sut.userId))
-      assertNotNull(actor)
-      assertEquals(input.personalName, actor?.getPersonalName()?.get())
-    }
-
-    @Test
-    @DisplayName("既に存在するユーザー名を登録しようとすると例外がスローされる")
-    fun signup_with_existing_username_throws_exception() {
-      val username = Username.of("test@example.com")
-      testUserFactory.createUser(
-        username = Username.of("test@example.com"),
-        password = Password.of("!Password0"),
-        personalName = "テスト氏名"
-      )
-      val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
-
-      assertThrows(UsernameAlreadyExists::class.java) {
-        runBlocking {
-          sut.handle(input)
+                assertThrows(UsernameAlreadyExists::class.java) {
+                    runBlocking {
+                        sut.handle(input)
+                    }
+                }
+            }
         }
-      }
     }
-  }
-}

@@ -4,5 +4,5 @@ import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.Si
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserOutputData
 
 interface SignupUserInputBoundary {
-  fun handle(input: SignupUserInputData): SignupUserOutputData
+    fun handle(input: SignupUserInputData): SignupUserOutputData
 }

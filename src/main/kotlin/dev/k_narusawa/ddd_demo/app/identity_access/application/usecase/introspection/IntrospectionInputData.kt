@@ -3,11 +3,14 @@ package dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.introspe
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.AccessToken
 
 data class IntrospectionInputData private constructor(
-  val accessToken: AccessToken
+    val accessToken: AccessToken,
 ) {
-  companion object {
-    fun of(accessToken: String, secret: String) = IntrospectionInputData(
-      accessToken = AccessToken.fromJwt(jwt = accessToken, secret = secret)
-    )
-  }
+    companion object {
+        fun of(
+            accessToken: String,
+            secret: String,
+        ) = IntrospectionInputData(
+            accessToken = AccessToken.fromJwt(jwt = accessToken, secret = secret),
+        )
+    }
 }

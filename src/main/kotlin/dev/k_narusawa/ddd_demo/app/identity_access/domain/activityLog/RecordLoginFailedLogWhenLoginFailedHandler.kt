@@ -8,20 +8,21 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional(
-  noRollbackFor = [IdentityAccessDomainException::class]
+    noRollbackFor = [IdentityAccessDomainException::class],
 )
 class RecordLoginFailedLogWhenLoginFailedHandler(
-  private val activityLogRepository: ActivityLogRepository
+    private val activityLogRepository: ActivityLogRepository,
 ) {
-  @EventListener
-  fun handle(event: LoginFailedDomainEvent) {
-    val log = ActivityLog.new(
-      userId = event.user.userId,
-      actionType = ActionType.LOGIN_FAILED,
-      ipAddress = event.ipAddress,
-      userAgent = event.userAgent,
-      occurredOn = event.occurredAt
-    )
-    activityLogRepository.save(log = log)
-  }
+    @EventListener
+    fun handle(event: LoginFailedDomainEvent) {
+        val log =
+            ActivityLog.new(
+                userId = event.user.userId,
+                actionType = ActionType.LOGIN_FAILED,
+                ipAddress = event.ipAddress,
+                userAgent = event.userAgent,
+                occurredOn = event.occurredAt,
+            )
+        activityLogRepository.save(log = log)
+    }
 }

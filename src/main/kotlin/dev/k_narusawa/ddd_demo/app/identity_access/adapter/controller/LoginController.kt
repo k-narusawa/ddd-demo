@@ -16,23 +16,24 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/identity_access/login")
 class LoginController(
-  private val loginInputBoundary: LoginInputBoundary,
+    private val loginInputBoundary: LoginInputBoundary,
 ) {
-  @PostMapping()
-  suspend fun postLogin(
-    request: HttpServletRequest,
-    @RequestHeader(name = HttpHeaders.USER_AGENT, required = false)
-    userAgent: String,
-    @RequestBody
-    requestBody: LoginRequest
-  ): ResponseEntity<LoginResponse> {
-    val input = LoginInputData.Companion.of(
-      username = requestBody.username,
-      password = requestBody.password,
-      userAgent = userAgent,
-      remoteAddr = request.remoteAddr
-    )
-    val output = loginInputBoundary.handle(input = input)
-    return ResponseEntity.ok(output.response)
-  }
+    @PostMapping()
+    suspend fun postLogin(
+        request: HttpServletRequest,
+        @RequestHeader(name = HttpHeaders.USER_AGENT, required = false)
+        userAgent: String,
+        @RequestBody
+        requestBody: LoginRequest,
+    ): ResponseEntity<LoginResponse> {
+        val input =
+            LoginInputData.Companion.of(
+                username = requestBody.username,
+                password = requestBody.password,
+                userAgent = userAgent,
+                remoteAddr = request.remoteAddr,
+            )
+        val output = loginInputBoundary.handle(input = input)
+        return ResponseEntity.ok(output.response)
+    }
 }

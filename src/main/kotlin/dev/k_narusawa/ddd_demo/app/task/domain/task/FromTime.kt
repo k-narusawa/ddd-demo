@@ -5,28 +5,24 @@ import java.time.LocalDateTime
 
 @Embeddable
 data class FromTime private constructor(
-  private val value: LocalDateTime
+    private val value: LocalDateTime,
 ) {
-  companion object {
-    fun of(value: LocalDateTime) = FromTime(value = value)
-  }
+    companion object {
+        fun of(value: LocalDateTime) = FromTime(value = value)
+    }
 
-  fun get() = value
+    fun get() = value
 
-  override fun toString(): String {
-    return value.toString()
-  }
+    override fun toString(): String = value.toString()
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other !is FromTime) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FromTime) return false
 
-    if (other.get() != value) return false
+        if (other.get() != value) return false
 
-    return true
-  }
+        return true
+    }
 
-  override fun hashCode(): Int {
-    return value.hashCode()
-  }
+    override fun hashCode(): Int = value.hashCode()
 }

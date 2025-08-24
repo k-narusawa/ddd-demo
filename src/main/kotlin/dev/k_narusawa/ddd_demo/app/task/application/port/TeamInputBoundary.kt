@@ -4,5 +4,5 @@ import dev.k_narusawa.ddd_demo.app.task.application.usecase.createTeam.CreateTea
 import dev.k_narusawa.ddd_demo.app.task.application.usecase.createTeam.CreateTeamOutputData
 
 interface TeamInputBoundary {
-  fun handle(input: CreateTeamInputData): CreateTeamOutputData
+    fun handle(input: CreateTeamInputData): CreateTeamOutputData
 }

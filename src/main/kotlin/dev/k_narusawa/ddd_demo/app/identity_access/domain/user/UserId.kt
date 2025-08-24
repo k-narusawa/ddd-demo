@@ -6,17 +6,15 @@ import java.util.*
 
 @Embeddable
 data class UserId(
-  private val value: String
+    private val value: String,
 ) : Serializable {
-  companion object {
-    fun new(): UserId {
-      return UserId(value = UUID.randomUUID().toString())
+    companion object {
+        fun new(): UserId = UserId(value = UUID.randomUUID().toString())
+
+        fun from(value: String) = UserId(value = value)
     }
 
-    fun from(value: String) = UserId(value = value)
-  }
+    fun get() = value
 
-  fun get() = value
-
-  override fun toString() = value
+    override fun toString() = value
 }

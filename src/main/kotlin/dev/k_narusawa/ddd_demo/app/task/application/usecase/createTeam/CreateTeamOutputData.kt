@@ -4,14 +4,16 @@ import dev.k_narusawa.ddd_demo.app.task.adapter.controller.model.CreateTeamRespo
 import dev.k_narusawa.ddd_demo.app.task.domain.team.Team
 
 data class CreateTeamOutputData(
-  val response: CreateTeamResponse
+    val response: CreateTeamResponse,
 ) {
-  companion object {
-    fun of(team: Team) = CreateTeamOutputData(
-      response = CreateTeamResponse(
-        teamId = team.teamId.get(),
-        name = team.getTeamName().get()
-      )
-    )
-  }
+    companion object {
+        fun of(team: Team) =
+            CreateTeamOutputData(
+                response =
+                    CreateTeamResponse(
+                        teamId = team.teamId.get(),
+                        name = team.getTeamName().get(),
+                    ),
+            )
+    }
 }

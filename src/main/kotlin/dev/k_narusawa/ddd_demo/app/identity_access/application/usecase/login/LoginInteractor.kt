@@ -11,18 +11,19 @@ import org.springframework.transaction.annotation.Transactional
 @EnableAsync
 @Transactional
 class LoginInteractor(
-  private val userService: UserService,
-  private val tokenRepository: TokenRepository,
+    private val userService: UserService,
+    private val tokenRepository: TokenRepository,
 ) : LoginInputBoundary {
-  override suspend fun handle(input: LoginInputData): LoginOutputData {
-    val token = userService.login(
-      username = input.username,
-      password = input.password,
-      userAgent = input.userAgent,
-      ipAddress = input.ipAddress,
-    )
+    override suspend fun handle(input: LoginInputData): LoginOutputData {
+        val token =
+            userService.login(
+                username = input.username,
+                password = input.password,
+                userAgent = input.userAgent,
+                ipAddress = input.ipAddress,
+            )
 
-    tokenRepository.save(token = token)
-    return LoginOutputData.of(token = token)
-  }
+        tokenRepository.save(token = token)
+        return LoginOutputData.of(token = token)
+    }
 }

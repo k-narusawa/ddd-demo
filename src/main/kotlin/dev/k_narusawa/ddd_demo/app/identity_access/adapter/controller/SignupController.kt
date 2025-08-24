@@ -13,24 +13,26 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/identity_access")
 class SignupController(
-  private val signupUserInputBoundary: SignupUserInputBoundary,
+    private val signupUserInputBoundary: SignupUserInputBoundary,
 ) {
-  @PostMapping("/users")
-  suspend fun postUsers(
-    @RequestBody
-    body: UserRegistrationRequest
-  ): ResponseEntity<UserRegistrationResponse> {
-    val inputData = SignupUserInputData.Companion.of(
-      username = body.username,
-      password = body.password,
-      personalName = body.personalName
-    )
-    val outputData = signupUserInputBoundary.handle(inputData)
+    @PostMapping("/users")
+    suspend fun postUsers(
+        @RequestBody
+        body: UserRegistrationRequest,
+    ): ResponseEntity<UserRegistrationResponse> {
+        val inputData =
+            SignupUserInputData.Companion.of(
+                username = body.username,
+                password = body.password,
+                personalName = body.personalName,
+            )
+        val outputData = signupUserInputBoundary.handle(inputData)
 
-    val response = UserRegistrationResponse(
-      userId = outputData.userId,
-      username = outputData.username
-    )
-    return ResponseEntity.ok(response)
-  }
+        val response =
+            UserRegistrationResponse(
+                userId = outputData.userId,
+                username = outputData.username,
+            )
+        return ResponseEntity.ok(response)
+    }
 }

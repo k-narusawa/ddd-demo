@@ -4,17 +4,17 @@ import dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model.Logi
 import dev.k_narusawa.ddd_demo.app.identity_access.domain.token.Token
 
 data class LoginOutputData private constructor(
-  val response: LoginResponse
+    val response: LoginResponse,
 ) {
-  companion object {
-    fun of(token: Token): LoginOutputData {
-      return LoginOutputData(
-        response = LoginResponse(
-          accessToken = token.getAccessToken().get(),
-          refreshToken = token.getRefreshToken().get(),
-          expiresIn = token.getExpiresIn()
-        )
-      )
+    companion object {
+        fun of(token: Token): LoginOutputData =
+            LoginOutputData(
+                response =
+                    LoginResponse(
+                        accessToken = token.getAccessToken().get(),
+                        refreshToken = token.getRefreshToken().get(),
+                        expiresIn = token.getExpiresIn(),
+                    ),
+            )
     }
-  }
 }

@@ -5,12 +5,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import org.springframework.transaction.event.TransactionalEventListenerFactory
 
-
 @Configuration
 @EnableTransactionManagement
 class TransactionalConfig {
-  @Bean
-  fun transactionalEventListenerFactory(): TransactionalEventListenerFactory {
-    return TransactionalEventListenerFactory()
-  }
+    @Bean
+    fun transactionalEventListenerFactory(): TransactionalEventListenerFactory = TransactionalEventListenerFactory()
 }
