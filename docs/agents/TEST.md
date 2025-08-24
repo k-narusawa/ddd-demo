@@ -22,7 +22,7 @@
 
 #### 実装例
 
-- `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserTest`を参考にしてください。
+- `dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserTest`を参考にしてください。
 
 ### 値オブジェクト
 
@@ -35,7 +35,7 @@
 
 #### 実装例
 
-- `package dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UsernameTest`を参考にしてください。
+- `package dev.knarusawa.dddDemo.app.identityAccess.domain.user.UsernameTest`を参考にしてください。
 
 ## 結合テスト
 
@@ -48,5 +48,5 @@
 
 ### 実装例
 
-- `dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInteractorTest`
+- `dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup.SignupUserInteractorTest`
   を参考にしてください。

@@ -13,7 +13,7 @@
 - **同一性**:
     - 識別子が同一であれば、他のプロパティが異なっていても同じエンティティと見なします。
     - そのため、`equals()` と `hashCode()` を識別子に基づいてオーバーライドすることが必須です。
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.User`
+- **実装例**: `dev.knarusawa.dddDemo.app.identityAccess.domain.user.User`
 
 ## 値オブジェクト (Value Object)
 
@@ -32,7 +32,7 @@
     - 原則として `value` という名前の単一のプロパティを持ちます。
     - カプセル化のため、この `value` プロパティは `private` とし、専用の `get()`
       メソッドを介してのみアクセスできるようにします。
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username`
+- **実装例**: `dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username`
 
 ## 集約 (Aggregate)
 
@@ -53,7 +53,7 @@
     - 集約の取得（IDによる検索など）、保存（新規作成、更新）、削除といった責務を持ちます。
     - ドメイン層にはインターフェースのみを定義します。実際の永続化処理（JPAなど）はアダプター層（インフラストラクチャ層）で実装します。
 - **命名規則**: `{集約名}Repository` という命名規則に従います。（例: `UserRepository`）
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserRepository`
+- **実装例**: `dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserRepository`
 
 ## ドメインサービス (Domain Service)
 
@@ -64,7 +64,7 @@
     - ドメインオブジェクトの生成（例: パスワードのハッシュ化など）。
 - **ステートレス**:
     - ドメインサービスは状態を持たない（ステートレスな）操作であるべきです。
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.UserService`
+- **実装例**: `dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserService`
 
 ## ドメインイベント (Domain Event)
 
@@ -78,4 +78,4 @@
     - `DomainEvent` インターフェースを実装します。
     - イベントの発行は、集約ルートのメソッド内で行い、Spring Frameworkのイベント発行機能などを利用して通知します。
 - **実装例**:
-  `dev.k_narusawa.ddd_demo.app.identity_access.domain.user.event.UserSignupCompletedEvent`
+  `dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent`

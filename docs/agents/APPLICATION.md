@@ -11,7 +11,7 @@
 - **DTO (Data Transfer Object)**: レイヤー間でデータを転送するためのオブジェクト。
 
 ```
-src/main/kotlin/dev/k_narusawa/ddd_demo/app/{context}/
+src/main/kotlin/dev/knarusawa/ddd_demo/app/{context}/
 └── application/
     ├── port/
     │   └── {UsecaseName}InputBoundary.kt  # ポート (インターフェース)
@@ -28,7 +28,7 @@ src/main/kotlin/dev/k_narusawa/ddd_demo/app/{context}/
     - アプリケーションが外部（コントローラーなど）に提供する機能を定義するインターフェースです。クリーンアーキテクチャにおける「入力ポート」に相当します。
     - これにより、ユースケースの実装詳細を隠蔽し、アダプター層との依存関係を逆転させます。
 - **命名規則**: `{UsecaseName}InputBoundary`
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.application.port.SignupUserInputBoundary`
+- **実装例**: `dev.knarusawa.dddDemo.app.identityAccess.application.port.SignupUserInputBoundary`
 
 ## 3. ユースケース (Usecase / Interactor)
 
@@ -37,7 +37,8 @@ src/main/kotlin/dev/k_narusawa/ddd_demo/app/{context}/
     - `InputData` を受け取り、ドメインオブジェクトのメソッドを呼び出したり、リポジトリを使ってドメインオブジェクトを永続化したりします。
     - 処理結果を `OutputData` に詰めて返却します。
 - **命名規則**: `{UsecaseName}Interactor`
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInteractor`
+- **実装例**:
+  `dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup.SignupUserInteractor`
 
 ## 4. DTO (Data Transfer Object)
 
@@ -51,11 +52,12 @@ src/main/kotlin/dev/k_narusawa/ddd_demo/app/{context}/
     - `data class` を利用してシンプルに定義します。
     - バリデーションロジックなどは含めず、純粋なデータコンテナとして扱います。
 - **実装例**:
-    - `dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInputData`
-    - `dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserOutputData`
+    - `dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup.SignupUserInputData`
+    - `dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup.SignupUserOutputData`
 
 ## 5. 例外処理
 
 - ユースケースの実行中に発生したビジネスルール上のエラー（例: ユーザー名が既に存在する）は、アプリケーション層固有の例外として定義します。
 - これにより、ドメイン層の例外とアプリケーション層の例外を区別し、アダプター層で適切なエラーハンドリングを行うことができます。
-- **実装例**: `dev.k_narusawa.ddd_demo.app.identity_access.application.exception.UsernameAlreadyExists`
+- **実装例**:
+  `dev.knarusawa.dddDemo.app.identityAccess.application.exception.UsernameAlreadyExists`

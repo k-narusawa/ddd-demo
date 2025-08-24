@@ -22,7 +22,7 @@
 プロジェクトの主要なディレクトリ構成とそれぞれの役割は以下の通りです。
 
 ```
-src/main/kotlin/dev/k_narusawa/ddd_demo/
+src/main/kotlin/dev/knarusawa/ddd_demo/
 ├── app/
 │   ├── identity_access/  # 認証・認可バウンデッドコンテキスト
 │   │   ├── adapter/        # アダプター層 (Controller, Middleware)
