@@ -4,7 +4,6 @@ import dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model.User
 import dev.k_narusawa.ddd_demo.app.identity_access.adapter.controller.model.UserRegistrationResponse
 import dev.k_narusawa.ddd_demo.app.identity_access.application.port.SignupUserInputBoundary
 import dev.k_narusawa.ddd_demo.app.identity_access.application.usecase.signup.SignupUserInputData
-import dev.k_narusawa.ddd_demo.util.logger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,18 +15,15 @@ import org.springframework.web.bind.annotation.RestController
 class SignupController(
   private val signupUserInputBoundary: SignupUserInputBoundary,
 ) {
-  companion object {
-    private val log = logger()
-  }
-
   @PostMapping("/users")
   suspend fun postUsers(
     @RequestBody
-    userRegistrationRequest: UserRegistrationRequest
+    body: UserRegistrationRequest
   ): ResponseEntity<UserRegistrationResponse> {
     val inputData = SignupUserInputData.Companion.of(
-      username = userRegistrationRequest.username,
-      password = userRegistrationRequest.password
+      username = body.username,
+      password = body.password,
+      personalName = body.personalName
     )
     val outputData = signupUserInputBoundary.handle(inputData)
 

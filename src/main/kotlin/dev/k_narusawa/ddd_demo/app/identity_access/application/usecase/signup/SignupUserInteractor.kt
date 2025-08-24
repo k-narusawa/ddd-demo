@@ -10,17 +10,21 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class SignupUserInteractor(
   private val userService: UserService,
   private val userRepository: UserRepository,
   private val applicationEventPublisher: ApplicationEventPublisher,
 ) : SignupUserInputBoundary {
-  @Transactional
-  override suspend fun handle(input: SignupUserInputData): SignupUserOutputData {
+  override fun handle(input: SignupUserInputData): SignupUserOutputData {
     val canSignup = userService.isExists(username = input.username)
     if (canSignup.not()) throw UsernameAlreadyExists(message = "", username = input.username)
 
-    val user = User.signup(username = input.username, password = input.password)
+    val user = User.signup(
+      username = input.username,
+      password = input.password,
+      personalName = input.personalName
+    )
     userRepository.save(user)
 
     user.getEvents().forEach {

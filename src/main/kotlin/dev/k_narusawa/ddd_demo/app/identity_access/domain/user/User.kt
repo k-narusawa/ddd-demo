@@ -37,14 +37,15 @@ class User private constructor(
   companion object {
     fun signup(
       username: Username,
-      password: Password
+      password: Password,
+      personalName: String
     ): User {
       val user = User(
         userId = UserId.new(),
         username = username,
-        password = password
+        password = password,
       )
-      val event = UserSignupCompletedDomainEvent(user = user)
+      val event = UserSignupCompletedDomainEvent(user = user, personalName = personalName)
       user.events.add(event)
       return user
     }

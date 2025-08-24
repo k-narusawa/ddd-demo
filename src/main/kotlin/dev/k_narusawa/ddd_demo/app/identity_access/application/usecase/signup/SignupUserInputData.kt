@@ -5,13 +5,15 @@ import dev.k_narusawa.ddd_demo.app.identity_access.domain.user.Username
 
 data class SignupUserInputData private constructor(
   val username: Username,
-  val password: Password
+  val password: Password,
+  val personalName: String,
 ) {
   companion object {
-    fun of(username: String, password: String): SignupUserInputData {
+    fun of(username: String, password: String, personalName: String): SignupUserInputData {
       return SignupUserInputData(
         username = Username.of(value = username),
-        password = Password.of(value = password)
+        password = Password.of(value = password),
+        personalName = personalName
       )
     }
   }

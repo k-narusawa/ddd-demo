@@ -1,6 +1,6 @@
 CREATE TABLE ddd_actor (
     actor_id VARCHAR(36) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    personal_name VARCHAR(255) NOT NULL,
     version BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
