@@ -3,7 +3,7 @@ package dev.k_narusawa.ddd_demo.app.task.domain.actor
 import jakarta.persistence.Embeddable
 
 @Embeddable
-data class Name(
+data class PersonalName(
   private val value: String
 ) {
   init {
@@ -12,7 +12,7 @@ data class Name(
   }
 
   companion object {
-    fun of(value: String) = Name(value = value)
+    fun of(value: String) = PersonalName(value = value)
   }
 
   fun get() = value
@@ -21,7 +21,7 @@ data class Name(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Name) return false
+    if (other !is PersonalName) return false
 
     if (other.get() != value) return false
 

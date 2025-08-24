@@ -1,6 +1,6 @@
 package dev.k_narusawa.ddd_demo.app.task.domain.task
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.task.domain.actor.ActorId
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -43,7 +43,7 @@ class Task private constructor(
   private val version: Long? = null,
 
   @Transient
-  private val events: MutableList<DomainEvent> = mutableListOf()
+  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf()
 ) {
 
   override fun equals(other: Any?): Boolean {

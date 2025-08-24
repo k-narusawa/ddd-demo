@@ -1,6 +1,6 @@
 package dev.k_narusawa.ddd_demo.app.task.domain.role
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import dev.k_narusawa.ddd_demo.app.task.domain.actor.ActorId
 import dev.k_narusawa.ddd_demo.app.task.domain.team.TeamId
 import jakarta.persistence.AttributeOverride
@@ -8,11 +8,10 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 import jakarta.persistence.Version
-
-import jakarta.persistence.Enumerated
-import jakarta.persistence.EnumType
 
 @Entity
 @Table(name = "ddd_actor_role")
@@ -38,6 +37,6 @@ class ActorRole private constructor(
   private val version: Long? = null,
 
   @Transient
-  private val events: MutableList<DomainEvent> = mutableListOf()
+  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf()
 ) {
 }

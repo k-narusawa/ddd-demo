@@ -1,6 +1,6 @@
 package dev.k_narusawa.ddd_demo.app.task.domain.actor
 
-import dev.k_narusawa.ddd_demo.app.identity_access.domain.DomainEvent
+import dev.k_narusawa.ddd_demo.app.identity_access.domain.IdentityAccessDomainEvent
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -17,14 +17,24 @@ class Actor private constructor(
   val actorId: ActorId,
 
   @Embedded
-  @AttributeOverride(name = "value", column = Column("name"))
-  private var name: Name,
+  @AttributeOverride(name = "value", column = Column("personal_name"))
+  private var personalName: PersonalName,
 
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
 
   @Transient
-  private val events: MutableList<DomainEvent> = mutableListOf()
+  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf()
 ) {
+  companion object {
+    fun signup(actorId: ActorId, personalName: PersonalName) = Actor(
+      actorId = actorId,
+      personalName = personalName
+    )
+  }
+
+  fun getEvents() = events.toList()
+
+  fun getPersonalName() = personalName
 }
