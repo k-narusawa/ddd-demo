@@ -39,4 +39,12 @@ class ActorRole private constructor(
   @Transient
   private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf()
 ) {
+  companion object {
+    fun signedUpFrom(actorId: ActorId, teamId: TeamId) = ActorRole(
+      actorRoleId = ActorRoleId.new(),
+      actorId = actorId,
+      teamId = teamId,
+      role = Role.ADMIN
+    )
+  }
 }

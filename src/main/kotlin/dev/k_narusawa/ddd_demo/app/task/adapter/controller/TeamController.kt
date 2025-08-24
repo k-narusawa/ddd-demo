@@ -2,7 +2,7 @@ package dev.k_narusawa.ddd_demo.app.task.adapter.controller
 
 import dev.k_narusawa.ddd_demo.app.task.adapter.controller.model.CreateTeamRequest
 import dev.k_narusawa.ddd_demo.app.task.adapter.controller.model.CreateTeamResponse
-import dev.k_narusawa.ddd_demo.app.task.application.port.CreateTeamInputBoundary
+import dev.k_narusawa.ddd_demo.app.task.application.port.TeamInputBoundary
 import dev.k_narusawa.ddd_demo.app.task.application.service.IdentityAccessService
 import dev.k_narusawa.ddd_demo.app.task.application.usecase.createTeam.CreateTeamInputData
 import org.springframework.http.HttpHeaders
@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/task/teams")
 class TeamController(
   private val identityAccessService: IdentityAccessService,
-  private val createTeamInputBoundary: CreateTeamInputBoundary,
+  private val teamInputBoundary: TeamInputBoundary,
 ) {
-
   @PostMapping
   suspend fun post(
     @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false)
@@ -42,8 +41,7 @@ class TeamController(
       teamName = requestBody.name,
     )
 
-    val output = createTeamInputBoundary.handle(input = input)
-
+    val output = teamInputBoundary.handle(input = input)
     return ResponseEntity.ok(output.response)
   }
 }
