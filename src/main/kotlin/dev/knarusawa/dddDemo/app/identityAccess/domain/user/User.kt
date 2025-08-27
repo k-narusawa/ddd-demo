@@ -1,9 +1,9 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessDomainEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedDomainEvent
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChangedDomainEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChangedEvent
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -39,7 +39,7 @@ class User private constructor(
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
   @Transient
-  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf(),
+  private val events: MutableList<IdentityAccessEvent> = mutableListOf(),
 ) {
   companion object {
     fun signup(
@@ -54,7 +54,7 @@ class User private constructor(
           password = password,
           accountStatus = AccountStatus.NORMAL,
         )
-      val event = UserSignupCompletedDomainEvent(user = user, personalName = personalName)
+      val event = UserSignupCompletedEvent(user = user, personalName = personalName)
       user.events.add(event)
       return user
     }
@@ -98,7 +98,7 @@ class User private constructor(
     this.username = newUsername
 
     val event =
-      UsernameChangedDomainEvent(
+      UsernameChangedEvent(
         user = this,
         ipAddress = ipAddress,
         userAgent = userAgent,

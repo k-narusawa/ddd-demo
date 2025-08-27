@@ -4,8 +4,8 @@ import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.AccountLock
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.Token
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.TokenService
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailedDomainEvent
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceededDomainEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailedEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceededEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -39,7 +39,7 @@ class UserService(
       userRepository.save(user = user)
 
       val event =
-        LoginFailedDomainEvent(
+        LoginFailedEvent(
           user = user,
           userAgent = userAgent,
           ipAddress = ipAddress,
@@ -56,7 +56,7 @@ class UserService(
     userRepository.save(user = user)
 
     val event =
-      LoginSucceededDomainEvent(
+      LoginSucceededEvent(
         user = user,
         userAgent = userAgent,
         ipAddress = ipAddress,

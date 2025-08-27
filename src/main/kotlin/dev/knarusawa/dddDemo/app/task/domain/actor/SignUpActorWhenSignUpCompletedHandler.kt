@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.actor
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedDomainEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
@@ -10,7 +10,7 @@ class SignUpActorWhenSignUpCompletedHandler(
   private val actorRepository: ActorRepository,
 ) {
   @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-  fun handle(event: UserSignupCompletedDomainEvent) {
+  fun handle(event: UserSignupCompletedEvent) {
     val actorId = ActorId.from(value = event.user.userId.get())
     val foundActor = actorRepository.findById(actorId)
     if (foundActor.isEmpty) {

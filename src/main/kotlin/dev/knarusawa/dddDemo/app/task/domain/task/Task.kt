@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessDomainEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -35,7 +35,7 @@ class Task private constructor(
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
   @Transient
-  private val events: MutableList<IdentityAccessDomainEvent> = mutableListOf(),
+  private val events: MutableList<IdentityAccessEvent> = mutableListOf(),
 ) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
