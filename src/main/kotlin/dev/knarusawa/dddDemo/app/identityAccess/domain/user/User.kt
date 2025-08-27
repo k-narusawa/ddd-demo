@@ -13,7 +13,6 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 import jakarta.persistence.Version
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "ddd_user")
@@ -27,10 +26,12 @@ class User private constructor(
   @Embedded
   @AttributeOverride(name = "value", column = Column("password"))
   private var password: Password,
+  @Embedded
   @AttributeOverride(name = "value", column = Column("login_failure_count"))
-  private var loginFailureCount: Int = 0,
+  private var loginFailureCount: LoginFailureCount = LoginFailureCount.init(),
+  @Embedded
   @AttributeOverride(name = "value", column = Column("last_login_failed_at"))
-  private var lastLoginFailedAt: LocalDateTime? = null,
+  private var lastLoginFailedAt: LastLoginFailedAt = LastLoginFailedAt.init(),
   @Enumerated(EnumType.STRING)
   @AttributeOverride(name = "value", column = Column("account_status"))
   private var accountStatus: AccountStatus,
@@ -76,15 +77,15 @@ class User private constructor(
   }
 
   fun unlock() {
-    this.loginFailureCount = 0
-    this.lastLoginFailedAt = null
+    this.loginFailureCount = LoginFailureCount.reset()
+    this.lastLoginFailedAt = LastLoginFailedAt.reset()
     this.accountStatus = AccountStatus.NORMAL
   }
 
   fun loginFailed() {
-    this.loginFailureCount = this.loginFailureCount + 1
-    this.lastLoginFailedAt = LocalDateTime.now()
-    if (this.loginFailureCount >= 5) {
+    this.loginFailureCount = LoginFailureCount.increment(count = this.loginFailureCount)
+    this.lastLoginFailedAt = LastLoginFailedAt.now()
+    if (this.loginFailureCount.isLockedCount()) {
       this.accountStatus = AccountStatus.ACCOUNT_LOCK
     }
   }
