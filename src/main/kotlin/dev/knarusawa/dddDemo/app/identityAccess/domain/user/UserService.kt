@@ -2,8 +2,6 @@ package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.AccountLock
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.loginAttempt.LoginAttempt
-import dev.knarusawa.dddDemo.app.identityAccess.domain.loginAttempt.LoginAttemptRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.Token
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.TokenService
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailedDomainEvent
@@ -13,10 +11,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
+@Transactional(noRollbackFor = [LoginFailed::class, AccountLock::class])
 class UserService(
   private val userRepository: UserRepository,
-  private val loginAttemptRepository: LoginAttemptRepository,
   private val tokenService: TokenService,
   private val eventPublisher: ApplicationEventPublisher,
 ) {
@@ -38,6 +35,9 @@ class UserService(
     try {
       user.verifyPassword(rawPassword = password)
     } catch (ex: LoginFailed) {
+      user.loginFailed()
+      userRepository.save(user = user)
+
       val event =
         LoginFailedDomainEvent(
           user = user,
@@ -45,17 +45,15 @@ class UserService(
           ipAddress = ipAddress,
         )
       eventPublisher.publishEvent(event)
-      val attempt =
-        loginAttemptRepository.findByUserId(userId = user.userId)
-          ?: LoginAttempt.new(userId = user.userId)
-      if (attempt.isLocked()) {
-        throw AccountLock(
-          cause = ex,
-          userId = user.userId,
-        )
+
+      if (user.isLocked()) {
+        throw AccountLock()
       }
       throw ex
     }
+
+    user.unlock()
+    userRepository.save(user = user)
 
     val event =
       LoginSucceededDomainEvent(

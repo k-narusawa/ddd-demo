@@ -144,6 +144,9 @@ class UserTest {
       userId,
       username,
       password,
+      0,
+      null,
+      AccountStatus.NORMAL,
       1L,
       mutableListOf<IdentityAccessDomainEvent>(),
     )

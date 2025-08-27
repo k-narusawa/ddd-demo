@@ -8,4 +8,6 @@ interface UserRepository : JpaRepository<User, UserId> {
   fun save(user: User)
 
   fun findByUsername(username: Username): User?
+
+  fun findByUserId(userId: UserId): User?
 }

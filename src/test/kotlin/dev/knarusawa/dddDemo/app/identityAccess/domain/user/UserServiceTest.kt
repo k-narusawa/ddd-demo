@@ -2,7 +2,6 @@ package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.AccountLock
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.loginAttempt.LoginAttemptRepository
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
 import dev.knarusawa.dddDemo.testFactory.TestUserFactory
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -23,7 +22,6 @@ class UserServiceTest
   @Autowired
   constructor(
     private val userRepository: UserRepository,
-    private val loginAttemptRepository: LoginAttemptRepository,
     private val sut: UserService,
     private val testUserFactory: TestUserFactory,
   ) {
@@ -83,11 +81,14 @@ class UserServiceTest
       @Test
       @DisplayName("パスワードが不正な場合、LoginFailed例外をスローする")
       fun login_should_throw_login_failed_when_password_is_incorrect() {
-        testUserFactory.createUser(username = username, password = password)
+        val user = testUserFactory.createUser(username = username, password = password)
 
         assertThrows<LoginFailed> {
           sut.login(username, "wrong-password", userAgent, ipAddress)
         }
+
+        val userFromRepo = userRepository.findByUserId(user.userId)
+        assertFalse(userFromRepo!!.isLocked())
       }
 
       @Test
@@ -104,8 +105,9 @@ class UserServiceTest
         assertThrows<AccountLock> {
           sut.login(username, "wrong-password", userAgent, ipAddress)
         }
-        val loginAttempt = loginAttemptRepository.findByUserId(user.userId)
-        assertTrue(loginAttempt!!.isLocked())
+
+        val userFromRepo = userRepository.findByUserId(userId = user.userId)
+        assertTrue(userFromRepo!!.isLocked())
       }
     }
   }
