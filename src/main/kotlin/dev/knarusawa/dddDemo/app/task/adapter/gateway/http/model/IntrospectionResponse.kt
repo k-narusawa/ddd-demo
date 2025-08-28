@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.adapter.http.model
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.http.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

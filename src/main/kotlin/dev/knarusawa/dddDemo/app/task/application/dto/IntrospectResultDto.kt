@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.application.dto
 
-import dev.knarusawa.dddDemo.app.task.adapter.http.model.IntrospectionResponse
+import dev.knarusawa.dddDemo.app.task.adapter.gateway.http.model.IntrospectionResponse
 
 data class IntrospectResultDto(
   val sub: String?,

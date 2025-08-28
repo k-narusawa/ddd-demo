@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.adapter.http
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.http
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

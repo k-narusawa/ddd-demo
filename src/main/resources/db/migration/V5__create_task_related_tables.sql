@@ -26,23 +26,3 @@ CREATE TRIGGER trigger_set_audit_columns
     BEFORE INSERT OR UPDATE ON ddd_team
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();
-
-CREATE TABLE ddd_task (
-    task_id VARCHAR(36) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    assignee VARCHAR(36),
-    from_time TIMESTAMP,
-    to_time TIMESTAMP,
-    version BIGINT,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    created_by TEXT NOT NULL DEFAULT CURRENT_USER,
-    updated_by TEXT NOT NULL DEFAULT CURRENT_USER,
-    FOREIGN KEY (assignee) REFERENCES ddd_actor(actor_id)
-);
-
-CREATE TRIGGER trigger_set_audit_columns
-    BEFORE INSERT OR UPDATE ON ddd_task
-    FOR EACH ROW
-    EXECUTE FUNCTION set_audit_columns();
