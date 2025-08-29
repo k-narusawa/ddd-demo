@@ -11,16 +11,35 @@ import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 class TaskState private constructor(
   val taskId: TaskId,
   val teamId: TeamId,
-  var operator: ActorId,
-  var title: Title,
-  var description: Description?,
-  var assigner: ActorId?,
-  var assignee: ActorId?,
-  var fromTime: FromTime?,
-  var toTime: ToTime?,
-  var completed: Boolean,
-  var version: Long,
+  operator: ActorId,
+  title: Title,
+  description: Description?,
+  assigner: ActorId?,
+  assignee: ActorId?,
+  fromTime: FromTime?,
+  toTime: ToTime?,
+  completed: Boolean,
+  version: Long,
 ) {
+  var operator = operator
+    private set
+  var title = title
+    private set
+  var description = description
+    private set
+  var assigner = assigner
+    private set
+  var assignee = assignee
+    private set
+  var fromTime = fromTime
+    private set
+  var toTime = toTime
+    private set
+  var completed = completed
+    private set
+  var version = version
+    private set
+
   companion object {
     fun init(cmd: CreateTaskCommand) =
       TaskState(
@@ -33,6 +52,21 @@ class TaskState private constructor(
         assignee = cmd.assignee,
         fromTime = cmd.fromTime,
         toTime = cmd.toTime,
+        completed = false,
+        version = 1,
+      )
+
+    fun init(event: TaskCreated) =
+      TaskState(
+        teamId = event.teamId,
+        operator = event.operator,
+        taskId = event.taskId,
+        title = event.title,
+        description = event.description,
+        assigner = event.assigner,
+        assignee = event.assignee,
+        fromTime = event.fromTime,
+        toTime = event.toTime,
         completed = false,
         version = 1,
       )

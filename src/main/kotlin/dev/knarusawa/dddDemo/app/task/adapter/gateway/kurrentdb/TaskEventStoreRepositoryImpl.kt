@@ -1,7 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb.eventData.TaskEventData
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
@@ -17,10 +16,10 @@ import java.util.UUID
 @Repository
 class TaskEventStoreRepositoryImpl(
   private val client: KurrentDBClient,
+  private val objectMapper: ObjectMapper,
 ) : TaskEventStoreRepository {
   companion object {
     private const val STREAM_NAME_PREFIX = "task_event-"
-    private val objectMapper = ObjectMapper().registerModule(JavaTimeModule())
   }
 
   private fun TaskId.streamName() = "$STREAM_NAME_PREFIX$this"

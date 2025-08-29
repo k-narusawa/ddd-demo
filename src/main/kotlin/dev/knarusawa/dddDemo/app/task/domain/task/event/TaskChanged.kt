@@ -1,7 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -15,19 +14,19 @@ import java.time.LocalDateTime
 data class TaskChanged
   @JsonCreator
   constructor(
-    @JsonProperty("taskId") override val taskId: TaskId,
-    @JsonProperty("type") override val type: TaskEventType,
-    @JsonProperty("teamId") override val teamId: TeamId,
-    @JsonProperty("operator") override val operator: ActorId,
-    @JsonProperty("title") override val title: Title,
-    @JsonProperty("description") override val description: Description?,
-    @JsonProperty("assigner") override val assigner: ActorId?,
-    @JsonProperty("assignee") override val assignee: ActorId?,
-    @JsonProperty("fromTime") override val fromTime: FromTime?,
-    @JsonProperty("toTime") override val toTime: ToTime?,
-    @JsonProperty("occurredAt") override val occurredAt: LocalDateTime = LocalDateTime.now(),
-    @JsonProperty("published") override val published: Boolean = false,
-    @JsonProperty("version") override val version: Long,
+    override val taskId: TaskId,
+    override val type: TaskEventType,
+    override val teamId: TeamId,
+    override val operator: ActorId,
+    override val title: Title,
+    override val description: Description?,
+    override val assigner: ActorId?,
+    override val assignee: ActorId?,
+    override val fromTime: FromTime?,
+    override val toTime: ToTime?,
+    override val occurredAt: LocalDateTime = LocalDateTime.now(),
+    override val completed: Boolean,
+    override val version: Long,
   ) : TaskEvent(
       source = taskId,
     ) {
@@ -56,7 +55,7 @@ data class TaskChanged
         fromTime = fromTime,
         toTime = toTime,
         occurredAt = LocalDateTime.now(),
-        published = false,
+        completed = completed ?: false,
         version = version,
       )
     }

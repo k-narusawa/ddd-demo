@@ -1,7 +1,9 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
+import jakarta.persistence.Embeddable
 import java.util.UUID
 
+@Embeddable
 data class TaskId(
   private val value: String,
 ) {

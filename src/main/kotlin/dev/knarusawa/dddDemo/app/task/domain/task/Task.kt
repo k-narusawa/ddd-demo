@@ -26,6 +26,23 @@ class Task private constructor(
         events = mutableListOf(event),
       )
     }
+
+    fun applyFromFirstEvent(events: List<TaskEvent>): Task {
+      val createdEvent =
+        events.firstOrNull() as? TaskCreated
+          ?: throw IllegalStateException()
+
+      val taskState = TaskState.init(event = createdEvent)
+      val task = Task(state = taskState)
+      events.forEachIndexed { index, event ->
+        if (index == 0) {
+          return@forEachIndexed
+        }
+        taskState.apply(event)
+        task.events.add(event)
+      }
+      return task
+    }
   }
 
   fun getEvents() = this.events.toList()
