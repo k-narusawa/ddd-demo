@@ -1,8 +1,8 @@
 package dev.knarusawa.dddDemo.app.task.domain.team
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
-import dev.knarusawa.dddDemo.app.task.domain.role.ActorRole
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.role.MemberRole
 import dev.knarusawa.dddDemo.app.task.domain.role.Role
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -26,7 +26,7 @@ class Team private constructor(
   private var teamName: TeamName,
   @OneToMany(cascade = [CascadeType.ALL])
   @JoinColumn(name = "team_id", referencedColumnName = "team_id")
-  private var members: MutableList<ActorRole> = mutableListOf(),
+  private var members: MutableList<MemberRole> = mutableListOf(),
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
@@ -36,14 +36,14 @@ class Team private constructor(
   companion object {
     fun of(
       teamName: TeamName,
-      actorId: ActorId,
+      memberId: MemberId,
     ): Team {
       val team =
         Team(
           teamId = TeamId.new(),
           teamName = teamName,
         )
-      team.add(actorId = actorId, role = Role.ADMIN)
+      team.add(memberId = memberId, role = Role.ADMIN)
 
       return team
     }
@@ -54,16 +54,16 @@ class Team private constructor(
   fun getEvents() = this.events.toList()
 
   fun add(
-    actorId: ActorId,
+    memberId: MemberId,
     role: Role,
   ) {
-    this.members.add(ActorRole.of(actorId = actorId, role = role, teamId = this.teamId))
+    this.members.add(MemberRole.of(memberId = memberId, role = role, teamId = this.teamId))
   }
 
-  fun hasWriteRole(member: ActorId): Boolean {
-    return this.members.any { actorRole ->
-      return if (actorRole.actorId == member) {
-        actorRole.role() == Role.ADMIN || actorRole.role() == Role.WRITE
+  fun hasWriteRole(member: MemberId): Boolean {
+    return this.members.any { memberRole ->
+      return if (memberRole.memberId == member) {
+        memberRole.role() == Role.ADMIN || memberRole.role() == Role.WRITE
       } else {
         false
       }

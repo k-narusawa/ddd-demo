@@ -11,7 +11,7 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
         "ddd_user",
         "ddd_activity_log",
         "ddd_token",
-        "ddd_actor",
+        "ddd_member",
         "ddd_team",
       )
   }

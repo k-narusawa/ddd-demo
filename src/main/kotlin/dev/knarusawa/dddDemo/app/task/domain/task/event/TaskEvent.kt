@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
@@ -17,11 +17,11 @@ sealed class TaskEvent(
   abstract val taskId: TaskId
   abstract val type: TaskEventType
   abstract val teamId: TeamId
-  abstract val operator: ActorId
+  abstract val operator: MemberId
   abstract val title: Title
   abstract val description: Description?
-  abstract val assigner: ActorId?
-  abstract val assignee: ActorId?
+  abstract val assigner: MemberId?
+  abstract val assignee: MemberId?
   abstract val fromTime: FromTime?
   abstract val toTime: ToTime?
   abstract val occurredAt: LocalDateTime

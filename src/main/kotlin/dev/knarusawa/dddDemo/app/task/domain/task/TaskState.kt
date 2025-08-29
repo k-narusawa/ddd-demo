@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCompleted
@@ -11,11 +11,11 @@ import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 class TaskState private constructor(
   val taskId: TaskId,
   val teamId: TeamId,
-  operator: ActorId,
+  operator: MemberId,
   title: Title,
   description: Description?,
-  assigner: ActorId?,
-  assignee: ActorId?,
+  assigner: MemberId?,
+  assignee: MemberId?,
   fromTime: FromTime?,
   toTime: ToTime?,
   completed: Boolean,

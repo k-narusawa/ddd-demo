@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.application.usecase.createTask
 
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
@@ -10,11 +10,11 @@ import java.time.LocalDateTime
 
 data class CreateTaskInputData private constructor(
   val teamId: TeamId,
-  val operator: ActorId,
+  val operator: MemberId,
   val title: Title,
   val description: Description?,
-  val assigner: ActorId?,
-  val assignee: ActorId?,
+  val assigner: MemberId?,
+  val assignee: MemberId?,
   val fromTime: FromTime?,
   val toTime: ToTime?,
 ) {
@@ -30,11 +30,11 @@ data class CreateTaskInputData private constructor(
       toTime: LocalDateTime?,
     ) = CreateTaskInputData(
       teamId = TeamId.from(value = teamId),
-      operator = ActorId.from(value = operator),
+      operator = MemberId.from(value = operator),
       title = Title.of(value = title),
       description = description?.let { Description.of(value = it) },
-      assigner = assigner?.let { ActorId.from(value = it) },
-      assignee = assignee?.let { ActorId.from(value = it) },
+      assigner = assigner?.let { MemberId.from(value = it) },
+      assignee = assignee?.let { MemberId.from(value = it) },
       fromTime = fromTime?.let { FromTime.of(value = it) },
       toTime = toTime?.let { ToTime.of(value = it) },
     )

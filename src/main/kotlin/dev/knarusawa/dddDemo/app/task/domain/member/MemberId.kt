@@ -1,17 +1,17 @@
-package dev.knarusawa.dddDemo.app.task.domain.actor
+package dev.knarusawa.dddDemo.app.task.domain.member
 
 import jakarta.persistence.Embeddable
 import java.io.Serializable
 import java.util.UUID
 
 @Embeddable
-data class ActorId(
+data class MemberId(
   private val value: String,
 ) : Serializable {
   companion object {
-    fun new(): ActorId = ActorId(value = UUID.randomUUID().toString())
+    fun new(): MemberId = MemberId(value = UUID.randomUUID().toString())
 
-    fun from(value: String) = ActorId(value = value)
+    fun from(value: String) = MemberId(value = value)
   }
 
   fun get() = value

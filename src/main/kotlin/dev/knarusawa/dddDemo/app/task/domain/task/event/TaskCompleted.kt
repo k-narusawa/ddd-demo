@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
@@ -14,11 +14,11 @@ data class TaskCompleted(
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val teamId: TeamId,
-  override val operator: ActorId,
+  override val operator: MemberId,
   override val title: Title,
   override val description: Description?,
-  override val assigner: ActorId?,
-  override val assignee: ActorId?,
+  override val assigner: MemberId?,
+  override val assignee: MemberId?,
   override val fromTime: FromTime?,
   override val toTime: ToTime?,
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
@@ -31,11 +31,11 @@ data class TaskCompleted(
     fun of(
       taskId: TaskId,
       teamId: TeamId,
-      operator: ActorId,
+      operator: MemberId,
       title: Title,
       description: Description?,
-      assigner: ActorId?,
-      assignee: ActorId?,
+      assigner: MemberId?,
+      assignee: MemberId?,
       fromTime: FromTime?,
       toTime: ToTime?,
       version: Long,

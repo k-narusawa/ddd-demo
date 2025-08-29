@@ -5,13 +5,13 @@ import java.io.Serializable
 import java.util.UUID
 
 @Embeddable
-data class ActorRoleId(
+data class MemberRoleId(
   private val value: String,
 ) : Serializable {
   companion object {
-    fun new(): ActorRoleId = ActorRoleId(value = UUID.randomUUID().toString())
+    fun new(): MemberRoleId = MemberRoleId(value = UUID.randomUUID().toString())
 
-    fun from(value: String) = ActorRoleId(value = value)
+    fun from(value: String) = MemberRoleId(value = value)
   }
 
   fun get() = value

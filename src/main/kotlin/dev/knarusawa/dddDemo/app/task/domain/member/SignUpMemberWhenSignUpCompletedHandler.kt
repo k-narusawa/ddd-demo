@@ -1,25 +1,26 @@
-package dev.knarusawa.dddDemo.app.task.domain.actor
+package dev.knarusawa.dddDemo.app.task.domain.member
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent
+import dev.knarusawa.dddDemo.app.task.domain.actor.PersonalName
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
-class SignUpActorWhenSignUpCompletedHandler(
-  private val actorRepository: ActorRepository,
+class SignUpMemberWhenSignUpCompletedHandler(
+  private val memberRepository: MemberRepository,
 ) {
   @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
   fun handle(event: UserSignupCompletedEvent) {
-    val actorId = ActorId.from(value = event.user.userId.get())
-    val foundActor = actorRepository.findById(actorId)
-    if (foundActor.isEmpty) {
-      val actor =
-        Actor.signup(
-          actorId = actorId,
+    val memberId = MemberId.from(value = event.user.userId.get())
+    val foundMember = memberRepository.findById(memberId)
+    if (foundMember.isEmpty) {
+      val member =
+        Member.signup(
+          memberId = memberId,
           personalName = PersonalName.of(value = event.personalName),
         )
-      actorRepository.save(actor)
+      memberRepository.save(member)
     }
   }
 }

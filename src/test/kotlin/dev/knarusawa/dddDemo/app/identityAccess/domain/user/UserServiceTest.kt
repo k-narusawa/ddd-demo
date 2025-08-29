@@ -17,7 +17,7 @@ import org.springframework.test.context.TestExecutionListeners
 
 @SpringBootTest
 @TestExecutionListeners(listeners = [DatabaseCleanupListener::class])
-@DisplayName("ドメインサービス_UserService")
+@DisplayName("ドメイン_サービス_UserService")
 class UserServiceTest
   @Autowired
   constructor(

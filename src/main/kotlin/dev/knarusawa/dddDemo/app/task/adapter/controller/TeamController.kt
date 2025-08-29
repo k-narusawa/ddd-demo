@@ -38,7 +38,7 @@ class TeamController(
 
     val input =
       CreateTeamInputData.of(
-        actorId = introspect.sub!!,
+        memberId = introspect.sub!!,
         teamName = requestBody.name,
       )
 

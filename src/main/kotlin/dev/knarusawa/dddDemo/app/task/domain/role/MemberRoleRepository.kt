@@ -4,4 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ActorRoleRepository : JpaRepository<ActorRole, ActorRoleId>
+interface MemberRoleRepository : JpaRepository<MemberRole, MemberRoleId>

@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.task.domain.role
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -14,14 +14,14 @@ import jakarta.persistence.Table
 import jakarta.persistence.Version
 
 @Entity
-@Table(name = "ddd_actor_role")
-class ActorRole private constructor(
+@Table(name = "ddd_member_role")
+class MemberRole private constructor(
   @EmbeddedId
-  @AttributeOverride(name = "value", column = Column("actor_role_id"))
-  val actorRoleId: ActorRoleId,
+  @AttributeOverride(name = "value", column = Column("member_role_id"))
+  val memberRoleId: MemberRoleId,
   @Embedded
-  @AttributeOverride(name = "value", column = Column("actor_id"))
-  val actorId: ActorId,
+  @AttributeOverride(name = "value", column = Column("member_id"))
+  val memberId: MemberId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("team_id"))
   val teamId: TeamId,
@@ -36,12 +36,12 @@ class ActorRole private constructor(
 ) {
   companion object {
     fun of(
-      actorId: ActorId,
+      memberId: MemberId,
       role: Role,
       teamId: TeamId,
-    ) = ActorRole(
-      actorRoleId = ActorRoleId.new(),
-      actorId = actorId,
+    ) = MemberRole(
+      memberRoleId = MemberRoleId.new(),
+      memberId = memberId,
       teamId = teamId,
       role = role,
     )

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@DisplayName("ドメイン_値オブジェクト_Username")
 class UsernameTest {
   @Nested
   @DisplayName("正常値テスト")

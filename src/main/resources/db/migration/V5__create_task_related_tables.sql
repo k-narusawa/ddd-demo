@@ -1,5 +1,5 @@
-CREATE TABLE ddd_actor (
-    actor_id VARCHAR(36) PRIMARY KEY,
+CREATE TABLE ddd_member (
+    member_id VARCHAR(36) PRIMARY KEY,
     personal_name VARCHAR(255) NOT NULL,
     version BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -9,7 +9,7 @@ CREATE TABLE ddd_actor (
 );
 
 CREATE TRIGGER trigger_set_audit_columns
-    BEFORE INSERT OR UPDATE ON ddd_actor
+    BEFORE INSERT OR UPDATE ON ddd_member
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();
 

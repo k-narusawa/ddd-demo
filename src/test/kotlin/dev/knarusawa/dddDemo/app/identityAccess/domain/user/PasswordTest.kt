@@ -10,6 +10,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@DisplayName("ドメイン_値オブジェクト_パスワード")
 class PasswordTest {
   @Nested
   @DisplayName("正常値テスト")

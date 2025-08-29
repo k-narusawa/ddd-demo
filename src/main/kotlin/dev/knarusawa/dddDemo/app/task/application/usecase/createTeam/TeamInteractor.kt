@@ -14,7 +14,7 @@ class TeamInteractor(
   private val applicationEventPublisher: ApplicationEventPublisher,
 ) : TeamInputBoundary {
   override fun handle(input: CreateTeamInputData): CreateTeamOutputData {
-    val team = Team.of(teamName = input.teamName, actorId = input.actorId)
+    val team = Team.of(teamName = input.teamName, memberId = input.memberId)
 
     teamRepository.save(team = team)
     team.getEvents().forEach { event ->

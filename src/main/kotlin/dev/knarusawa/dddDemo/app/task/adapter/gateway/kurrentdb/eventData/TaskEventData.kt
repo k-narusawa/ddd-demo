@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
@@ -59,11 +59,11 @@ data class TaskEventData
             taskId = TaskId.from(value = this.taskId),
             type = TaskEventType.TASK_CREATED,
             teamId = TeamId.from(value = this.taskId),
-            operator = ActorId.from(value = this.operator),
+            operator = MemberId.from(value = this.operator),
             title = Title.of(value = this.title),
             description = this.description?.let { Description.of(value = it) },
-            assigner = this.assigner?.let { ActorId.from(value = it) },
-            assignee = this.assignee?.let { ActorId.from(value = it) },
+            assigner = this.assigner?.let { MemberId.from(value = it) },
+            assignee = this.assignee?.let { MemberId.from(value = it) },
             fromTime = this.fromTime?.let { FromTime.of(value = it) },
             toTime = this.toTime?.let { ToTime.of(value = it) },
             occurredAt = this.occurredAt,

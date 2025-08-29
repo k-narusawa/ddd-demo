@@ -4,8 +4,8 @@ import dev.knarusawa.dddDemo.app.identityAccess.application.exception.UsernameAl
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Password
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorRepository
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberRepository
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
 import dev.knarusawa.dddDemo.testFactory.TestUserFactory
 import kotlinx.coroutines.runBlocking
@@ -27,7 +27,7 @@ class SignupUserInteractorTest
   constructor(
     private val userRepository: UserRepository,
     private val sut: SignupUserInteractor,
-    private val actorRepository: ActorRepository,
+    private val memberRepository: MemberRepository,
     private val testUserFactory: TestUserFactory,
   ) {
     @Nested
@@ -48,8 +48,8 @@ class SignupUserInteractorTest
           assertEquals(sut.userId, user?.userId?.get())
           assertEquals(username.get(), user?.getUsername()?.get())
           val actor =
-            actorRepository.findByActorId(
-              actorId = ActorId.from(value = sut.userId),
+            memberRepository.findByMemberId(
+              memberId = MemberId.from(value = sut.userId),
             )
           assertNotNull(actor)
           assertEquals(input.personalName, actor?.getPersonalName()?.get())

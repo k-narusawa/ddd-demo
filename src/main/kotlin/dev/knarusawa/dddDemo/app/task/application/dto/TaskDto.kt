@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.application.dto
 
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Task
@@ -27,7 +27,7 @@ data class TaskDto(
   val teamId: TeamId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("operator"))
-  val operator: ActorId,
+  val operator: MemberId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("title"))
   val title: Title,
@@ -36,10 +36,10 @@ data class TaskDto(
   val description: Description?,
   @Embedded
   @AttributeOverride(name = "value", column = Column("assigner"))
-  val assigner: ActorId?,
+  val assigner: MemberId?,
   @Embedded
   @AttributeOverride(name = "value", column = Column("assignee"))
-  val assignee: ActorId?,
+  val assignee: MemberId?,
   @Embedded
   @AttributeOverride(name = "value", column = Column("from_time"))
   val fromTime: FromTime?,

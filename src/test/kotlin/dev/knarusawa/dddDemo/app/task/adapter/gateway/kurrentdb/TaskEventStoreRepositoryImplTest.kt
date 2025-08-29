@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb
 
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
+import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
@@ -34,11 +34,11 @@ class TaskEventStoreRepositoryImplTest
         val event =
           TaskCreated.of(
             teamId = TeamId.new(),
-            operator = ActorId.new(),
-            assigner = ActorId.new(),
+            operator = MemberId.new(),
+            assigner = MemberId.new(),
             title = Title.of("test"),
             description = Description.of("test"),
-            assignee = ActorId.new(),
+            assignee = MemberId.new(),
             fromTime = FromTime.of(LocalDateTime.now()),
             toTime = ToTime.of(LocalDateTime.now()),
           )
@@ -54,11 +54,11 @@ class TaskEventStoreRepositoryImplTest
         val event =
           TaskCreated.of(
             teamId = TeamId.new(),
-            operator = ActorId.new(),
-            assigner = ActorId.new(),
+            operator = MemberId.new(),
+            assigner = MemberId.new(),
             title = Title.of("test"),
             description = Description.of("test"),
-            assignee = ActorId.new(),
+            assignee = MemberId.new(),
             fromTime = FromTime.of(LocalDateTime.now()),
             toTime = ToTime.of(LocalDateTime.now()),
           )
