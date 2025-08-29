@@ -32,7 +32,7 @@ class TaskEventStoreRepositoryImplTest
         val event =
           TaskCreated.of(
             taskId = TaskId.new(),
-            eventVersion = 0,
+            version = 0,
             title = Title.of("test"),
             description = Description.of("test"),
             assignee = ActorId.new(),
@@ -52,7 +52,7 @@ class TaskEventStoreRepositoryImplTest
         val event =
           TaskCreated.of(
             taskId = taskId,
-            eventVersion = 0,
+            version = 0,
             title = Title.of("test"),
             description = Description.of("test"),
             assignee = ActorId.new(),
@@ -61,7 +61,7 @@ class TaskEventStoreRepositoryImplTest
           )
         sut.commit(event)
 
-        val events = sut.loadEvent(taskId = taskId)
+        val events = sut.loadEvents(taskId = taskId)
         assert(events.size == 1)
       }
     }

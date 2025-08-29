@@ -5,5 +5,5 @@ import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 interface TaskEventStoreRepository {
   fun commit(event: TaskEvent)
 
-  fun loadEvent(taskId: TaskId): List<TaskEvent>
+  fun loadEvents(taskId: TaskId): List<TaskEvent>
 }

@@ -21,10 +21,10 @@ class ActorRole private constructor(
   val actorRoleId: ActorRoleId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("actor_id"))
-  private var actorId: ActorId,
+  val actorId: ActorId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("team_id"))
-  private var teamId: TeamId,
+  val teamId: TeamId,
   @Enumerated(EnumType.STRING)
   @AttributeOverride(name = "value", column = Column("role"))
   private var role: Role,
@@ -35,14 +35,17 @@ class ActorRole private constructor(
   private val events: MutableList<IdentityAccessEvent> = mutableListOf(),
 ) {
   companion object {
-    fun signedUpFrom(
+    fun of(
       actorId: ActorId,
+      role: Role,
       teamId: TeamId,
     ) = ActorRole(
       actorRoleId = ActorRoleId.new(),
       actorId = actorId,
       teamId = teamId,
-      role = Role.ADMIN,
+      role = role,
     )
   }
+
+  fun role() = this.role
 }

@@ -1,50 +1,43 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
-import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.EmbeddedId
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import jakarta.persistence.Version
+import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
 
-@Entity
-@Table(name = "ddd_task")
 class Task private constructor(
-  @EmbeddedId
-  @AttributeOverride(name = "value", column = Column("task_id"))
-  val taskId: TaskId,
-  @Embedded
-  @AttributeOverride(name = "value", column = Column("title"))
-  private var title: Title,
-  @Embedded
-  @AttributeOverride(name = "value", column = Column("description"))
-  private var description: Description?,
-  @Embedded
-  @AttributeOverride(name = "value", column = Column("assignee"))
-  private val assignee: ActorId?,
-  @Embedded
-  @AttributeOverride(name = "value", column = Column("from_time"))
-  private val fromTime: FromTime?,
-  @Embedded
-  @AttributeOverride(name = "value", column = Column("to_time"))
-  private val toTime: ToTime?,
-  @Version
-  @AttributeOverride(name = "value", column = Column("version"))
-  private val version: Long? = null,
-  @Transient
-  private val events: MutableList<IdentityAccessEvent> = mutableListOf(),
+  val state: TaskState,
+  private val events: MutableList<TaskEvent> = mutableListOf(),
 ) {
+  companion object {
+    fun handle(cmd: CreateTaskCommand): Task {
+      val event =
+        TaskCreated.of(
+          teamId = cmd.teamId,
+          operator = cmd.operator,
+          title = cmd.title,
+          description = cmd.description,
+          assigner = cmd.assigner,
+          assignee = cmd.assignee,
+          fromTime = cmd.fromTime,
+          toTime = cmd.toTime,
+        )
+      return Task(
+        state = TaskState.init(cmd),
+        events = mutableListOf(event),
+      )
+    }
+  }
+
+  fun getEvents() = this.events.toList()
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is Task) return false
 
-    if (taskId !== other.taskId) return false
+    if (state?.taskId !== other.state?.taskId) return false
 
     return true
   }
 
-  override fun hashCode(): Int = taskId.hashCode()
+  override fun hashCode(): Int = state?.taskId.hashCode()
 }

@@ -3,6 +3,7 @@ package dev.knarusawa.dddDemo.app.task.domain.team
 import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.task.domain.actor.ActorId
 import dev.knarusawa.dddDemo.app.task.domain.role.ActorRole
+import dev.knarusawa.dddDemo.app.task.domain.role.Role
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -25,7 +26,7 @@ class Team private constructor(
   private var teamName: TeamName,
   @OneToMany(cascade = [CascadeType.ALL])
   @JoinColumn(name = "team_id", referencedColumnName = "team_id")
-  private var members: MutableList<ActorRole>,
+  private var members: MutableList<ActorRole> = mutableListOf(),
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
@@ -41,11 +42,8 @@ class Team private constructor(
         Team(
           teamId = TeamId.new(),
           teamName = teamName,
-          members = mutableListOf(),
         )
-
-      val admin = ActorRole.signedUpFrom(actorId = actorId, teamId = team.teamId)
-      team.add(actorRole = admin)
+      team.add(actorId = actorId, role = Role.ADMIN)
 
       return team
     }
@@ -55,7 +53,20 @@ class Team private constructor(
 
   fun getEvents() = this.events.toList()
 
-  fun add(actorRole: ActorRole) {
-    this.members.add(actorRole)
+  fun add(
+    actorId: ActorId,
+    role: Role,
+  ) {
+    this.members.add(ActorRole.of(actorId = actorId, role = role, teamId = this.teamId))
+  }
+
+  fun hasWriteRole(member: ActorId): Boolean {
+    return this.members.any { actorRole ->
+      return if (actorRole.actorId == member) {
+        actorRole.role() == Role.ADMIN || actorRole.role() == Role.WRITE
+      } else {
+        false
+      }
+    }
   }
 }
