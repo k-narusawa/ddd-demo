@@ -1,5 +1,6 @@
 package dev.knarusawa.dddDemo.config
 
+import dev.knarusawa.dddDemo.util.logger
 import io.kurrent.dbclient.CreatePersistentSubscriptionToAllOptions
 import io.kurrent.dbclient.KurrentDBClient
 import io.kurrent.dbclient.KurrentDBClientSettings
@@ -10,6 +11,10 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class KurrentDBConfig {
+  companion object {
+    private val log = logger()
+  }
+
   @Bean
   fun kurrentDBClient(): KurrentDBClient {
     val settings =
@@ -19,6 +24,7 @@ class KurrentDBConfig {
         .tls(false)
         .buildConnectionSettings()
 
+    log.info("KurrentDBClientの初期化")
     return KurrentDBClient.create(settings)
   }
 
@@ -31,6 +37,7 @@ class KurrentDBConfig {
         .tls(false)
         .buildConnectionSettings()
 
+    log.info("TaskProjectionSubscriptionClientの初期化")
     return KurrentDBPersistentSubscriptionsClient.create(settings).apply {
       val filter =
         SubscriptionFilter
