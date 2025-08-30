@@ -2,7 +2,7 @@ package dev.knarusawa.dddDemo.app.task.domain.role
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -23,8 +23,8 @@ class MemberRole private constructor(
   @AttributeOverride(name = "value", column = Column("member_id"))
   val memberId: MemberId,
   @Embedded
-  @AttributeOverride(name = "value", column = Column("team_id"))
-  val teamId: TeamId,
+  @AttributeOverride(name = "value", column = Column("project_id"))
+  val projectId: ProjectId,
   @Enumerated(EnumType.STRING)
   @AttributeOverride(name = "value", column = Column("role"))
   private var role: Role,
@@ -38,11 +38,11 @@ class MemberRole private constructor(
     fun of(
       memberId: MemberId,
       role: Role,
-      teamId: TeamId,
+      projectId: ProjectId,
     ) = MemberRole(
       memberRoleId = MemberRoleId.new(),
       memberId = memberId,
-      teamId = teamId,
+      projectId = projectId,
       role = role,
     )
   }

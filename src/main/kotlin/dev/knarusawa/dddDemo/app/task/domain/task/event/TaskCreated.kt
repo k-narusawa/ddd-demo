@@ -3,18 +3,18 @@ package dev.knarusawa.dddDemo.app.task.domain.task.event
 import dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb.eventData.TaskEventData
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
 data class TaskCreated private constructor(
   override val taskId: TaskId,
   override val type: TaskEventType,
-  override val teamId: TeamId,
+  override val projectId: ProjectId,
   override val operator: MemberId,
   override val title: Title,
   override val description: Description?,
@@ -30,7 +30,7 @@ data class TaskCreated private constructor(
   ) {
   companion object {
     fun of(
-      teamId: TeamId,
+      projectId: ProjectId,
       operator: MemberId,
       title: Title,
       description: Description?,
@@ -40,7 +40,7 @@ data class TaskCreated private constructor(
       toTime: ToTime?,
     ) = TaskCreated(
       taskId = TaskId.new(),
-      teamId = teamId,
+      projectId = projectId,
       operator = operator,
       type = TaskEventType.TASK_CREATED,
       title = title,
@@ -58,7 +58,7 @@ data class TaskCreated private constructor(
       TaskCreated(
         taskId = TaskId.from(value = eventData.taskId),
         type = TaskEventType.TASK_CREATED,
-        teamId = TeamId.from(value = eventData.taskId),
+        projectId = ProjectId.from(value = eventData.taskId),
         operator = MemberId.from(value = eventData.operator),
         title = Title.of(value = eventData.title),
         description = eventData.description?.let { Description.of(value = it) },

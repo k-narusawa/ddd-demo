@@ -14,7 +14,7 @@ class Task private constructor(
     fun handle(cmd: CreateTaskCommand): Task {
       val created =
         TaskCreated.of(
-          teamId = cmd.teamId,
+          projectId = cmd.projectId,
           operator = cmd.operator,
           title = cmd.title,
           description = cmd.description,
@@ -54,7 +54,7 @@ class Task private constructor(
     val changed =
       TaskChanged.of(
         taskId = cmd.taskId,
-        teamId = this.state.teamId,
+        projectId = this.state.projectId,
         operator = cmd.operator,
         title = cmd.title,
         description = cmd.description,

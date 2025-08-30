@@ -12,7 +12,7 @@ class ChangeTaskOutputData private constructor(
         response =
           TaskResponse(
             taskId = task.state!!.taskId.get(),
-            teamId = task.state.teamId.get(),
+            projectId = task.state.projectId.get(),
             operator = task.state.operator.get(),
             title = task.state.title.get(),
             description = task.state.description?.get(),

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/task/{teamId}")
+@RequestMapping("/api/task/{projectId}")
 class TaskController(
   private val identityAccessService: IdentityAccessService,
   private val taskInteractor: TaskInteractor,
@@ -26,8 +26,8 @@ class TaskController(
   suspend fun post(
     @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false)
     authorization: String?,
-    @PathVariable(name = "teamId")
-    teamId: String,
+    @PathVariable(name = "projectId")
+    projectId: String,
     @RequestBody
     body: CreateTaskRequest,
   ): ResponseEntity<TaskResponse> {
@@ -43,7 +43,7 @@ class TaskController(
 
     val input =
       CreateTaskInputData.of(
-        teamId = teamId,
+        projectId = projectId,
         operator = introspect.sub!!,
         title = body.title,
         description = body.description,
@@ -61,8 +61,8 @@ class TaskController(
   suspend fun put(
     @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false)
     authorization: String?,
-    @PathVariable(name = "teamId")
-    teamId: String,
+    @PathVariable(name = "projectId")
+    projectId: String,
     @PathVariable(name = "taskId")
     taskId: String,
     @RequestBody
@@ -81,7 +81,7 @@ class TaskController(
     val input =
       ChangeTaskInputData.of(
         taskId = taskId,
-        teamId = teamId,
+        projectId = projectId,
         operator = introspect.sub!!,
         title = body.title,
         description = body.description,

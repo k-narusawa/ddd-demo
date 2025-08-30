@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class TaskResponse(
   @JsonProperty("task_id") val taskId: String,
-  @JsonProperty("team_id") val teamId: String,
+  @JsonProperty("project_id") val projectId: String,
   @JsonProperty("operator") val operator: String,
   @JsonProperty("title") val title: String,
   @JsonProperty("description") val description: String?,

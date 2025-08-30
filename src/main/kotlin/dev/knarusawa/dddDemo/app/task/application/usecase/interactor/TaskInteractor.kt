@@ -5,29 +5,31 @@ import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.ChangeTaskIn
 import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.CreateTaskInputData
 import dev.knarusawa.dddDemo.app.task.application.usecase.outputData.ChangeTaskOutputData
 import dev.knarusawa.dddDemo.app.task.application.usecase.outputData.CreateTaskOutputData
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectRepository
 import dev.knarusawa.dddDemo.app.task.domain.task.Task
 import dev.knarusawa.dddDemo.app.task.domain.task.command.ChangeTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventStoreRepository
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamRepository
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 
 @Service
 class TaskInteractor(
-  private val teamRepository: TeamRepository,
+  private val projectRepository: ProjectRepository,
   private val taskEventStoreRepository: TaskEventStoreRepository,
 ) : TaskInputBoundary {
   override fun handle(input: CreateTaskInputData): CreateTaskOutputData {
-    val team = teamRepository.findByTeamId(teamId = input.teamId) ?: throw RuntimeException()
+    val project =
+      projectRepository.findByProjectId(projectId = input.projectId)
+        ?: throw RuntimeException()
 
-    if (!team.hasWriteRole(input.operator)) {
+    if (!project.hasWriteRole(input.operator)) {
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 
     val cmd =
       CreateTaskCommand(
-        teamId = input.teamId,
+        projectId = input.projectId,
         operator = input.operator,
         title = input.title,
         description = input.description,
@@ -45,9 +47,11 @@ class TaskInteractor(
   }
 
   override fun handle(input: ChangeTaskInputData): ChangeTaskOutputData {
-    val team = teamRepository.findByTeamId(teamId = input.teamId) ?: throw RuntimeException()
+    val project =
+      projectRepository.findByProjectId(projectId = input.projectId)
+        ?: throw RuntimeException()
 
-    if (!team.hasWriteRole(input.operator)) {
+    if (!project.hasWriteRole(input.operator)) {
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 

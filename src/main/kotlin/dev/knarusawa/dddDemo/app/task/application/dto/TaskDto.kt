@@ -1,13 +1,13 @@
 package dev.knarusawa.dddDemo.app.task.application.dto
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Task
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -23,8 +23,8 @@ data class TaskDto(
   @AttributeOverride(name = "value", column = Column("task_id"))
   val taskId: TaskId,
   @Embedded
-  @AttributeOverride(name = "value", column = Column("team_id"))
-  val teamId: TeamId,
+  @AttributeOverride(name = "value", column = Column("project_id"))
+  val projectId: ProjectId,
   @Embedded
   @AttributeOverride(name = "value", column = Column("operator"))
   val operator: MemberId,
@@ -56,7 +56,7 @@ data class TaskDto(
     fun from(task: Task) =
       TaskDto(
         taskId = task.state.taskId,
-        teamId = task.state.teamId,
+        projectId = task.state.projectId,
         operator = task.state.operator,
         title = task.state.title,
         description = task.state.description,

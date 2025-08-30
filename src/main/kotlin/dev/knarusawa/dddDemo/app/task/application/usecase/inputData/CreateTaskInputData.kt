@@ -1,15 +1,15 @@
 package dev.knarusawa.dddDemo.app.task.application.usecase.inputData
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
 data class CreateTaskInputData private constructor(
-  val teamId: TeamId,
+  val projectId: ProjectId,
   val operator: MemberId,
   val title: Title,
   val description: Description?,
@@ -20,7 +20,7 @@ data class CreateTaskInputData private constructor(
 ) {
   companion object {
     fun of(
-      teamId: String,
+      projectId: String,
       operator: String,
       title: String,
       description: String?,
@@ -29,7 +29,7 @@ data class CreateTaskInputData private constructor(
       fromTime: LocalDateTime?,
       toTime: LocalDateTime?,
     ) = CreateTaskInputData(
-      teamId = TeamId.Companion.from(value = teamId),
+      projectId = ProjectId.Companion.from(value = projectId),
       operator = MemberId.Companion.from(value = operator),
       title = Title.Companion.of(value = title),
       description = description?.let { Description.Companion.of(value = it) },

@@ -1,14 +1,14 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.command
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 
 data class CreateTaskCommand(
-  val teamId: TeamId,
+  val projectId: ProjectId,
   val operator: MemberId,
   val title: Title,
   val description: Description?,

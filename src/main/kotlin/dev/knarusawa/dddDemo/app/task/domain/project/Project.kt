@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.domain.team
+package dev.knarusawa.dddDemo.app.task.domain.project
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
@@ -16,16 +16,16 @@ import jakarta.persistence.Table
 import jakarta.persistence.Version
 
 @Entity
-@Table(name = "ddd_team")
-class Team private constructor(
+@Table(name = "ddd_project")
+class Project private constructor(
   @EmbeddedId
-  @AttributeOverride(name = "value", column = Column("team_id"))
-  val teamId: TeamId,
+  @AttributeOverride(name = "value", column = Column("project_id"))
+  val projectId: ProjectId,
   @Embedded
-  @AttributeOverride(name = "value", column = Column("team_name"))
-  private var teamName: TeamName,
+  @AttributeOverride(name = "value", column = Column("project_name"))
+  private var projectName: ProjectName,
   @OneToMany(cascade = [CascadeType.ALL])
-  @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+  @JoinColumn(name = "project_id", referencedColumnName = "project_id")
   private var members: MutableList<MemberRole> = mutableListOf(),
   @Version
   @AttributeOverride(name = "value", column = Column("version"))
@@ -35,21 +35,21 @@ class Team private constructor(
 ) {
   companion object {
     fun of(
-      teamName: TeamName,
+      projectName: ProjectName,
       memberId: MemberId,
-    ): Team {
-      val team =
-        Team(
-          teamId = TeamId.new(),
-          teamName = teamName,
+    ): Project {
+      val project =
+        Project(
+          projectId = ProjectId.new(),
+          projectName = projectName,
         )
-      team.add(memberId = memberId, role = Role.ADMIN)
+      project.add(memberId = memberId, role = Role.ADMIN)
 
-      return team
+      return project
     }
   }
 
-  fun getTeamName() = this.teamName
+  fun getProjectName() = this.projectName
 
   fun getEvents() = this.events.toList()
 
@@ -57,7 +57,7 @@ class Team private constructor(
     memberId: MemberId,
     role: Role,
   ) {
-    this.members.add(MemberRole.of(memberId = memberId, role = role, teamId = this.teamId))
+    this.members.add(MemberRole.of(memberId = memberId, role = role, projectId = this.projectId))
   }
 
   fun hasWriteRole(member: MemberId): Boolean {

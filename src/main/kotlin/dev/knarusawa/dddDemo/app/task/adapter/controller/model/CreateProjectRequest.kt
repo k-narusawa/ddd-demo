@@ -2,6 +2,6 @@ package dev.knarusawa.dddDemo.app.task.adapter.controller.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CreateTeamRequest(
+data class CreateProjectRequest(
   @JsonProperty("name") val name: String,
 )

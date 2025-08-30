@@ -15,7 +15,7 @@ data class TaskEventData
   constructor(
     @JsonProperty("taskId") val taskId: String,
     @JsonProperty("type") val type: TaskEventType,
-    @JsonProperty("teamId") val teamId: String,
+    @JsonProperty("projectId") val projectId: String,
     @JsonProperty("operator") val operator: String,
     @JsonProperty("title") val title: String,
     @JsonProperty("description") val description: String?,
@@ -32,7 +32,7 @@ data class TaskEventData
         TaskEventData(
           taskId = event.taskId.get(),
           type = event.type,
-          teamId = event.teamId.get(),
+          projectId = event.projectId.get(),
           operator = event.operator.get(),
           title = event.title.get(),
           description = event.description?.get(),

@@ -1,19 +1,19 @@
 package dev.knarusawa.dddDemo.app.task.application.usecase.inputData
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamName
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectName
 
-data class CreateTeamInputData(
+data class CreateProjectInputData(
   val memberId: MemberId,
-  val teamName: TeamName,
+  val projectName: ProjectName,
 ) {
   companion object {
     fun of(
       memberId: String,
-      teamName: String,
-    ) = CreateTeamInputData(
+      projectName: String,
+    ) = CreateProjectInputData(
       memberId = MemberId.Companion.from(value = memberId),
-      teamName = TeamName.Companion.of(value = teamName),
+      projectName = ProjectName.Companion.of(value = projectName),
     )
   }
 }

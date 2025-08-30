@@ -2,12 +2,12 @@ package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import org.springframework.context.ApplicationEvent
 import java.time.LocalDateTime
 
@@ -16,7 +16,7 @@ sealed class TaskEvent(
 ) : ApplicationEvent(source) {
   abstract val taskId: TaskId
   abstract val type: TaskEventType
-  abstract val teamId: TeamId
+  abstract val projectId: ProjectId
   abstract val operator: MemberId
   abstract val title: Title
   abstract val description: Description?

@@ -13,9 +13,9 @@ CREATE TRIGGER trigger_set_audit_columns
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();
 
-CREATE TABLE ddd_team (
-    team_id VARCHAR(36) PRIMARY KEY,
-    team_name VARCHAR(255) NOT NULL,
+CREATE TABLE ddd_project (
+    project_id VARCHAR(36) PRIMARY KEY,
+    project_name VARCHAR(255) NOT NULL,
     version BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -23,6 +23,6 @@ CREATE TABLE ddd_team (
     updated_by TEXT NOT NULL DEFAULT CURRENT_USER
 );
 CREATE TRIGGER trigger_set_audit_columns
-    BEFORE INSERT OR UPDATE ON ddd_team
+    BEFORE INSERT OR UPDATE ON ddd_project
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();

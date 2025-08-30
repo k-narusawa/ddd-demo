@@ -1,9 +1,9 @@
-package dev.knarusawa.dddDemo.app.task.domain.team
+package dev.knarusawa.dddDemo.app.task.domain.project
 
 import jakarta.persistence.Embeddable
 
 @Embeddable
-data class TeamName(
+data class ProjectName(
   private val value: String,
 ) {
   init {
@@ -12,7 +12,7 @@ data class TeamName(
   }
 
   companion object {
-    fun of(value: String) = TeamName(value = value)
+    fun of(value: String) = ProjectName(value = value)
   }
 
   fun get() = value
@@ -21,7 +21,7 @@ data class TeamName(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is TeamName) return false
+    if (other !is ProjectName) return false
 
     if (other.get() != value) return false
 

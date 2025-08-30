@@ -1,12 +1,12 @@
 package dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
 import io.kurrent.dbclient.KurrentDBPersistentSubscriptionsClient
 import org.junit.jupiter.api.DisplayName
@@ -33,7 +33,7 @@ class TaskEventStoreRepositoryImplTest
       fun event_can_be_committed() {
         val event =
           TaskCreated.of(
-            teamId = TeamId.new(),
+            projectId = ProjectId.new(),
             operator = MemberId.new(),
             assigner = MemberId.new(),
             title = Title.of("test"),
@@ -53,7 +53,7 @@ class TaskEventStoreRepositoryImplTest
       fun event_can_load() {
         val event =
           TaskCreated.of(
-            teamId = TeamId.new(),
+            projectId = ProjectId.new(),
             operator = MemberId.new(),
             assigner = MemberId.new(),
             title = Title.of("test"),

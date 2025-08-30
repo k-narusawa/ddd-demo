@@ -1,6 +1,6 @@
 CREATE TABLE ddd_task_projection (
     task_id VARCHAR(36) PRIMARY KEY,
-    team_id VARCHAR(36) NOT NULL,
+    project_id VARCHAR(36) NOT NULL,
     operator VARCHAR(36) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255),

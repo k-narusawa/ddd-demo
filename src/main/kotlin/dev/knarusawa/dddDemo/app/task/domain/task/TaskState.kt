@@ -1,16 +1,16 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 
 class TaskState private constructor(
   val taskId: TaskId,
-  val teamId: TeamId,
+  val projectId: ProjectId,
   operator: MemberId,
   title: Title,
   description: Description?,
@@ -43,7 +43,7 @@ class TaskState private constructor(
   companion object {
     fun init(cmd: CreateTaskCommand) =
       TaskState(
-        teamId = cmd.teamId,
+        projectId = cmd.projectId,
         operator = cmd.operator,
         taskId = TaskId.new(),
         title = cmd.title,
@@ -58,7 +58,7 @@ class TaskState private constructor(
 
     fun init(event: TaskCreated) =
       TaskState(
-        teamId = event.teamId,
+        projectId = event.projectId,
         operator = event.operator,
         taskId = event.taskId,
         title = event.title,
