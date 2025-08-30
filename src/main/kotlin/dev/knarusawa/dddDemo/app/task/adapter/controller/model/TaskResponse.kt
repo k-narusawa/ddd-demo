@@ -3,7 +3,7 @@ package dev.knarusawa.dddDemo.app.task.adapter.controller.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
-data class CreateTaskResponse(
+data class TaskResponse(
   @JsonProperty("task_id") val taskId: String,
   @JsonProperty("team_id") val teamId: String,
   @JsonProperty("operator") val operator: String,

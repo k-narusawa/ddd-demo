@@ -1,14 +1,16 @@
-package dev.knarusawa.dddDemo.app.task.application.usecase.createTask
+package dev.knarusawa.dddDemo.app.task.application.usecase.inputData
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
 import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
+import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
-data class CreateTaskInputData private constructor(
+data class ChangeTaskInputData(
+  val taskId: TaskId,
   val teamId: TeamId,
   val operator: MemberId,
   val title: Title,
@@ -20,6 +22,7 @@ data class CreateTaskInputData private constructor(
 ) {
   companion object {
     fun of(
+      taskId: String,
       teamId: String,
       operator: String,
       title: String,
@@ -28,15 +31,16 @@ data class CreateTaskInputData private constructor(
       assignee: String?,
       fromTime: LocalDateTime?,
       toTime: LocalDateTime?,
-    ) = CreateTaskInputData(
+    ) = ChangeTaskInputData(
+      taskId = TaskId.from(value = taskId),
       teamId = TeamId.from(value = teamId),
-      operator = MemberId.from(value = operator),
-      title = Title.of(value = title),
-      description = description?.let { Description.of(value = it) },
-      assigner = assigner?.let { MemberId.from(value = it) },
-      assignee = assignee?.let { MemberId.from(value = it) },
-      fromTime = fromTime?.let { FromTime.of(value = it) },
-      toTime = toTime?.let { ToTime.of(value = it) },
+      operator = MemberId.Companion.from(value = operator),
+      title = Title.Companion.of(value = title),
+      description = description?.let { Description.Companion.of(value = it) },
+      assigner = assigner?.let { MemberId.Companion.from(value = it) },
+      assignee = assignee?.let { MemberId.Companion.from(value = it) },
+      fromTime = fromTime?.let { FromTime.Companion.of(value = it) },
+      toTime = toTime?.let { ToTime.Companion.of(value = it) },
     )
   }
 }

@@ -1,5 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
+import dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb.eventData.TaskEventData
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -10,7 +11,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
-data class TaskCreated(
+data class TaskCreated private constructor(
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val teamId: TeamId,
@@ -52,5 +53,22 @@ data class TaskCreated(
       completed = false,
       version = 1,
     )
+
+    fun of(eventData: TaskEventData) =
+      TaskCreated(
+        taskId = TaskId.from(value = eventData.taskId),
+        type = TaskEventType.TASK_CREATED,
+        teamId = TeamId.from(value = eventData.taskId),
+        operator = MemberId.from(value = eventData.operator),
+        title = Title.of(value = eventData.title),
+        description = eventData.description?.let { Description.of(value = it) },
+        assigner = eventData.assigner?.let { MemberId.from(value = it) },
+        assignee = eventData.assignee?.let { MemberId.from(value = it) },
+        fromTime = eventData.fromTime?.let { FromTime.of(value = it) },
+        toTime = eventData.toTime?.let { ToTime.of(value = it) },
+        occurredAt = eventData.occurredAt,
+        completed = eventData.completed,
+        version = eventData.version,
+      )
   }
 }

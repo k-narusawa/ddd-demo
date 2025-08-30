@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.application.usecase.createTeam
+package dev.knarusawa.dddDemo.app.task.application.usecase.outputData
 
 import dev.knarusawa.dddDemo.app.task.adapter.controller.model.CreateTeamResponse
 import dev.knarusawa.dddDemo.app.task.domain.team.Team

@@ -73,6 +73,9 @@ class TaskState private constructor(
   }
 
   fun apply(event: TaskEvent) {
+    if (this.version + 1 >= event.version) {
+      throw IllegalStateException()
+    }
     when (event) {
       TaskChanged -> {
         this.operator = event.operator

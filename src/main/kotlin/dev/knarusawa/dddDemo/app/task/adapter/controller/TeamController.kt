@@ -4,7 +4,7 @@ import dev.knarusawa.dddDemo.app.task.adapter.controller.model.CreateTeamRequest
 import dev.knarusawa.dddDemo.app.task.adapter.controller.model.CreateTeamResponse
 import dev.knarusawa.dddDemo.app.task.application.port.TeamInputBoundary
 import dev.knarusawa.dddDemo.app.task.application.service.IdentityAccessService
-import dev.knarusawa.dddDemo.app.task.application.usecase.createTeam.CreateTeamInputData
+import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.CreateTeamInputData
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

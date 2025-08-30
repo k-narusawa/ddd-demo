@@ -10,7 +10,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
-data class TaskCompleted(
+data class TaskCompleted private constructor(
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val teamId: TeamId,

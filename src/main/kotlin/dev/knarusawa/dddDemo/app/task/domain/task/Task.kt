@@ -1,6 +1,8 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
+import dev.knarusawa.dddDemo.app.task.domain.task.command.ChangeTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
 
@@ -10,7 +12,7 @@ class Task private constructor(
 ) {
   companion object {
     fun handle(cmd: CreateTaskCommand): Task {
-      val event =
+      val created =
         TaskCreated.of(
           teamId = cmd.teamId,
           operator = cmd.operator,
@@ -23,26 +25,48 @@ class Task private constructor(
         )
       return Task(
         state = TaskState.init(cmd),
-        events = mutableListOf(event),
+        events = mutableListOf(created),
       )
     }
 
     fun applyFromFirstEvent(events: List<TaskEvent>): Task {
-      val createdEvent =
+      val created =
         events.firstOrNull() as? TaskCreated
           ?: throw IllegalStateException()
 
-      val taskState = TaskState.init(event = createdEvent)
+      val taskState = TaskState.init(event = created)
       val task = Task(state = taskState)
       events.forEachIndexed { index, event ->
         if (index == 0) {
           return@forEachIndexed
         }
         taskState.apply(event)
-        task.events.add(event)
       }
       return task
     }
+  }
+
+  fun handle(cmd: ChangeTaskCommand) {
+    if (cmd.taskId != this.state.taskId) {
+      throw IllegalStateException()
+    }
+
+    val changed =
+      TaskChanged.of(
+        taskId = cmd.taskId,
+        teamId = this.state.teamId,
+        operator = cmd.operator,
+        title = cmd.title,
+        description = cmd.description,
+        assigner = cmd.assigner,
+        assignee = cmd.assignee,
+        fromTime = cmd.fromTime,
+        toTime = cmd.toTime,
+        completed = false,
+        version = this.state.version + 1,
+      )
+
+    events.add(changed)
   }
 
   fun getEvents() = this.events.toList()

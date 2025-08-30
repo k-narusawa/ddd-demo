@@ -4,15 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
-import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
-import dev.knarusawa.dddDemo.app.task.domain.task.Description
-import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
-import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
-import dev.knarusawa.dddDemo.app.task.domain.task.Title
-import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
-import dev.knarusawa.dddDemo.app.task.domain.team.TeamId
 import java.time.LocalDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -52,29 +46,12 @@ data class TaskEventData
         )
     }
 
-    fun to(): TaskEvent {
+    fun to(): TaskEvent =
       when (this.type) {
-        TaskEventType.TASK_CREATED -> {
-          return TaskCreated(
-            taskId = TaskId.from(value = this.taskId),
-            type = TaskEventType.TASK_CREATED,
-            teamId = TeamId.from(value = this.taskId),
-            operator = MemberId.from(value = this.operator),
-            title = Title.of(value = this.title),
-            description = this.description?.let { Description.of(value = it) },
-            assigner = this.assigner?.let { MemberId.from(value = it) },
-            assignee = this.assignee?.let { MemberId.from(value = it) },
-            fromTime = this.fromTime?.let { FromTime.of(value = it) },
-            toTime = this.toTime?.let { ToTime.of(value = it) },
-            occurredAt = this.occurredAt,
-            completed = this.completed,
-            version = this.version,
-          )
-        }
-
+        TaskEventType.TASK_CREATED -> TaskCreated.of(this)
+        TaskEventType.TASK_CHANGED -> TaskChanged.of(this)
         else -> {
           throw RuntimeException()
         }
       }
-    }
   }

@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.application.usecase.createTeam
+package dev.knarusawa.dddDemo.app.task.application.usecase.inputData
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.team.TeamName
@@ -12,8 +12,8 @@ data class CreateTeamInputData(
       memberId: String,
       teamName: String,
     ) = CreateTeamInputData(
-      memberId = MemberId.from(value = memberId),
-      teamName = TeamName.of(value = teamName),
+      memberId = MemberId.Companion.from(value = memberId),
+      teamName = TeamName.Companion.of(value = teamName),
     )
   }
 }
