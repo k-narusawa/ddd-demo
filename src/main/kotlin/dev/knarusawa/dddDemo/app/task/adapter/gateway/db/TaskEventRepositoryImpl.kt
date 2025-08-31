@@ -1,7 +1,7 @@
-package dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.db
 
-import dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql.jpa.TaskEventJpaEntity
-import dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql.jpa.TaskEventJpaRepository
+import dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa.TaskEventJpaEntity
+import dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa.TaskEventJpaRepository
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId

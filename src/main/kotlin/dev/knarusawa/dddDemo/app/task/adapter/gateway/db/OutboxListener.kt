@@ -1,5 +1,7 @@
-package dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.db
 
+import dev.knarusawa.dddDemo.app.task.application.eventHandler.event.OutboxEvent
+import dev.knarusawa.dddDemo.app.task.application.port.OutboxEventInputBoundary
 import dev.knarusawa.dddDemo.util.logger
 import jakarta.annotation.PostConstruct
 import org.postgresql.PGConnection
@@ -8,12 +10,12 @@ import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import java.sql.Connection
 import java.sql.SQLException
-import java.sql.Statement
 import javax.sql.DataSource
 
 @Component
-class OutBoxListener(
+class OutboxListener(
   private val dataSource: DataSource,
+  private val outboxEventInputBoundary: OutboxEventInputBoundary,
 ) : ApplicationRunner {
   private lateinit var conn: Connection
   private lateinit var pgconn: PGConnection
@@ -27,7 +29,7 @@ class OutBoxListener(
     log.info("OutboxListenerを起動")
     this.conn = dataSource.connection
     this.pgconn = conn.unwrap(PGConnection::class.java)
-    val stmt: Statement = conn.createStatement()
+    val stmt = conn.createStatement()
     stmt.execute("LISTEN outbox_channel;")
     stmt.close()
   }
@@ -39,18 +41,19 @@ class OutBoxListener(
 
         if (notifications != null) {
           for (i in notifications.indices) {
-            println(
-              "Got notification: " + notifications[i]?.name,
+            log.info(
+              "PostgresSQLから通知受信 name: ${notifications[i]?.name}, payload: ${notifications[i]?.parameter}",
             )
+            val event = OutboxEvent.of(payload = notifications[i]?.parameter)
+            outboxEventInputBoundary.handle(event = event)
           }
         }
-
         Thread.sleep(500)
       }
     } catch (sqle: SQLException) {
-      sqle.printStackTrace()
+      log.error("PostgresSQLからの通知処理に失敗", sqle)
     } catch (ie: InterruptedException) {
-      ie.printStackTrace()
+      log.error("PostgresSQLからの通知処理の中断", ie)
     }
   }
 }

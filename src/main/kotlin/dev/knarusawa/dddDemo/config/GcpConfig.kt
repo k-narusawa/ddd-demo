@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.messaging.MessageChannel
 
 class GcpConfig {
+  @Bean
   fun inboundChannelAdapter(
     @Qualifier("inputMessageChannel")
     messageChannel: MessageChannel,

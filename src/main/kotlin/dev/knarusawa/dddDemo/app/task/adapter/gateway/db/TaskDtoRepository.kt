@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.db
 
 import dev.knarusawa.dddDemo.app.task.application.dto.TaskDto
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId

@@ -32,7 +32,8 @@ class RequestFilter : OncePerRequestFilter() {
     val requestURI = request.requestURI
     val queryString = request.queryString
 
-    log.info("リクエスト メソッド:[${request.method}] URI:[$requestURI] Query:[$queryString]")
+    log.info("----- Request Start -----")
+    log.info("[${request.method}] $requestURI", if (queryString != null) "?$queryString" else "")
 
     val start = System.currentTimeMillis()
     try {
@@ -40,8 +41,9 @@ class RequestFilter : OncePerRequestFilter() {
     } finally {
       val end = System.currentTimeMillis()
       log.info(
-        "レスポンス メソッド:[${request.method}] URI:[$requestURI] ステータス:[${response.status}] レスポンスタイム:[${end - start}ms]",
+        "[${request.method}] $requestURI status:[${response.status}] time:[${end - start}ms]",
       )
+      log.info("----- Response End -----")
       MDC.clear()
     }
   }

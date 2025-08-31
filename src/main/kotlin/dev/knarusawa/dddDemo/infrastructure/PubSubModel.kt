@@ -5,18 +5,22 @@ class PubSubModel private constructor(
   val subscriptions: List<String>,
 ) {
   companion object {
+    const val TASK_CREATED_TOPIC = "task-created-topic"
+    const val TASK_CHANGED_TOPIC = "task-changed-topic"
+    const val TASK_COMPLETED_TOPIC = "task-completed-topic"
+
     fun of(): List<PubSubModel> =
       listOf(
         PubSubModel(
-          topic = "task-created-topic",
+          topic = TASK_CREATED_TOPIC,
           subscriptions = listOf("task-sub"),
         ),
         PubSubModel(
-          topic = "task-changed-topic",
+          topic = TASK_CHANGED_TOPIC,
           subscriptions = listOf("task-sub"),
         ),
         PubSubModel(
-          topic = "task-completed-topic",
+          topic = TASK_COMPLETED_TOPIC,
           subscriptions = listOf("task-sub"),
         ),
       )

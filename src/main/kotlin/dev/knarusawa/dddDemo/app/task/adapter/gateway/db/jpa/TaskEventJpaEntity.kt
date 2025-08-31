@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.adapter.gateway.postgresql.jpa
+package dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa
 
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
