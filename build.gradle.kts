@@ -20,14 +20,14 @@ java {
 
 repositories {
   mavenCentral()
-  maven { url = uri("https://repo.spring.io/milestone") }
-  maven { url = uri("https://repo.spring.io/snapshot") }
+//  maven { url = uri("https://repo.spring.io/milestone") }
+//  maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
   implementation(libs.flyway.core)
   implementation(libs.flyway.database.postgresql)
-  runtimeOnly(libs.postgresql)
+  implementation(libs.postgresql)
   implementation(libs.spring.boot.starter.data.jdbc)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.web)
@@ -48,6 +48,10 @@ dependencies {
   implementation(libs.kotlinx.coroutines.reactor)
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.kurrentdb.client)
+  implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.10.3")
+  implementation("com.google.cloud:spring-cloud-gcp-dependencies:7.3.0")
+  implementation("com.google.cloud:spring-cloud-gcp-starter-pubsub:7.3.0")
+  implementation("org.springframework.integration:spring-integration-core")
 
   runtimeOnly(libs.flyway.core)
   runtimeOnly(libs.flyway.database.postgresql)
