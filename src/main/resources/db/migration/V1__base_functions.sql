@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION set_audit_columns() 
+CREATE OR REPLACE FUNCTION set_audit_columns()
   RETURNS trigger AS $$
   BEGIN
     IF TG_OP = 'INSERT' THEN
@@ -14,5 +14,13 @@ CREATE OR REPLACE FUNCTION set_audit_columns()
     END IF;
 
     RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION notify_outbox_event()
+  RETURNS TRIGGER AS $$
+  BEGIN
+      PERFORM pg_notify('outbox_channel', NEW.event_id::text);
+      RETURN NEW;
   END;
   $$ LANGUAGE plpgsql;

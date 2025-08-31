@@ -1,6 +1,5 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
-import dev.knarusawa.dddDemo.app.task.adapter.gateway.kurrentdb.eventData.TaskEventData
 import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
@@ -11,7 +10,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import java.time.LocalDateTime
 
-data class TaskChanged private constructor(
+data class TaskChanged(
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -25,9 +24,7 @@ data class TaskChanged private constructor(
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
   override val version: Long,
-) : TaskEvent(
-    source = taskId,
-  ) {
+) : TaskEvent() {
   companion object {
     fun of(
       taskId: TaskId,
@@ -56,22 +53,5 @@ data class TaskChanged private constructor(
       completed = completed ?: false,
       version = version,
     )
-
-    fun of(eventData: TaskEventData) =
-      TaskChanged(
-        taskId = TaskId.from(value = eventData.taskId),
-        type = TaskEventType.TASK_CREATED,
-        projectId = ProjectId.from(value = eventData.taskId),
-        operator = MemberId.from(value = eventData.operator),
-        title = Title.of(value = eventData.title),
-        description = eventData.description?.let { Description.of(value = it) },
-        assigner = eventData.assigner?.let { MemberId.from(value = it) },
-        assignee = eventData.assignee?.let { MemberId.from(value = it) },
-        fromTime = eventData.fromTime?.let { FromTime.of(value = it) },
-        toTime = eventData.toTime?.let { ToTime.of(value = it) },
-        occurredAt = eventData.occurredAt,
-        completed = eventData.completed,
-        version = eventData.version,
-      )
   }
 }

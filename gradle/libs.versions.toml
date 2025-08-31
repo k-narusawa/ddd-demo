@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.2.0"
-springBoot = "4.0.0-SNAPSHOT"
+springBoot = "4.0.0-M2"
 springDependencyManagement = "1.1.7"
 flyway = "11.10.2"
 postgresql = "42.7.3"

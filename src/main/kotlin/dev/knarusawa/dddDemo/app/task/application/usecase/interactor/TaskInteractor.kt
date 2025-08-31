@@ -5,18 +5,21 @@ import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.ChangeTaskIn
 import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.CreateTaskInputData
 import dev.knarusawa.dddDemo.app.task.application.usecase.outputData.ChangeTaskOutputData
 import dev.knarusawa.dddDemo.app.task.application.usecase.outputData.CreateTaskOutputData
+import dev.knarusawa.dddDemo.app.task.domain.outbox.EventType
+import dev.knarusawa.dddDemo.app.task.domain.outbox.OutboxEvent
+import dev.knarusawa.dddDemo.app.task.domain.outbox.OutboxEventRepository
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectRepository
 import dev.knarusawa.dddDemo.app.task.domain.task.Task
 import dev.knarusawa.dddDemo.app.task.domain.task.command.ChangeTaskCommand
 import dev.knarusawa.dddDemo.app.task.domain.task.command.CreateTaskCommand
-import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventStoreRepository
-import kotlinx.coroutines.runBlocking
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventRepository
 import org.springframework.stereotype.Service
 
 @Service
 class TaskInteractor(
+  private val taskEventRepository: TaskEventRepository,
   private val projectRepository: ProjectRepository,
-  private val taskEventStoreRepository: TaskEventStoreRepository,
+  private val outboxEventRepository: OutboxEventRepository,
 ) : TaskInputBoundary {
   override fun handle(input: CreateTaskInputData): CreateTaskOutputData {
     val project =
@@ -40,7 +43,14 @@ class TaskInteractor(
       )
     val task = Task.handle(cmd = cmd)
     task.getEvents().forEach {
-      taskEventStoreRepository.commit(event = it)
+      taskEventRepository.save(event = it)
+      outboxEventRepository.save(
+        event =
+          OutboxEvent.of(
+            type = EventType.TASK_CREATED,
+            payload = it.toPayload(),
+          ),
+      )
     }
 
     return CreateTaskOutputData.of(task = task)
@@ -66,14 +76,21 @@ class TaskInteractor(
         fromTime = input.fromTime,
         toTime = input.toTime,
       )
-    val events = runBlocking { taskEventStoreRepository.loadEvents(taskId = input.taskId) }
+    val events = taskEventRepository.findByTaskId(taskId = input.taskId)
     val task =
       Task.applyFromFirstEvent(events = events).apply {
         handle(cmd = cmd)
       }
 
     task.getEvents().forEach {
-      taskEventStoreRepository.commit(event = it)
+      taskEventRepository.save(event = it)
+      outboxEventRepository.save(
+        event =
+          OutboxEvent.of(
+            type = EventType.TASK_CHANGED,
+            payload = it.toPayload(),
+          ),
+      )
     }
 
     return ChangeTaskOutputData.of(task = task)

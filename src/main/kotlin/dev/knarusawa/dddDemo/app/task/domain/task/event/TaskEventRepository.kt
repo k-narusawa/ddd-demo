@@ -2,8 +2,8 @@ package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 
-interface TaskEventStoreRepository {
-  fun commit(event: TaskEvent)
+interface TaskEventRepository {
+  fun save(event: TaskEvent)
 
-  fun loadEvents(taskId: TaskId): List<TaskEvent>
+  fun findByTaskId(taskId: TaskId): List<TaskEvent>
 }

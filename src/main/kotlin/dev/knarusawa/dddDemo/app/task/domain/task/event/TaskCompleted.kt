@@ -10,7 +10,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import java.time.LocalDateTime
 
-data class TaskCompleted private constructor(
+data class TaskCompleted(
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -24,9 +24,7 @@ data class TaskCompleted private constructor(
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
   override val version: Long,
-) : TaskEvent(
-    source = taskId,
-  ) {
+) : TaskEvent() {
   companion object {
     fun of(
       taskId: TaskId,

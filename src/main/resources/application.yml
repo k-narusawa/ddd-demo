@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   application:
     name: ddd-demo
   datasource:
@@ -6,12 +8,24 @@ spring:
     url: jdbc:postgresql://127.0.0.1:5432/ddd
     username: user
     password: password
+  data:
+    jdbc:
+      repositories:
+        enabled: false
   flyway:
     user: user
     password: password
-
   jpa:
     show-sql: true
+  cloud:
+    gcp:
+      project-id: ddd-demo
+      pubsub:
+        emulator-host: localhost:8085
+      secretmanager:
+        enabled: false
+      parametermanager:
+        enabled: false
 
 logging:
   level:
