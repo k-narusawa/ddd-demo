@@ -8,6 +8,7 @@ import org.springframework.integration.channel.PublishSubscribeChannel
 
 @Configuration
 class AppConfig {
+  @Bean
   fun inputMessageChannel() = PublishSubscribeChannel()
 
   @Bean

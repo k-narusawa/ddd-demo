@@ -1,6 +1,5 @@
 package dev.knarusawa.dddDemo.app.task.domain.outbox
 
-import io.hypersistence.utils.hibernate.type.json.JsonType
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.EmbeddedId
@@ -8,7 +7,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
-import org.hibernate.annotations.Type
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
 
 @Entity
@@ -20,7 +20,7 @@ class OutboxEvent private constructor(
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   val eventType: EventType,
-  @Type(JsonType::class)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(nullable = false, columnDefinition = "jsonb")
   val payload: String,
   @Column(nullable = false)

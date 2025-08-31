@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.2.0"
 springBoot = "4.0.0-M2"
+springCloudGcp = "7.2.0"
 springDependencyManagement = "1.1.7"
 flyway = "11.10.2"
 postgresql = "42.7.3"
@@ -23,6 +24,9 @@ spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-start
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 spring-security-crypto = { module = "org.springframework.security:spring-security-crypto" }
+spring-integration-core = { module = "org.springframework.integration:spring-integration-core" }
+spring-cloud-gcp-dependencies = { module = "com.google.cloud:spring-cloud-gcp-dependencies", version.ref = "springCloudGcp" }
+spring-cloud-gcp-starter-pubsub = { module = "com.google.cloud:spring-cloud-gcp-starter-pubsub", version.ref = "springCloudGcp" }
 bouncycastle-prov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
