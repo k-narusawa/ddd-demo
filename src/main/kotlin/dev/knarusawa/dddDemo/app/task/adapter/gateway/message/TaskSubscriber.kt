@@ -49,6 +49,7 @@ class TaskSubscriber(
       message.nack()
     } finally {
       MDC.clear()
+      log.info("タスクサブスクライバーでメッセージの処理が完了")
     }
   }
 }
