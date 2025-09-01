@@ -27,38 +27,71 @@ sealed class TaskEvent {
   abstract val version: Long
 
   companion object {
-    fun fromPayload(
-      eventType: TaskEventType,
-      payload: String,
-    ): TaskEvent =
-      when (eventType) {
-        TaskEventType.TASK_CREATED -> {
-          val jsonMap = JsonUtil.jsonToMap(jsonString = payload)
+    fun fromPayload(payload: String): TaskEvent {
+      val jsonMap = JsonUtil.jsonToMap(jsonString = payload)
+      val type = TaskEventType.valueOf(jsonMap["type"] as String)
+      return when (type) {
+        TaskEventType.TASK_CREATED ->
           TaskCreated(
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_CREATED,
             projectId = ProjectId(jsonMap["projectId"] as String),
             operator = MemberId(jsonMap["operator"] as String),
             title = Title.of(jsonMap["title"] as String),
-            description = Description.of(jsonMap["description"] as String),
-            assigner = MemberId.from(jsonMap["assigner"] as String),
-            assignee = MemberId.from(jsonMap["assignee"] as String),
-            fromTime = FromTime.of(jsonMap["fromTime"] as LocalDateTime),
-            toTime = ToTime.of(jsonMap["toTime"] as LocalDateTime),
+            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
+            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
+            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
+            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
+            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
             occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
             completed = jsonMap["completed"] as Boolean,
-            version = jsonMap["version"] as Long,
+            version = (jsonMap["version"] as Number).toLong(),
           )
-        }
 
-        else -> throw IllegalStateException()
+        TaskEventType.TASK_CHANGED ->
+          TaskCreated(
+            taskId = TaskId(jsonMap["taskId"] as String),
+            type = TaskEventType.TASK_CHANGED,
+            projectId = ProjectId(jsonMap["projectId"] as String),
+            operator = MemberId(jsonMap["operator"] as String),
+            title = Title.of(jsonMap["title"] as String),
+            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
+            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
+            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
+            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
+            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
+            occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
+            completed = jsonMap["completed"] as Boolean,
+            version = (jsonMap["version"] as Number).toLong(),
+          )
+
+        TaskEventType.TASK_COMPLETED ->
+          TaskCreated(
+            taskId = TaskId(jsonMap["taskId"] as String),
+            type = TaskEventType.TASK_COMPLETED,
+            projectId = ProjectId(jsonMap["projectId"] as String),
+            operator = MemberId(jsonMap["operator"] as String),
+            title = Title.of(jsonMap["title"] as String),
+            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
+            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
+            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
+            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
+            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
+            occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
+            completed = jsonMap["completed"] as Boolean,
+            version = (jsonMap["version"] as Number).toLong(),
+          )
+
+        else -> throw IllegalStateException("")
       }
+    }
   }
 
   fun toPayload(): String =
     """
     {
       "taskId": "${this.taskId.get()}",
+      "type": "${this.type.name}",
       "projectId": "${this.projectId.get()}",
       "operator": "${this.operator.get()}",
       "title": "${this.title.get()}",
@@ -68,8 +101,8 @@ sealed class TaskEvent {
       "fromTime": "${this.fromTime?.get()}",
       "toTime": "${this.toTime?.get()}",
       "occurredAt": "${this.occurredAt}",
-      "completed": "${this.completed}",
-      "version": "${this.version}"
+      "completed": ${this.completed},
+      "version": ${this.version}
     }
     """.trimIndent()
 }

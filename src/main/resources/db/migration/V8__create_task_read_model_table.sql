@@ -1,4 +1,4 @@
-CREATE TABLE ddd_task_projection (
+CREATE TABLE ddd_task_read_model (
     task_id VARCHAR(36) PRIMARY KEY,
     project_id VARCHAR(36) NOT NULL,
     operator VARCHAR(36) NOT NULL,
@@ -17,6 +17,6 @@ CREATE TABLE ddd_task_projection (
 );
 
 CREATE TRIGGER trigger_set_audit_columns
-    BEFORE INSERT OR UPDATE ON ddd_task_projection
+    BEFORE INSERT OR UPDATE ON ddd_task_read_model
     FOR EACH ROW
     EXECUTE FUNCTION set_audit_columns();

@@ -2,10 +2,10 @@ package dev.knarusawa.dddDemo.app.task.adapter.controller
 
 import dev.knarusawa.dddDemo.app.task.adapter.controller.model.CreateTaskRequest
 import dev.knarusawa.dddDemo.app.task.adapter.controller.model.TaskResponse
+import dev.knarusawa.dddDemo.app.task.application.port.TaskInputBoundary
 import dev.knarusawa.dddDemo.app.task.application.service.IdentityAccessService
 import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.ChangeTaskInputData
 import dev.knarusawa.dddDemo.app.task.application.usecase.inputData.CreateTaskInputData
-import dev.knarusawa.dddDemo.app.task.application.usecase.interactor.TaskInteractor
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/task/{projectId}")
 class TaskController(
   private val identityAccessService: IdentityAccessService,
-  private val taskInteractor: TaskInteractor,
+  private val taskInputBoundary: TaskInputBoundary,
 ) {
   @PostMapping
   suspend fun post(
@@ -52,7 +52,7 @@ class TaskController(
         fromTime = body.fromTime,
         toTime = body.toTime,
       )
-    val output = taskInteractor.handle(input = input)
+    val output = taskInputBoundary.handle(input = input)
 
     return ResponseEntity.status(201).body(output.response)
   }
@@ -90,7 +90,7 @@ class TaskController(
         fromTime = body.fromTime,
         toTime = body.toTime,
       )
-    val output = taskInteractor.handle(input = input)
+    val output = taskInputBoundary.handle(input = input)
 
     return ResponseEntity.status(200).body(output.response)
   }

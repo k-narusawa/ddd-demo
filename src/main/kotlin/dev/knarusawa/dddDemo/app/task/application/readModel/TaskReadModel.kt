@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.application.dto
+package dev.knarusawa.dddDemo.app.task.application.readModel
 
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
@@ -16,9 +16,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 
-@Table(name = "ddd_task_projection")
+@Table(name = "ddd_task_read_model")
 @Entity
-data class TaskDto(
+data class TaskReadModel(
   @EmbeddedId
   @AttributeOverride(name = "value", column = Column("task_id"))
   val taskId: TaskId,
@@ -54,7 +54,7 @@ data class TaskDto(
 ) {
   companion object {
     fun from(task: Task) =
-      TaskDto(
+      TaskReadModel(
         taskId = task.state.taskId,
         projectId = task.state.projectId,
         operator = task.state.operator,
