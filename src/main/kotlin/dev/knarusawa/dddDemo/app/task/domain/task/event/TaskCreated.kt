@@ -11,6 +11,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import java.time.LocalDateTime
 
 data class TaskCreated(
+  override val taskEventId: TaskEventId,
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -27,6 +28,7 @@ data class TaskCreated(
 ) : TaskEvent() {
   companion object {
     fun of(
+      taskId: TaskId,
       projectId: ProjectId,
       operator: MemberId,
       title: Title,
@@ -36,7 +38,8 @@ data class TaskCreated(
       fromTime: FromTime?,
       toTime: ToTime?,
     ) = TaskCreated(
-      taskId = TaskId.new(),
+      taskEventId = TaskEventId.new(),
+      taskId = taskId,
       projectId = projectId,
       operator = operator,
       type = TaskEventType.TASK_CREATED,

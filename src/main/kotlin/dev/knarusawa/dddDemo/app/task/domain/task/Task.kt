@@ -12,8 +12,10 @@ class Task private constructor(
 ) {
   companion object {
     fun handle(cmd: CreateTaskCommand): Task {
+      val state = TaskState.init(cmd)
       val created =
         TaskCreated.of(
+          taskId = state.taskId,
           projectId = cmd.projectId,
           operator = cmd.operator,
           title = cmd.title,
@@ -24,7 +26,7 @@ class Task private constructor(
           toTime = cmd.toTime,
         )
       return Task(
-        state = TaskState.init(cmd),
+        state = state,
         events = mutableListOf(created),
       )
     }

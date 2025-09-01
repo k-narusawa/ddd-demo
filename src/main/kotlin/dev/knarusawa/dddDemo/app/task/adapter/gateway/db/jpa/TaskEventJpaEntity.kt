@@ -14,6 +14,8 @@ import java.time.LocalDateTime
 @Table(name = "ddd_task_event")
 class TaskEventJpaEntity(
   @Id
+  @Column(nullable = false, name = "task_event_id")
+  val taskEventId: String,
   @Column(nullable = false, name = "task_id")
   val taskId: String,
   @Enumerated(EnumType.STRING)
@@ -45,6 +47,7 @@ class TaskEventJpaEntity(
   companion object {
     fun from(event: TaskEvent): TaskEventJpaEntity =
       TaskEventJpaEntity(
+        taskEventId = event.taskEventId.get(),
         taskId = event.taskId.get(),
         type = event.type,
         projectId = event.projectId.get(),

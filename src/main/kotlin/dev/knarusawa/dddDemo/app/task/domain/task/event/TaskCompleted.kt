@@ -11,6 +11,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import java.time.LocalDateTime
 
 data class TaskCompleted(
+  override val taskEventId: TaskEventId,
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -38,6 +39,7 @@ data class TaskCompleted(
       toTime: ToTime?,
       version: Long,
     ) = TaskCompleted(
+      taskEventId = TaskEventId.new(),
       taskId = taskId,
       projectId = projectId,
       operator = operator,

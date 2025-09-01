@@ -28,7 +28,8 @@ CREATE TRIGGER trigger_set_audit_columns
     EXECUTE FUNCTION set_audit_columns();
 
 CREATE TABLE ddd_task_event (
-    task_id VARCHAR(36) PRIMARY KEY,
+    task_event_id VARCHAR(36) PRIMARY KEY,
+    task_id VARCHAR(36),
     type VARCHAR(255) NOT NULL,
     project_id VARCHAR(36) NOT NULL,
     operator VARCHAR(36) NOT NULL,
@@ -46,6 +47,9 @@ CREATE TABLE ddd_task_event (
     created_by TEXT NOT NULL DEFAULT CURRENT_USER,
     updated_by TEXT NOT NULL DEFAULT CURRENT_USER
 );
+
+CREATE INDEX idx_event_task_id ON ddd_task_event (task_id);
+
 CREATE TRIGGER trigger_set_audit_columns
     BEFORE INSERT OR UPDATE ON ddd_task_event
     FOR EACH ROW

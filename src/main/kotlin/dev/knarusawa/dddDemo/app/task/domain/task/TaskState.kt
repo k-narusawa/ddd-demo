@@ -43,9 +43,9 @@ class TaskState private constructor(
   companion object {
     fun init(cmd: CreateTaskCommand) =
       TaskState(
+        taskId = TaskId.new(),
         projectId = cmd.projectId,
         operator = cmd.operator,
-        taskId = TaskId.new(),
         title = cmd.title,
         description = cmd.description,
         assigner = cmd.assigner,

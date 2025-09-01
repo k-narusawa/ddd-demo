@@ -12,6 +12,7 @@ import dev.knarusawa.dddDemo.util.JsonUtil
 import java.time.LocalDateTime
 
 sealed class TaskEvent {
+  abstract val taskEventId: TaskEventId
   abstract val taskId: TaskId
   abstract val type: TaskEventType
   abstract val projectId: ProjectId
@@ -33,6 +34,7 @@ sealed class TaskEvent {
       return when (type) {
         TaskEventType.TASK_CREATED ->
           TaskCreated(
+            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_CREATED,
             projectId = ProjectId(jsonMap["projectId"] as String),
@@ -50,6 +52,7 @@ sealed class TaskEvent {
 
         TaskEventType.TASK_CHANGED ->
           TaskCreated(
+            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_CHANGED,
             projectId = ProjectId(jsonMap["projectId"] as String),
@@ -67,6 +70,7 @@ sealed class TaskEvent {
 
         TaskEventType.TASK_COMPLETED ->
           TaskCreated(
+            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_COMPLETED,
             projectId = ProjectId(jsonMap["projectId"] as String),
@@ -81,8 +85,6 @@ sealed class TaskEvent {
             completed = jsonMap["completed"] as Boolean,
             version = (jsonMap["version"] as Number).toLong(),
           )
-
-        else -> throw IllegalStateException("")
       }
     }
   }
@@ -90,6 +92,7 @@ sealed class TaskEvent {
   fun toPayload(): String =
     """
     {
+      "taskEventId": "${this.taskEventId.get()}",
       "taskId": "${this.taskId.get()}",
       "type": "${this.type.name}",
       "projectId": "${this.projectId.get()}",
