@@ -9,19 +9,21 @@ class PubSubModel private constructor(
     const val TASK_CHANGED_TOPIC = "task-changed-topic"
     const val TASK_COMPLETED_TOPIC = "task-completed-topic"
 
+    const val TASK_SUBSCRIPTION = "task-sub"
+
     fun of(): List<PubSubModel> =
       listOf(
         PubSubModel(
           topic = TASK_CREATED_TOPIC,
-          subscriptions = listOf("task-sub"),
+          subscriptions = listOf(TASK_SUBSCRIPTION),
         ),
         PubSubModel(
           topic = TASK_CHANGED_TOPIC,
-          subscriptions = listOf("task-sub"),
+          subscriptions = listOf(TASK_SUBSCRIPTION),
         ),
         PubSubModel(
           topic = TASK_COMPLETED_TOPIC,
-          subscriptions = listOf("task-sub"),
+          subscriptions = listOf(TASK_SUBSCRIPTION),
         ),
       )
   }

@@ -1,19 +1,40 @@
 package dev.knarusawa.dddDemo.infrastructure
 
 import com.google.cloud.spring.pubsub.core.PubSubTemplate
+import com.google.cloud.spring.pubsub.integration.AckMode
+import com.google.cloud.spring.pubsub.integration.inbound.PubSubInboundChannelAdapter
 import com.google.cloud.spring.pubsub.integration.outbound.PubSubMessageHandler
 import dev.knarusawa.dddDemo.util.logger
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.integration.channel.PublishSubscribeChannel
 import org.springframework.messaging.Message
+import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.MessageHandler
 
 @Configuration
 class GcpPubSubConfig {
   companion object {
     private val log = logger()
+  }
+
+  @Bean
+  fun taskSubscriptionChannel() = PublishSubscribeChannel()
+
+  @Bean
+  fun inboundChannelAdapter(
+    @Qualifier("taskSubscriptionChannel")
+    messageChannel: MessageChannel,
+    pubSubTemplate: PubSubTemplate,
+  ): PubSubInboundChannelAdapter {
+    val adapter =
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_SUBSCRIPTION)
+    adapter.setOutputChannel(messageChannel)
+    adapter.ackMode = AckMode.MANUAL
+    adapter.payloadType = String::class.java
+    return adapter
   }
 
   @Bean
