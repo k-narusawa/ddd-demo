@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+  <springProfile name="local">
+    <property name="CONSOLE_LOG_PATTERN"
+      value="%white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%-5level) requestId:[%red(%X{requestId})] %logger - %msg%n"/>
+    <!--    スレッドあり-->
+    <!--    <property name="CONSOLE_LOG_PATTERN"-->
+    <!--      value="%white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%-5level) requestId:[%red(%X{requestId})] [%yellow(%thread)] %logger Line:%-3L - %msg%n"/>-->
+  </springProfile>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>
