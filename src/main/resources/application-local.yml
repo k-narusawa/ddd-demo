@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    task:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://127.0.0.1:5432/ddd
+      username: user
+      password: password
+  jpa:
+    show-sql: true
+  flyway:
+    user: user
+    password: password
+  cloud:
+    gcp:
+      project-id: ddd-demo
+      pubsub:
+        emulator-host: localhost:8085
+      secretmanager:
+        enabled: false
+      parametermanager:
+        enabled: false
+
+logging:
+  level:
+    org.springframework.jdbc: INFO
+    org.springframework.transaction: INFO
+    org.springframework.transaction.interceptor: INFO
+    org.springframework.orm.jpa: INFO
+
+services:
+  identity-access:
+    url: http://localhost:8080
+
+environment:
+  identity_access:
+    access_token:
+      secret: secret
+      expires_in: 3600 # 1時間
+    refresh_token:
+      secret: secret
+      expires_in: 3456000 # 30日

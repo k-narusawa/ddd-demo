@@ -4,35 +4,17 @@ spring:
   application:
     name: ddd-demo
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/ddd
-    username: user
-    password: password
+    task:
+      url: ${TASK_DATASOURCE_URL}
+      username: ${TASK_DATASOURCE_USERNAME}
+      password: ${TASK_DATASOURCE_PASSWORD}
   data:
     jdbc:
       repositories:
         enabled: false
-  flyway:
-    user: user
-    password: password
-  jpa:
-    show-sql: true
   cloud:
     gcp:
-      project-id: ddd-demo
-      pubsub:
-        emulator-host: localhost:8085
-      secretmanager:
-        enabled: false
-      parametermanager:
-        enabled: false
-
-logging:
-  level:
-    org.springframework.jdbc: INFO
-    org.springframework.transaction: INFO
-    org.springframework.transaction.interceptor: INFO
-    org.springframework.orm.jpa: INFO
+      project-id: ${GCP_PROJECT_ID}
 
 services:
   identity-access:
