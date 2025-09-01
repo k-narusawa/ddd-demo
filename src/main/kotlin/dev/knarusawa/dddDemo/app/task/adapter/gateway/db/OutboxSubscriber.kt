@@ -13,7 +13,7 @@ import java.sql.SQLException
 import javax.sql.DataSource
 
 @Component
-class OutboxListener(
+class OutboxSubscriber(
   private val dataSource: DataSource,
   private val outboxEventInputBoundary: OutboxEventInputBoundary,
 ) : ApplicationRunner {
@@ -26,7 +26,7 @@ class OutboxListener(
 
   @PostConstruct
   fun init() {
-    log.info("OutboxListenerを起動")
+    log.info("OutboxSubscriberを起動")
     this.conn = dataSource.connection
     this.pgconn = conn.unwrap(PGConnection::class.java)
     val stmt = conn.createStatement()
