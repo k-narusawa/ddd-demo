@@ -73,11 +73,8 @@ class TaskState private constructor(
   }
 
   fun apply(event: TaskEvent) {
-    if (this.version + 1 >= event.version) {
-      throw IllegalStateException()
-    }
     when (event) {
-      TaskChanged -> {
+      is TaskChanged -> {
         this.operator = event.operator
         this.title = event.title
         this.description = event.description
@@ -88,7 +85,7 @@ class TaskState private constructor(
         this.version = event.version
       }
 
-      TaskCompleted -> {
+      is TaskCompleted -> {
         this.operator = event.operator
         this.title = event.title
         this.description = event.description
@@ -100,8 +97,7 @@ class TaskState private constructor(
         this.version = event.version
       }
 
-      TaskCreated -> throw IllegalStateException()
-      else -> throw IllegalStateException()
+      is TaskCreated -> throw IllegalStateException()
     }
   }
 }

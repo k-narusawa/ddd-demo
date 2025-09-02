@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface TaskReadModelRepository : JpaRepository<TaskReadModel, TaskId> {
   fun save(task: TaskReadModel)
 
+  fun saveAndFlush(task: TaskReadModel)
+
   fun findByTaskId(taskId: String): TaskReadModel?
 }

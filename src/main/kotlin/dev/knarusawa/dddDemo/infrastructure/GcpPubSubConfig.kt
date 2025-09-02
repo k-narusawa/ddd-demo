@@ -21,16 +21,50 @@ class GcpPubSubConfig {
   }
 
   @Bean
-  fun taskSubscriptionChannel() = PublishSubscribeChannel()
+  fun taskCreatedSubscriptionChannel() = PublishSubscribeChannel()
 
   @Bean
-  fun inboundChannelAdapter(
-    @Qualifier("taskSubscriptionChannel")
+  fun taskCreatedSubscriptionChannelAdapter(
+    @Qualifier("taskCreatedSubscriptionChannel")
     messageChannel: MessageChannel,
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CREATED_SUBSCRIPTION)
+    adapter.setOutputChannel(messageChannel)
+    adapter.ackMode = AckMode.MANUAL
+    adapter.payloadType = String::class.java
+    return adapter
+  }
+
+  @Bean
+  fun taskChangedSubscriptionChannel() = PublishSubscribeChannel()
+
+  @Bean
+  fun taskChangedSubscriptionChannelAdapter(
+    @Qualifier("taskChangedSubscriptionChannel")
+    messageChannel: MessageChannel,
+    pubSubTemplate: PubSubTemplate,
+  ): PubSubInboundChannelAdapter {
+    val adapter =
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CHANGED_SUBSCRIPTION)
+    adapter.setOutputChannel(messageChannel)
+    adapter.ackMode = AckMode.MANUAL
+    adapter.payloadType = String::class.java
+    return adapter
+  }
+
+  @Bean
+  fun taskCompletedSubscriptionChannel() = PublishSubscribeChannel()
+
+  @Bean
+  fun taskCompletedSubscriptionChannelAdapter(
+    @Qualifier("taskCompletedSubscriptionChannel")
+    messageChannel: MessageChannel,
+    pubSubTemplate: PubSubTemplate,
+  ): PubSubInboundChannelAdapter {
+    val adapter =
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_COMPLETED_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java

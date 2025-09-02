@@ -22,10 +22,33 @@ class TaskSubscriber(
     private val log = logger()
   }
 
-  @ServiceActivator(inputChannel = "taskSubscriptionChannel")
-  fun messageReceiver(
+  @ServiceActivator(inputChannel = "taskCreatedSubscriptionChannel")
+  fun taskCreatedEventReceiver(
     payload: String?,
     @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
+  ) {
+    handleEvent(payload = payload!!, message = message)
+  }
+
+  @ServiceActivator(inputChannel = "taskChangedSubscriptionChannel")
+  fun taskChangedEventReceiver(
+    payload: String?,
+    @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
+  ) {
+    handleEvent(payload = payload!!, message = message)
+  }
+
+  @ServiceActivator(inputChannel = "taskCompletedSubscriptionChannel")
+  fun taskCompletedEventReceiver(
+    payload: String?,
+    @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
+  ) {
+    handleEvent(payload = payload!!, message = message)
+  }
+
+  private fun handleEvent(
+    payload: String,
+    message: BasicAcknowledgeablePubsubMessage,
   ) {
     val requestId = UUID.randomUUID().toString()
     MDC.put("requestId", requestId)

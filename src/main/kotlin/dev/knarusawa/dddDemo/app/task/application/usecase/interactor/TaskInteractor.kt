@@ -76,11 +76,10 @@ class TaskInteractor(
         fromTime = input.fromTime,
         toTime = input.toTime,
       )
-    val events = taskEventRepository.findByTaskId(taskId = input.taskId)
-    val task =
-      Task.applyFromFirstEvent(events = events).apply {
-        handle(cmd = cmd)
-      }
+    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
+
+    val task = Task.applyFromFirstEvent(events = events)
+    task.handle(cmd = cmd)
 
     task.getEvents().forEach {
       taskEventRepository.save(event = it)

@@ -27,7 +27,7 @@ class TaskEventRepositoryImpl(
     taskEventJpaRepository.save(entity = entity)
   }
 
-  override fun findByTaskId(taskId: TaskId): List<TaskEvent> {
+  override fun findByTaskIdOrderByOccurredAtAsc(taskId: TaskId): List<TaskEvent> {
     val entities = taskEventJpaRepository.findByTaskId(taskId = taskId.get())
     return entities.map {
       when (it.type) {

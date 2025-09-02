@@ -14,7 +14,6 @@ import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import jakarta.persistence.Version
 
 @Table(name = "ddd_task_read_model")
 @Entity
@@ -48,9 +47,6 @@ data class TaskReadModel(
   val toTime: ToTime?,
   @AttributeOverride(name = "value", column = Column("completed"))
   val completed: Boolean,
-  @Version
-  @AttributeOverride(name = "value", column = Column("version"))
-  val version: Long,
 ) {
   companion object {
     fun from(task: Task) =
@@ -65,7 +61,6 @@ data class TaskReadModel(
         fromTime = task.state.fromTime,
         toTime = task.state.toTime,
         completed = task.state.completed,
-        version = task.state.version,
       )
   }
 }

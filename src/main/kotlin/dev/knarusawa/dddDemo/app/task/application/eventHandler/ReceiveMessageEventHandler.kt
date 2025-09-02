@@ -18,23 +18,23 @@ class ReceiveMessageEventHandler(
   private val taskReadModelRepository: TaskReadModelRepository,
 ) : ReceiveMessageInputBoundary {
   override fun handle(event: TaskCreated) {
-    val events = taskEventRepository.findByTaskId(taskId = event.taskId)
+    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.applyFromFirstEvent(events = events)
     val readModel = TaskReadModel.from(task = task)
     taskReadModelRepository.save(task = readModel)
   }
 
   override fun handle(event: TaskChanged) {
-    val events = taskEventRepository.findByTaskId(taskId = event.taskId)
+    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.applyFromFirstEvent(events = events)
     val readModel = TaskReadModel.from(task = task)
-    taskReadModelRepository.save(task = readModel)
+    taskReadModelRepository.saveAndFlush(task = readModel)
   }
 
   override fun handle(event: TaskCompleted) {
-    val events = taskEventRepository.findByTaskId(taskId = event.taskId)
+    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.applyFromFirstEvent(events = events)
     val readModel = TaskReadModel.from(task = task)
-    taskReadModelRepository.save(task = readModel)
+    taskReadModelRepository.saveAndFlush(task = readModel)
   }
 }

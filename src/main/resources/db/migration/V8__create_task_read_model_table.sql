@@ -9,7 +9,6 @@ CREATE TABLE ddd_task_read_model (
     from_time TIMESTAMP,
     to_time TIMESTAMP,
     completed BOOLEAN NOT NULL,
-    version BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     created_by TEXT NOT NULL DEFAULT CURRENT_USER,
