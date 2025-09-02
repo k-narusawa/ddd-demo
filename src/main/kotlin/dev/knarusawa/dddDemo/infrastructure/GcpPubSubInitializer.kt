@@ -11,9 +11,11 @@ import com.google.pubsub.v1.TopicName
 import dev.knarusawa.dddDemo.util.logger
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
 @Component
+@Profile("local")
 class GcpPubSubInitializer(
   private val topicAdminClient: TopicAdminClient,
   private val subscriptionAdminClient: SubscriptionAdminClient,

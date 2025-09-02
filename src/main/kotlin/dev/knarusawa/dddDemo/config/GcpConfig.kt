@@ -6,35 +6,12 @@ import com.google.cloud.pubsub.v1.SubscriptionAdminClient
 import com.google.cloud.pubsub.v1.SubscriptionAdminSettings
 import com.google.cloud.pubsub.v1.TopicAdminClient
 import com.google.cloud.pubsub.v1.TopicAdminSettings
-import com.google.cloud.spring.pubsub.core.PubSubTemplate
-import com.google.cloud.spring.pubsub.integration.AckMode
-import com.google.cloud.spring.pubsub.integration.inbound.PubSubInboundChannelAdapter
 import io.grpc.ManagedChannelBuilder
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
-import org.springframework.messaging.MessageChannel
 
 class GcpConfig {
-  @Bean
-  fun inboundChannelAdapter(
-    @Qualifier("inputMessageChannel")
-    messageChannel: MessageChannel,
-    pubSubTemplate: PubSubTemplate,
-  ): PubSubInboundChannelAdapter {
-    val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, "sub-one")
-    adapter.setOutputChannel(messageChannel)
-    adapter.ackMode = AckMode.MANUAL
-    adapter.payloadType = String::class.java
-    return adapter
-  }
-
-  @Bean
-  @Profile("!local")
-  fun topicAdminClient(): TopicAdminClient = TopicAdminClient.create()
-
   @Bean
   @Profile("local")
   fun localTopicAdminClient(
@@ -51,10 +28,6 @@ class GcpConfig {
         .build(),
     )
   }
-
-  @Bean
-  @Profile("!local")
-  fun subscriptionAdminClient() = SubscriptionAdminClient.create()
 
   @Bean
   @Profile("local")
