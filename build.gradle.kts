@@ -30,7 +30,6 @@ dependencies {
   implementation(libs.postgresql)
   implementation(libs.spring.boot.starter.data.jdbc)
   implementation(libs.spring.boot.starter.data.jpa)
-  implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.boot.starter.webflux)
   implementation(libs.spring.boot.starter.aop)
   implementation(libs.spring.security.crypto)
