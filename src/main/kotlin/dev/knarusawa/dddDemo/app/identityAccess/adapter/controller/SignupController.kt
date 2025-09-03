@@ -21,7 +21,7 @@ class SignupController(
     body: UserRegistrationRequest,
   ): ResponseEntity<UserRegistrationResponse> {
     val inputData =
-      SignupUserInputData.Companion.of(
+      SignupUserInputData.of(
         username = body.username,
         password = body.password,
         personalName = body.personalName,

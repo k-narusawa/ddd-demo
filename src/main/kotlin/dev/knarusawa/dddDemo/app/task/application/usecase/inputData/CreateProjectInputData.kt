@@ -12,8 +12,8 @@ data class CreateProjectInputData(
       memberId: String,
       projectName: String,
     ) = CreateProjectInputData(
-      memberId = MemberId.Companion.from(value = memberId),
-      projectName = ProjectName.Companion.of(value = projectName),
+      memberId = MemberId.from(value = memberId),
+      projectName = ProjectName.of(value = projectName),
     )
   }
 }

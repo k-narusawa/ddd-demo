@@ -16,13 +16,13 @@ class ProjectInteractor(
   private val applicationEventPublisher: ApplicationEventPublisher,
 ) : ProjectInputBoundary {
   override fun handle(input: CreateProjectInputData): CreateProjectOutputData {
-    val project = Project.Companion.of(projectName = input.projectName, memberId = input.memberId)
+    val project = Project.of(projectName = input.projectName, memberId = input.memberId)
 
     projectRepository.save(project = project)
     project.getEvents().forEach { event ->
       applicationEventPublisher.publishEvent(event)
     }
 
-    return CreateProjectOutputData.Companion.of(project = project)
+    return CreateProjectOutputData.of(project = project)
   }
 }

@@ -27,7 +27,7 @@ class LoginController(
     requestBody: LoginRequest,
   ): ResponseEntity<LoginResponse> {
     val input =
-      LoginInputData.Companion.of(
+      LoginInputData.of(
         username = requestBody.username,
         password = requestBody.password,
         userAgent = userAgent,

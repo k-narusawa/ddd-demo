@@ -34,13 +34,13 @@ data class ChangeTaskInputData(
     ) = ChangeTaskInputData(
       taskId = TaskId.from(value = taskId),
       projectId = ProjectId.from(value = projectId),
-      operator = MemberId.Companion.from(value = operator),
-      title = Title.Companion.of(value = title),
-      description = description?.let { Description.Companion.of(value = it) },
-      assigner = assigner?.let { MemberId.Companion.from(value = it) },
-      assignee = assignee?.let { MemberId.Companion.from(value = it) },
-      fromTime = fromTime?.let { FromTime.Companion.of(value = it) },
-      toTime = toTime?.let { ToTime.Companion.of(value = it) },
+      operator = MemberId.from(value = operator),
+      title = Title.of(value = title),
+      description = description?.let { Description.of(value = it) },
+      assigner = assigner?.let { MemberId.from(value = it) },
+      assignee = assignee?.let { MemberId.from(value = it) },
+      fromTime = fromTime?.let { FromTime.of(value = it) },
+      toTime = toTime?.let { ToTime.of(value = it) },
     )
   }
 }

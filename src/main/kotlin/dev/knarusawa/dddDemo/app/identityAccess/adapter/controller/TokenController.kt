@@ -35,7 +35,7 @@ class TokenController(
 
     try {
       val input =
-        IntrospectionInputData.Companion.of(
+        IntrospectionInputData.of(
           accessToken = token,
           secret = accessTokenSecret!!,
         )
