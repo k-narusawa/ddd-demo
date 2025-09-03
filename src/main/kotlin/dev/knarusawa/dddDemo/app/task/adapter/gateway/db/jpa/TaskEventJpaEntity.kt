@@ -41,8 +41,6 @@ class TaskEventJpaEntity(
   val occurredAt: LocalDateTime,
   @Column(nullable = false, name = "completed")
   val completed: Boolean,
-  @Column(nullable = false, name = "version")
-  val version: Long,
 ) {
   companion object {
     fun from(event: TaskEvent): TaskEventJpaEntity =
@@ -60,7 +58,6 @@ class TaskEventJpaEntity(
         toTime = event.toTime?.get(),
         occurredAt = event.occurredAt,
         completed = event.completed,
-        version = event.version,
       )
   }
 }

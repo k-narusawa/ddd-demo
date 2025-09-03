@@ -41,7 +41,6 @@ CREATE TABLE ddd_task_event (
     to_time TIMESTAMP,
     occurred_at TIMESTAMP NOT NULL,
     completed BOOLEAN NOT NULL,
-    version BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     created_by TEXT NOT NULL DEFAULT CURRENT_USER,

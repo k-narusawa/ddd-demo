@@ -46,7 +46,6 @@ class TaskEventRepositoryImpl(
             toTime = it.toTime?.let { ToTime.of(value = it) },
             occurredAt = it.occurredAt,
             completed = it.completed,
-            version = it.version,
           )
         }
 
@@ -65,7 +64,6 @@ class TaskEventRepositoryImpl(
             toTime = it.toTime?.let { ToTime.of(value = it) },
             occurredAt = it.occurredAt,
             completed = it.completed,
-            version = it.version,
           )
         }
 
@@ -84,11 +82,8 @@ class TaskEventRepositoryImpl(
             toTime = it.toTime?.let { ToTime.of(value = it) },
             occurredAt = it.occurredAt,
             completed = it.completed,
-            version = it.version,
           )
         }
-
-        else -> throw IllegalStateException()
       }
     }
   }

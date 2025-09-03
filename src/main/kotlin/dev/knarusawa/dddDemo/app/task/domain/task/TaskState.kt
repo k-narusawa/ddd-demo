@@ -82,7 +82,6 @@ class TaskState private constructor(
         this.assignee = event.assignee
         this.fromTime = event.fromTime
         this.toTime = event.toTime
-        this.version = event.version
       }
 
       is TaskCompleted -> {
@@ -94,7 +93,6 @@ class TaskState private constructor(
         this.fromTime = event.fromTime
         this.toTime = event.toTime
         this.completed = true
-        this.version = event.version
       }
 
       is TaskCreated -> throw IllegalStateException()

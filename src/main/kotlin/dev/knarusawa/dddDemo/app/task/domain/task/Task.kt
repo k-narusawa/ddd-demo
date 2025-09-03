@@ -65,7 +65,6 @@ class Task private constructor(
         fromTime = cmd.fromTime,
         toTime = cmd.toTime,
         completed = false,
-        version = this.state.version + 1,
       )
 
     events.add(changed)
@@ -77,10 +76,10 @@ class Task private constructor(
     if (this === other) return true
     if (other !is Task) return false
 
-    if (state?.taskId !== other.state?.taskId) return false
+    if (state.taskId !== other.state.taskId) return false
 
     return true
   }
 
-  override fun hashCode(): Int = state?.taskId.hashCode()
+  override fun hashCode(): Int = state.taskId.hashCode()
 }

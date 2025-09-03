@@ -25,7 +25,6 @@ sealed class TaskEvent {
   abstract val toTime: ToTime?
   abstract val occurredAt: LocalDateTime
   abstract val completed: Boolean
-  abstract val version: Long
 
   companion object {
     fun fromPayload(payload: String): TaskEvent {
@@ -47,11 +46,10 @@ sealed class TaskEvent {
             toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
             occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
             completed = jsonMap["completed"] as Boolean,
-            version = (jsonMap["version"] as Number).toLong(),
           )
 
         TaskEventType.TASK_CHANGED ->
-          TaskCreated(
+          TaskChanged(
             taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_CHANGED,
@@ -65,11 +63,10 @@ sealed class TaskEvent {
             toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
             occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
             completed = jsonMap["completed"] as Boolean,
-            version = (jsonMap["version"] as Number).toLong(),
           )
 
         TaskEventType.TASK_COMPLETED ->
-          TaskCreated(
+          TaskCompleted(
             taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
             taskId = TaskId(jsonMap["taskId"] as String),
             type = TaskEventType.TASK_COMPLETED,
@@ -83,7 +80,6 @@ sealed class TaskEvent {
             toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
             occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
             completed = jsonMap["completed"] as Boolean,
-            version = (jsonMap["version"] as Number).toLong(),
           )
       }
     }
@@ -104,8 +100,7 @@ sealed class TaskEvent {
       "fromTime": "${this.fromTime?.get()}",
       "toTime": "${this.toTime?.get()}",
       "occurredAt": "${this.occurredAt}",
-      "completed": ${this.completed},
-      "version": ${this.version}
+      "completed": ${this.completed}
     }
     """.trimIndent()
 }

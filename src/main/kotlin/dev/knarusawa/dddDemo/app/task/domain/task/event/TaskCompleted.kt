@@ -24,7 +24,6 @@ data class TaskCompleted(
   override val toTime: ToTime?,
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
-  override val version: Long,
 ) : TaskEvent() {
   companion object {
     fun of(
@@ -37,7 +36,6 @@ data class TaskCompleted(
       assignee: MemberId?,
       fromTime: FromTime?,
       toTime: ToTime?,
-      version: Long,
     ) = TaskCompleted(
       taskEventId = TaskEventId.new(),
       taskId = taskId,
@@ -52,7 +50,6 @@ data class TaskCompleted(
       toTime = toTime,
       occurredAt = LocalDateTime.now(),
       completed = true,
-      version = version,
     )
   }
 }
