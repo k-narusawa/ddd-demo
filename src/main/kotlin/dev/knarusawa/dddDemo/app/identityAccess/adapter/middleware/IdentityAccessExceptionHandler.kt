@@ -19,7 +19,9 @@ class IdentityAccessExceptionHandler {
   }
 
   @ExceptionHandler(IdentityAccessDomainException::class)
-  fun handleDomainException(ex: IdentityAccessDomainException): ResponseEntity<ErrorResponse> {
+  suspend fun handleDomainException(
+    ex: IdentityAccessDomainException,
+  ): ResponseEntity<ErrorResponse> {
     when (ex) {
       is LoginFailed -> {
         log.warn("ログインに失敗しました userId: ${ex.userId?.get()}")
@@ -80,7 +82,7 @@ class IdentityAccessExceptionHandler {
   }
 
   @ExceptionHandler(IdentityAccessApplicationException::class)
-  fun handleApplicationException(
+  suspend fun handleApplicationException(
     ex: IdentityAccessApplicationException,
   ): ResponseEntity<ErrorResponse> {
     when (ex) {
@@ -115,7 +117,9 @@ class IdentityAccessExceptionHandler {
   }
 
   @ExceptionHandler(IllegalArgumentException::class)
-  fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+  suspend fun handleIllegalArgumentException(
+    ex: IllegalArgumentException,
+  ): ResponseEntity<ErrorResponse> {
     log.warn("IllegalArgumentException", ex)
     val response =
       ErrorResponse(
@@ -131,7 +135,9 @@ class IdentityAccessExceptionHandler {
   }
 
   @ExceptionHandler(IllegalStateException::class)
-  fun handleIllegalStateException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+  suspend fun handleIllegalStateException(
+    ex: IllegalArgumentException,
+  ): ResponseEntity<ErrorResponse> {
     log.warn("IllegalStateException", ex)
     val response =
       ErrorResponse(
@@ -147,7 +153,7 @@ class IdentityAccessExceptionHandler {
   }
 
   @ExceptionHandler(Exception::class)
-  fun handleException(ex: Exception): ResponseEntity<ErrorResponse> {
+  suspend fun handleException(ex: Exception): ResponseEntity<ErrorResponse> {
     log.error("Internal Server Error", ex)
     val response =
       ErrorResponse(

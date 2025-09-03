@@ -20,8 +20,8 @@ java {
 
 repositories {
   mavenCentral()
-//  maven { url = uri("https://repo.spring.io/milestone") }
-//  maven { url = uri("https://repo.spring.io/snapshot") }
+  maven { url = uri("https://repo.spring.io/milestone") }
+  maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
@@ -41,6 +41,7 @@ dependencies {
   implementation(libs.jakarta.mail.api)
   runtimeOnly(libs.angus.mail)
   implementation(libs.kotlin.result)
+  implementation(libs.context.propagation)
 
   implementation(libs.jackson.module.kotlin)
   implementation(libs.kotlin.reflect)
@@ -49,7 +50,6 @@ dependencies {
   implementation(libs.kotlinx.coroutines.reactive)
   implementation(libs.kotlinx.coroutines.reactor)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.kurrentdb.client)
 
   runtimeOnly(libs.flyway.core)
   runtimeOnly(libs.flyway.database.postgresql)
