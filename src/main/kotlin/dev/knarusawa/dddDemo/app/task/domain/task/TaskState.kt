@@ -82,6 +82,7 @@ class TaskState private constructor(
         this.assignee = event.assignee
         this.fromTime = event.fromTime
         this.toTime = event.toTime
+        this.version += this.version + 1
       }
 
       is TaskCompleted -> {
@@ -93,9 +94,10 @@ class TaskState private constructor(
         this.fromTime = event.fromTime
         this.toTime = event.toTime
         this.completed = true
+        this.version += this.version + 1
       }
 
-      is TaskCreated -> throw IllegalStateException()
+      is TaskCreated -> throw IllegalStateException("作成イベントの適用は不可能")
     }
   }
 }
