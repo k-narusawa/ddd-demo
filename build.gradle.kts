@@ -85,10 +85,46 @@ tasks.withType<Test> {
 }
 
 flyway {
-  url = "jdbc:postgresql://localhost:5432/ddd"
   driver = "org.postgresql.Driver"
-  user = "user"
-  password = "password"
-  locations = arrayOf("filesystem:src/main/resources/db/migration")
   cleanDisabled = false
+}
+
+tasks.register("flywayMigrateIdentityAccess", org.flywaydb.gradle.task.FlywayMigrateTask::class) {
+  url = System.getenv("IDENTITY_ACCESS_DATASOURCE_URL")
+    ?: "jdbc:postgresql://localhost:5432/ddd_identity_access"
+  user = System.getenv("IDENTITY_ACCESS_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("IDENTITY_ACCESS_DATASOURCE_PASSWORD") ?: "password"
+  locations = arrayOf("filesystem:src/main/resources/db/migration/identityAccess")
+  baselineOnMigrate = true
+}
+
+tasks.register("flywayMigrateTask", org.flywaydb.gradle.task.FlywayMigrateTask::class) {
+  url = System.getenv("TASK_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_task"
+  user = System.getenv("TASK_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("TASK_DATASOURCE_PASSWORD") ?: "password"
+  locations = arrayOf("filesystem:src/main/resources/db/migration/task")
+  baselineOnMigrate = true
+}
+
+tasks.named("flywayMigrate") {
+  dependsOn(tasks.named("flywayMigrateIdentityAccess"), tasks.named("flywayMigrateTask"))
+  enabled = false
+}
+
+tasks.register("flywayCleanIdentityAccess", org.flywaydb.gradle.task.FlywayCleanTask::class) {
+  url = System.getenv("IDENTITY_ACCESS_DATASOURCE_URL")
+    ?: "jdbc:postgresql://localhost:5432/ddd_identity_access"
+  user = System.getenv("IDENTITY_ACCESS_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("IDENTITY_ACCESS_DATASOURCE_PASSWORD") ?: "password"
+}
+
+tasks.register("flywayCleanTask", org.flywaydb.gradle.task.FlywayCleanTask::class) {
+  url = System.getenv("TASK_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_task"
+  user = System.getenv("TASK_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("TASK_DATASOURCE_PASSWORD") ?: "password"
+}
+
+tasks.named("flywayClean") {
+  dependsOn(tasks.named("flywayCleanIdentityAccess"), tasks.named("flywayCleanTask"))
+  enabled = false
 }

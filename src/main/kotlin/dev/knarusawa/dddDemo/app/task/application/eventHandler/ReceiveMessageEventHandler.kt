@@ -28,13 +28,33 @@ class ReceiveMessageEventHandler(
     val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.applyFromFirstEvent(events = events)
     val readModel = TaskReadModel.from(task = task)
-    taskReadModelRepository.saveAndFlush(task = readModel)
+    taskReadModelRepository.update(
+      taskId = readModel.taskId,
+      operator = readModel.operator,
+      title = readModel.title,
+      description = readModel.description,
+      assigner = readModel.assigner,
+      assignee = readModel.assignee,
+      fromTime = readModel.fromTime,
+      toTime = readModel.toTime,
+      completed = readModel.completed,
+    )
   }
 
   override fun handle(event: TaskCompleted) {
     val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.applyFromFirstEvent(events = events)
     val readModel = TaskReadModel.from(task = task)
-    taskReadModelRepository.saveAndFlush(task = readModel)
+    taskReadModelRepository.update(
+      taskId = readModel.taskId,
+      operator = readModel.operator,
+      title = readModel.title,
+      description = readModel.description,
+      assigner = readModel.assigner,
+      assignee = readModel.assignee,
+      fromTime = readModel.fromTime,
+      toTime = readModel.toTime,
+      completed = readModel.completed,
+    )
   }
 }

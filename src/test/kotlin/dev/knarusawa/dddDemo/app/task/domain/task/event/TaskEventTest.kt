@@ -33,7 +33,7 @@ class TaskEventTest {
       }
       """.trimIndent()
 
-    val sut = TaskEvent.fromPayload(eventType, payload)
+    val sut = TaskEvent.fromPayload(payload)
 
     assertEquals(TaskId("28b22f77-147b-4435-bbc5-916ae85b789a"), sut.taskId)
     assertEquals(TaskEventType.TASK_CREATED, sut.type)
@@ -47,6 +47,5 @@ class TaskEventTest {
     assertNull(sut.toTime)
     assertEquals(LocalDateTime.of(2025, 9, 1, 15, 30, 48, 559617000), sut.occurredAt)
     assertEquals(false, sut.completed)
-    assertEquals(1L, sut.version)
   }
 }

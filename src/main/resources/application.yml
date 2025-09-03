@@ -4,10 +4,17 @@ spring:
   application:
     name: ddd-demo
   datasource:
+    identity-access:
+      url: ${IDENTITY_ACCESS_DATASOURCE_URL}
+      username: ${IDENTITY_ACCESS_DATASOURCE_USERNAME:${TASK_DATASOURCE_USERNAME}}
+      password: ${IDENTITY_ACCESS_DATASOURCE_PASSWORD:${TASK_DATASOURCE_PASSWORD}}
     task:
       url: ${TASK_DATASOURCE_URL}
       username: ${TASK_DATASOURCE_USERNAME}
       password: ${TASK_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
   data:
     jdbc:
       repositories:
