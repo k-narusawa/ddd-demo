@@ -1,5 +1,10 @@
 spring:
   datasource:
+    identity-access:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://127.0.0.1:5432/ddd
+      username: user
+      password: password
     task:
       driver-class-name: org.postgresql.Driver
       url: jdbc:postgresql://127.0.0.1:5432/ddd
