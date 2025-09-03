@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-@RestControllerAdvice(basePackages = ["dev.knarusawa.ddd_demo.app.identity_access"])
+@RestControllerAdvice(basePackages = ["dev.knarusawa.dddDemo.app.identityAccess"])
 class IdentityAccessExceptionHandler {
   companion object {
     private val log = logger()
