@@ -64,20 +64,6 @@ class IdentityAccessExceptionHandler {
           .header("Content-Type", "application/problem+json")
           .body(response)
       }
-
-      else -> {
-        log.error("予期せぬエラーが発生しました", ex)
-        val response =
-          ErrorResponse(
-            title = "予期せぬエラーが発生しました",
-            detail = ex.message ?: "An error occurred due to invalid input",
-          )
-
-        return ResponseEntity
-          .status(500)
-          .header("Content-Type", "application/problem+json")
-          .body(response)
-      }
     }
   }
 
