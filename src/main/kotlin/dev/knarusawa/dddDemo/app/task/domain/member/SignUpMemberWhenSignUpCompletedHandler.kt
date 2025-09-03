@@ -13,8 +13,8 @@ class SignUpMemberWhenSignUpCompletedHandler(
   @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
   fun handle(event: UserSignupCompletedEvent) {
     val memberId = MemberId.from(value = event.user.userId.get())
-    val foundMember = memberRepository.findById(memberId)
-    if (foundMember.isEmpty) {
+    val foundMember = memberRepository.findByMemberId(memberId)
+    if (foundMember == null) {
       val member =
         Member.signup(
           memberId = memberId,
