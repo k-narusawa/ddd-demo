@@ -10,6 +10,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
@@ -24,7 +25,7 @@ class Project private constructor(
   @Embedded
   @AttributeOverride(name = "value", column = Column("project_name"))
   private var projectName: ProjectName,
-  @OneToMany(cascade = [CascadeType.ALL])
+  @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
   @JoinColumn(name = "project_id", referencedColumnName = "project_id")
   private var members: MutableList<MemberRole> = mutableListOf(),
   @Version
