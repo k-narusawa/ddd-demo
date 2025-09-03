@@ -40,6 +40,4 @@ interface TaskReadModelRepository : JpaRepository<TaskReadModel, TaskId> {
     @Param("toTime") toTime: ToTime?,
     @Param("completed") completed: Boolean?,
   )
-
-  fun findByTaskId(taskId: TaskId): TaskReadModel?
 }
