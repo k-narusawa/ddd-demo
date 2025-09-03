@@ -5,6 +5,7 @@ import dev.knarusawa.dddDemo.app.task.application.port.OutboxEventInputBoundary
 import dev.knarusawa.dddDemo.util.logger
 import jakarta.annotation.PostConstruct
 import org.postgresql.PGConnection
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
@@ -13,8 +14,8 @@ import java.sql.SQLException
 import javax.sql.DataSource
 
 @Component
-class OutboxSubscriber(
-  private val dataSource: DataSource,
+class TaskOutboxSubscriber(
+  @Qualifier("taskDataSource") private val dataSource: DataSource,
   private val outboxEventInputBoundary: OutboxEventInputBoundary,
 ) : ApplicationRunner {
   private lateinit var conn: Connection
@@ -32,6 +33,7 @@ class OutboxSubscriber(
     val stmt = conn.createStatement()
     stmt.execute("LISTEN outbox_channel;")
     stmt.close()
+    log.info("OutboxSubscriberの起動完了")
   }
 
   override fun run(args: ApplicationArguments) {
