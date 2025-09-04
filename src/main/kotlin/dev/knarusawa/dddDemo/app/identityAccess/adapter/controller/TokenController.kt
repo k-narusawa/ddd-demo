@@ -5,14 +5,14 @@ import dev.knarusawa.dddDemo.app.identityAccess.application.port.IntrospectionIn
 import dev.knarusawa.dddDemo.app.identityAccess.application.usecase.introspection.IntrospectionInputData
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.TokenUnauthorized
 import dev.knarusawa.dddDemo.util.logger
+import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.core.env.Environment
 import org.springframework.core.env.getProperty
 import org.springframework.http.ResponseEntity
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ServerWebExchange
 
 @RestController
 @RequestMapping("/api/identity_access/token")
@@ -26,9 +26,9 @@ class TokenController(
 
   @PostMapping("/introspect")
   suspend fun postIntrospection(
-    @RequestBody
-    request: MultiValueMap<String, String>,
+    exchange: ServerWebExchange,
   ): ResponseEntity<IntrospectionResponse> {
+    val request = exchange.formData.awaitSingle()
     val token = request.getFirst("token") ?: throw RuntimeException()
     val accessTokenSecret =
       environment.getProperty<String>("environment.identity_access.access_token.secret")

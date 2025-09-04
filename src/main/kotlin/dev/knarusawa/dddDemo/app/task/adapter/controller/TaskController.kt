@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/task/{projectId}")
+@RequestMapping("/api/projects/{projectId}/tasks")
 class TaskController(
   private val identityAccessService: IdentityAccessService,
   private val taskInputBoundary: TaskInputBoundary,
@@ -33,8 +33,6 @@ class TaskController(
     authorization: String?,
     @PathVariable(name = "projectId")
     projectId: String,
-    @RequestBody
-    body: CreateTaskRequest,
   ): ResponseEntity<TaskListResponse> {
     val token = authorization?.split(" ")[1]
     if (token == null) {

@@ -122,7 +122,7 @@ class IdentityAccessExceptionHandler {
 
   @ExceptionHandler(IllegalStateException::class)
   suspend fun handleIllegalStateException(
-    ex: IllegalArgumentException,
+    ex: IllegalStateException,
   ): ResponseEntity<ErrorResponse> {
     log.warn("IllegalStateException", ex)
     val response =

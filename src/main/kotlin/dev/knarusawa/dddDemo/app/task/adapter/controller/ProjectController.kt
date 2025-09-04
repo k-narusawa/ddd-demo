@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/task/projects")
+@RequestMapping("/api/projects")
 class ProjectController(
   private val identityAccessService: IdentityAccessService,
   private val projectInputBoundary: ProjectInputBoundary,

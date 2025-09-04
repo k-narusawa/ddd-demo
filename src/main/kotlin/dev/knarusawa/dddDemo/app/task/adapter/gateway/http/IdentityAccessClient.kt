@@ -1,6 +1,7 @@
 package dev.knarusawa.dddDemo.app.task.adapter.gateway.http
 
 import dev.knarusawa.dddDemo.app.task.adapter.gateway.http.model.IntrospectionResponse
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
@@ -19,6 +20,6 @@ class IdentityAccessClient(
       .bodyValue(map)
       .retrieve()
       .bodyToMono(IntrospectionResponse::class.java)
-      .block()
+      .awaitSingle()
   }
 }

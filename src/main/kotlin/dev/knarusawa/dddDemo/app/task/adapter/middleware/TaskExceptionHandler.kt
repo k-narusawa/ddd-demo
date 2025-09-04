@@ -29,7 +29,7 @@ class TaskExceptionHandler {
   }
 
   @ExceptionHandler(IllegalStateException::class)
-  fun handleIllegalStateException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+  fun handleIllegalStateException(ex: IllegalStateException): ResponseEntity<ErrorResponse> {
     log.warn("IllegalStateException", ex)
     val response =
       ErrorResponse(
