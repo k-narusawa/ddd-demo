@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile
 
 class GcpConfig {
   @Bean
-  @Profile("local")
+  @Profile("local", "test")
   fun localTopicAdminClient(
     @Value($$"${spring.cloud.gcp.pubsub.emulator-host}")
     emulatorHost: String,
@@ -30,7 +30,7 @@ class GcpConfig {
   }
 
   @Bean
-  @Profile("local")
+  @Profile("local", "test")
   fun localSubscriptionAdminClient(
     @Value($$"${spring.cloud.gcp.pubsub.emulator-host}")
     emulatorHost: String,

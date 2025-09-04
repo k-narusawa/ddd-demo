@@ -88,6 +88,10 @@ flyway {
   cleanDisabled = false
 }
 
+tasks.withType<Test> {
+  systemProperty("spring.profiles.active", "test")
+}
+
 tasks.register("flywayMigrateIdentityAccess", org.flywaydb.gradle.task.FlywayMigrateTask::class) {
   url = System.getenv("IDENTITY_ACCESS_DATASOURCE_URL")
     ?: "jdbc:postgresql://localhost:5432/ddd_identity_access"
