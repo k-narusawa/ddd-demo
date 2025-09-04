@@ -24,7 +24,8 @@ class SignupUserInteractor(
       User.signup(
         username = input.username,
         password = input.password,
-        personalName = input.personalName,
+        givenName = input.givenName,
+        familyName = input.familyName,
       )
     userRepository.save(user)
 

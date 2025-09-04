@@ -26,6 +26,14 @@ class User private constructor(
   @Embedded
   @AttributeOverride(name = "value", column = Column("password"))
   private var password: Password,
+  @AttributeOverride(name = "value", column = Column("email_verified"))
+  private var emailVerified: Boolean,
+  @Embedded
+  @AttributeOverride(name = "value", column = Column("given_name"))
+  private var givenName: GivenName,
+  @Embedded
+  @AttributeOverride(name = "value", column = Column("family_name"))
+  private var familyName: FamilyName,
   @Embedded
   @AttributeOverride(name = "value", column = Column("login_failure_count"))
   private var loginFailureCount: LoginFailureCount = LoginFailureCount.init(),
@@ -45,16 +53,20 @@ class User private constructor(
     fun signup(
       username: Username,
       password: Password,
-      personalName: String,
+      givenName: GivenName,
+      familyName: FamilyName,
     ): User {
       val user =
         User(
           userId = UserId.new(),
           username = username,
           password = password,
+          emailVerified = false,
+          givenName = givenName,
+          familyName = familyName,
           accountStatus = AccountStatus.NORMAL,
         )
-      val event = UserSignupCompletedEvent(user = user, personalName = personalName)
+      val event = UserSignupCompletedEvent(user = user)
       user.events.add(event)
       return user
     }

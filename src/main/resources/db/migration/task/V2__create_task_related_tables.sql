@@ -1,6 +1,5 @@
 CREATE TABLE ddd_member (
     member_id VARCHAR(36) PRIMARY KEY,
-    personal_name VARCHAR(255) NOT NULL,
     version BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),

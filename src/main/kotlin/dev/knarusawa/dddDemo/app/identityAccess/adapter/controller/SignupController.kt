@@ -24,7 +24,8 @@ class SignupController(
       SignupUserInputData.of(
         username = body.username,
         password = body.password,
-        personalName = body.personalName,
+        givenName = body.givenName,
+        familyName = body.familyName,
       )
     val outputData = signupUserInputBoundary.handle(inputData)
 

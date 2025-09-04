@@ -1,7 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.member
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent
-import dev.knarusawa.dddDemo.app.task.domain.actor.PersonalName
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
@@ -15,11 +14,7 @@ class SignUpMemberWhenSignUpCompletedHandler(
     val memberId = MemberId.from(value = event.user.userId.get())
     val foundMember = memberRepository.findByMemberId(memberId)
     if (foundMember == null) {
-      val member =
-        Member.signup(
-          memberId = memberId,
-          personalName = PersonalName.of(value = event.personalName),
-        )
+      val member = Member.signup(memberId = memberId)
       memberRepository.save(member)
     }
   }
