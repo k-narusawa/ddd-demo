@@ -66,9 +66,13 @@ class UserTest {
       val username = Username.of("taro@example.com")
       val passwordString = "!Password0"
       val password = Password.of(passwordString)
-      val user = User.signup(username, password, "テスト氏名")
+      val givenName = GivenName.of("名")
+      val familyName = FamilyName.of("姓")
+      val user = User.signup(username, password, givenName, familyName)
 
       Assertions.assertEquals(username, user.getUsername())
+      Assertions.assertEquals(givenName, user.getGivenName())
+      Assertions.assertEquals(familyName, user.getFamilyName())
     }
   }
 
@@ -112,7 +116,9 @@ class UserTest {
     fun user_can_verify_password() {
       val rawPassword = "!Password0"
       val password = Password.of(rawPassword)
-      val user = User.signup(Username.of("taro@example.com"), password, "テスト氏名")
+      val givenName = GivenName.of("名")
+      val familyName = FamilyName.of("姓")
+      val user = User.signup(Username.of("taro@example.com"), password, givenName, familyName)
 
       Assertions.assertDoesNotThrow {
         user.verifyPassword(rawPassword)
@@ -125,7 +131,9 @@ class UserTest {
       val rawPassword = "!Password0"
       val anotherRawPassword = "!Password1"
       val password = Password.of(rawPassword)
-      val user = User.signup(Username.of("taro@example.com"), password, "テスト氏名")
+      val givenName = GivenName.of("名")
+      val familyName = FamilyName.of("姓")
+      val user = User.signup(Username.of("taro@example.com"), password, givenName, familyName)
 
       Assertions.assertThrows(LoginFailed::class.java) {
         user.verifyPassword(anotherRawPassword)
@@ -144,6 +152,9 @@ class UserTest {
       userId,
       username,
       password,
+      false,
+      GivenName.of("名"),
+      FamilyName.of("姓"),
       LoginFailureCount.init(),
       LastLoginFailedAt.init(),
       AccountStatus.NORMAL,

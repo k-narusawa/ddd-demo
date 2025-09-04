@@ -20,6 +20,7 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
     val applicationContext = testContext.applicationContext
     val jdbcTemplate = applicationContext.getBean(JdbcTemplate::class.java)
 
+    jdbcTemplate.execute("use ddd_identity_access;")
     jdbcTemplate.execute("SET session_replication_role = 'replica';") // 外部キー制約を外す
 
     targetTables.forEach { tableName ->

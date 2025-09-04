@@ -1,6 +1,8 @@
 package dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup
 
 import dev.knarusawa.dddDemo.app.identityAccess.application.exception.UsernameAlreadyExists
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.FamilyName
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.GivenName
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Password
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
@@ -38,7 +40,10 @@ class SignupUserInteractorTest
       fun signup_succeeds() =
         runBlocking {
           val username = Username.of("test@example.com")
-          val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
+          val givenName = GivenName.of(value = "名")
+          val familyName = FamilyName.of(value = "姓")
+          val input =
+            SignupUserInputData.of(username.get(), "!Password0", givenName.get(), familyName.get())
 
           val sut = sut.handle(input)
 
@@ -52,19 +57,22 @@ class SignupUserInteractorTest
               memberId = MemberId.from(value = sut.userId),
             )
           assertNotNull(actor)
-          assertEquals(input.personalName, actor?.getPersonalName()?.get())
         }
 
       @Test
       @DisplayName("既に存在するユーザー名を登録しようとすると例外がスローされる")
       fun signup_with_existing_username_throws_exception() {
         val username = Username.of("test@example.com")
+        val givenName = GivenName.of("名")
+        val familyName = FamilyName.of("姓")
         testUserFactory.createUser(
           username = Username.of("test@example.com"),
           password = Password.of("!Password0"),
-          personalName = "テスト氏名",
+          givenName = givenName,
+          familyName = familyName,
         )
-        val input = SignupUserInputData.of(username.get(), "!Password0", "テスト氏名")
+        val input =
+          SignupUserInputData.of(username.get(), "!Password0", givenName.get(), familyName.get())
 
         assertThrows(UsernameAlreadyExists::class.java) {
           runBlocking {

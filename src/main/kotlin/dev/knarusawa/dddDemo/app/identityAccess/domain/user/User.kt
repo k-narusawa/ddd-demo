@@ -74,6 +74,10 @@ class User private constructor(
 
   fun getUsername() = this.username
 
+  fun getFamilyName() = this.familyName
+
+  fun getGivenName() = this.givenName
+
   fun getEvents() = this.events.toList()
 
   fun isLocked() = this.accountStatus === AccountStatus.ACCOUNT_LOCK
