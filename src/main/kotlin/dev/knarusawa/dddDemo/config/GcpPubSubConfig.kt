@@ -1,9 +1,10 @@
-package dev.knarusawa.dddDemo.infrastructure
+package dev.knarusawa.dddDemo.config
 
 import com.google.cloud.spring.pubsub.core.PubSubTemplate
 import com.google.cloud.spring.pubsub.integration.AckMode
 import com.google.cloud.spring.pubsub.integration.inbound.PubSubInboundChannelAdapter
 import com.google.cloud.spring.pubsub.integration.outbound.PubSubMessageHandler
+import dev.knarusawa.dddDemo.infrastructure.PubSubModel
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
@@ -30,7 +31,7 @@ class GcpPubSubConfig {
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CREATED_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.Companion.TASK_CREATED_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java
@@ -47,7 +48,7 @@ class GcpPubSubConfig {
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CHANGED_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.Companion.TASK_CHANGED_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java
@@ -64,7 +65,7 @@ class GcpPubSubConfig {
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_COMPLETED_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.Companion.TASK_COMPLETED_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java
@@ -83,7 +84,7 @@ class GcpPubSubConfig {
   @Bean
   @ServiceActivator(inputChannel = "taskCreatedEventChannel")
   fun taskCreatedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_CREATED_TOPIC)
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.Companion.TASK_CREATED_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.info("タスク作成イベントの送信に成功 ackId:$ackId")
@@ -101,7 +102,7 @@ class GcpPubSubConfig {
   @Bean
   @ServiceActivator(inputChannel = "taskChangedEventChannel")
   fun taskChangedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_CHANGED_TOPIC)
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.Companion.TASK_CHANGED_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.info("タスク変更イベントの送信に成功 ackId:$ackId")
@@ -119,7 +120,7 @@ class GcpPubSubConfig {
   @Bean
   @ServiceActivator(inputChannel = "taskCompletedEventChannel")
   fun taskCompletedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_COMPLETED_TOPIC)
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.Companion.TASK_COMPLETED_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.info("タスク完了イベントの送信に成功 ackId:$ackId")

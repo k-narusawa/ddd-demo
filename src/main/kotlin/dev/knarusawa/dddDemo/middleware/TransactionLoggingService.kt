@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.config
+package dev.knarusawa.dddDemo.middleware
 
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.stereotype.Service
