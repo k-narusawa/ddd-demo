@@ -6,8 +6,8 @@ import dev.knarusawa.dddDemo.app.identityAccess.domain.user.GivenName
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Password
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
-import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
-import dev.knarusawa.dddDemo.app.task.domain.member.MemberRepository
+import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.project.domain.member.MemberRepository
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
 import dev.knarusawa.dddDemo.testFactory.TestUserFactory
 import kotlinx.coroutines.runBlocking

@@ -3,10 +3,10 @@ package dev.knarusawa.dddDemo.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskChanged
-import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCompleted
-import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
-import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
+import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
+import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
+import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
+import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
