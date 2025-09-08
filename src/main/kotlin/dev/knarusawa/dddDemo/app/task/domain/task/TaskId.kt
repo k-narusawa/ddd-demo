@@ -1,8 +1,10 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
 import jakarta.persistence.Embeddable
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 @Embeddable
 data class TaskId(
   private val value: String,

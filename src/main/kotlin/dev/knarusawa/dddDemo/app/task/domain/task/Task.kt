@@ -64,9 +64,8 @@ class Task private constructor(
         assignee = cmd.assignee,
         fromTime = cmd.fromTime,
         toTime = cmd.toTime,
-        completed = false,
       )
-
+    state.apply(changed)
     events.add(changed)
   }
 

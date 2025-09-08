@@ -1,12 +1,12 @@
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.spring)
+  alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.spring.boot)
   alias(libs.plugins.spring.dependency.management)
   alias(libs.plugins.kotlin.jpa)
   alias(libs.plugins.flyway)
   alias(libs.plugins.ktlint)
-  kotlin("plugin.serialization") version "2.2.0"
 }
 
 group = "dev.k-narusawa"
@@ -36,20 +36,22 @@ dependencies {
   implementation(libs.spring.integration.core)
   implementation(libs.spring.cloud.gcp.dependencies)
   implementation(libs.spring.cloud.gcp.starter.pubsub)
-  implementation(libs.bouncycastle.prov)
-  implementation(libs.java.jwt)
-  implementation(libs.jakarta.mail.api)
-  runtimeOnly(libs.angus.mail)
-  implementation(libs.kotlin.result)
-  implementation(libs.context.propagation)
 
-  implementation(libs.jackson.module.kotlin)
   implementation(libs.kotlin.reflect)
   implementation(libs.kotlin.stdlib)
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlinx.coroutines.reactive)
   implementation(libs.kotlinx.coroutines.reactor)
+  implementation(libs.kotlinx.serialization.json)
+
+  implementation(libs.java.jwt)
+  implementation(libs.jackson.module.kotlin)
   implementation(libs.jackson.datatype.jsr310)
+  implementation(libs.jakarta.mail.api)
+  implementation(libs.bouncycastle.prov)
+  runtimeOnly(libs.angus.mail)
+  implementation(libs.kotlin.result)
+  implementation(libs.context.propagation)
 
   runtimeOnly(libs.flyway.core)
   runtimeOnly(libs.flyway.database.postgresql)

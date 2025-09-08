@@ -1,6 +1,5 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
-import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -8,10 +7,13 @@ import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 data class TaskChanged(
-  override val taskEventId: TaskEventId,
+  override val eventId: TaskEventId,
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -22,6 +24,7 @@ data class TaskChanged(
   override val assignee: MemberId?,
   override val fromTime: FromTime?,
   override val toTime: ToTime?,
+  @Contextual
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
 ) : TaskEvent() {
@@ -36,13 +39,12 @@ data class TaskChanged(
       assignee: MemberId?,
       fromTime: FromTime?,
       toTime: ToTime?,
-      completed: Boolean?,
     ) = TaskChanged(
-      taskEventId = TaskEventId.new(),
+      eventId = TaskEventId.new(),
       taskId = taskId,
       projectId = projectId,
       operator = operator,
-      type = TaskEventType.TASK_CHANGED,
+      type = TaskEventType.TASK_CREATED,
       title = title,
       description = description,
       assigner = assigner,
@@ -50,7 +52,7 @@ data class TaskChanged(
       fromTime = fromTime,
       toTime = toTime,
       occurredAt = LocalDateTime.now(),
-      completed = completed ?: false,
+      completed = false,
     )
   }
 }

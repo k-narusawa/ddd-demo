@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.task.domain
+package dev.knarusawa.dddDemo.app.task.domain.task.event
 
 enum class TaskEventType {
   TASK_CREATED,

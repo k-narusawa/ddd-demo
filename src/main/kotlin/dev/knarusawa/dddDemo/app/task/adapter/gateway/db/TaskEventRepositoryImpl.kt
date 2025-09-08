@@ -2,7 +2,6 @@ package dev.knarusawa.dddDemo.app.task.adapter.gateway.db
 
 import dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa.TaskEventJpaEntity
 import dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa.TaskEventJpaRepository
-import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -16,6 +15,7 @@ import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventId
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventRepository
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventType
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -33,7 +33,7 @@ class TaskEventRepositoryImpl(
       when (it.type) {
         TaskEventType.TASK_CREATED -> {
           TaskCreated(
-            taskEventId = TaskEventId.from(value = it.taskEventId),
+            eventId = TaskEventId.from(value = it.taskEventId),
             taskId = taskId,
             type = it.type,
             projectId = ProjectId.from(value = it.projectId),
@@ -51,7 +51,7 @@ class TaskEventRepositoryImpl(
 
         TaskEventType.TASK_CHANGED -> {
           TaskChanged(
-            taskEventId = TaskEventId.from(value = it.taskEventId),
+            eventId = TaskEventId.from(value = it.taskEventId),
             taskId = taskId,
             type = it.type,
             projectId = ProjectId.from(value = it.projectId),
@@ -69,7 +69,7 @@ class TaskEventRepositoryImpl(
 
         TaskEventType.TASK_COMPLETED -> {
           TaskCompleted(
-            taskEventId = TaskEventId.from(value = it.taskEventId),
+            eventId = TaskEventId.from(value = it.taskEventId),
             taskId = taskId,
             type = it.type,
             projectId = ProjectId.from(value = it.projectId),

@@ -1,9 +1,11 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
 import jakarta.persistence.Embeddable
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Embeddable
-data class Description private constructor(
+data class Description(
   private val value: String,
 ) {
   init {

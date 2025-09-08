@@ -1,13 +1,14 @@
 package dev.knarusawa.dddDemo.app.task.domain.member
 
 import jakarta.persistence.Embeddable
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 @Embeddable
 data class MemberId(
   private val value: String,
-) : Serializable {
+) {
   companion object {
     fun new(): MemberId = MemberId(value = UUID.randomUUID().toString())
 

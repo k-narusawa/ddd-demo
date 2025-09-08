@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.task.adapter.gateway.db.jpa
 
-import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEvent
+import dev.knarusawa.dddDemo.app.task.domain.task.event.TaskEventType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -45,7 +45,7 @@ class TaskEventJpaEntity(
   companion object {
     fun from(event: TaskEvent): TaskEventJpaEntity =
       TaskEventJpaEntity(
-        taskEventId = event.taskEventId.get(),
+        taskEventId = event.eventId.get(),
         taskId = event.taskId.get(),
         type = event.type,
         projectId = event.projectId.get(),

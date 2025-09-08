@@ -1,13 +1,13 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
-import jakarta.persistence.Embeddable
-import java.io.Serializable
+import dev.knarusawa.dddDemo.app.task.domain.EventId
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
-@Embeddable
+@Serializable
 data class TaskEventId(
   private val value: String,
-) : Serializable {
+) : EventId(eventId = value) {
   companion object {
     fun new(): TaskEventId = TaskEventId(value = UUID.randomUUID().toString())
 

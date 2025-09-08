@@ -1,10 +1,14 @@
 package dev.knarusawa.dddDemo.app.task.domain.task
 
 import jakarta.persistence.Embeddable
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 @Embeddable
-data class ToTime private constructor(
+data class ToTime(
+  @Contextual
   private val value: LocalDateTime,
 ) {
   companion object {

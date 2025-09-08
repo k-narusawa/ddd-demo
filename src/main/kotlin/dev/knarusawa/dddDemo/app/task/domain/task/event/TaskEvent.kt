@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
-import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
+import dev.knarusawa.dddDemo.app.task.TaskDomainEvent
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -9,10 +9,12 @@ import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
 import dev.knarusawa.dddDemo.util.JsonUtil
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-sealed class TaskEvent {
-  abstract val taskEventId: TaskEventId
+@Serializable
+sealed class TaskEvent : TaskDomainEvent() {
+  abstract override val eventId: TaskEventId
   abstract val taskId: TaskId
   abstract val type: TaskEventType
   abstract val projectId: ProjectId
@@ -27,80 +29,15 @@ sealed class TaskEvent {
   abstract val completed: Boolean
 
   companion object {
-    fun fromPayload(payload: String): TaskEvent {
-      val jsonMap = JsonUtil.jsonToMap(jsonString = payload)
-      val type = TaskEventType.valueOf(jsonMap["type"] as String)
-      return when (type) {
-        TaskEventType.TASK_CREATED ->
-          TaskCreated(
-            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
-            taskId = TaskId(jsonMap["taskId"] as String),
-            type = TaskEventType.TASK_CREATED,
-            projectId = ProjectId(jsonMap["projectId"] as String),
-            operator = MemberId(jsonMap["operator"] as String),
-            title = Title.of(jsonMap["title"] as String),
-            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
-            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
-            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
-            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
-            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
-            occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
-            completed = jsonMap["completed"] as Boolean,
-          )
-
-        TaskEventType.TASK_CHANGED ->
-          TaskChanged(
-            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
-            taskId = TaskId(jsonMap["taskId"] as String),
-            type = TaskEventType.TASK_CHANGED,
-            projectId = ProjectId(jsonMap["projectId"] as String),
-            operator = MemberId(jsonMap["operator"] as String),
-            title = Title.of(jsonMap["title"] as String),
-            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
-            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
-            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
-            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
-            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
-            occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
-            completed = jsonMap["completed"] as Boolean,
-          )
-
-        TaskEventType.TASK_COMPLETED ->
-          TaskCompleted(
-            taskEventId = TaskEventId(jsonMap["taskEventId"] as String),
-            taskId = TaskId(jsonMap["taskId"] as String),
-            type = TaskEventType.TASK_COMPLETED,
-            projectId = ProjectId(jsonMap["projectId"] as String),
-            operator = MemberId(jsonMap["operator"] as String),
-            title = Title.of(jsonMap["title"] as String),
-            description = (jsonMap["description"] as? String)?.let { Description.of(it) },
-            assigner = (jsonMap["assigner"] as? String)?.let { MemberId.from(it) },
-            assignee = (jsonMap["assignee"] as? String)?.let { MemberId.from(it) },
-            fromTime = (jsonMap["fromTime"] as? LocalDateTime)?.let { FromTime.of(it) },
-            toTime = (jsonMap["toTime"] as? LocalDateTime)?.let { ToTime.of(it) },
-            occurredAt = LocalDateTime.parse(jsonMap["occurredAt"] as String),
-            completed = jsonMap["completed"] as Boolean,
-          )
-      }
-    }
+    fun fromPayload(payload: String): TaskEvent = JsonUtil.json.decodeFromString<TaskEvent>(payload)
   }
 
-  fun toPayload(): String =
-    """
-    {
-      "taskEventId": "${this.taskEventId.get()}",
-      "taskId": "${this.taskId.get()}",
-      "type": "${this.type.name}",
-      "projectId": "${this.projectId.get()}",
-      "operator": "${this.operator.get()}",
-      "title": "${this.title.get()}",
-      "description": "${this.description?.get()}",
-      "assigner": "${this.assigner?.get()}",
-      "assignee": "${this.assignee?.get()}",
-      "fromTime": "${this.fromTime?.get()}",
-      "toTime": "${this.toTime?.get()}",
-      "occurredAt": "${this.occurredAt}",
-      "completed": ${this.completed}
-    }
-    """.trimIndent()
+  fun toPayload(): String = JsonUtil.json.encodeToString(TaskEvent.serializer(), this)
+
+//  fun toPayload(): String =
+//    when (this) {
+//      is TaskCreated -> JsonUtil.json.encodeToString(TaskCreated.serializer(), this)
+//      is TaskChanged -> JsonUtil.json.encodeToString(TaskChanged.serializer(), this)
+//      is TaskCompleted -> JsonUtil.json.encodeToString(TaskCompleted.serializer(), this)
+//    }
 }

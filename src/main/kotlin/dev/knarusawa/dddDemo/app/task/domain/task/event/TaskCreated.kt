@@ -1,6 +1,5 @@
 package dev.knarusawa.dddDemo.app.task.domain.task.event
 
-import dev.knarusawa.dddDemo.app.task.domain.TaskEventType
 import dev.knarusawa.dddDemo.app.task.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.task.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.task.domain.task.Description
@@ -8,10 +7,13 @@ import dev.knarusawa.dddDemo.app.task.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.task.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.task.domain.task.Title
 import dev.knarusawa.dddDemo.app.task.domain.task.ToTime
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 data class TaskCreated(
-  override val taskEventId: TaskEventId,
+  override val eventId: TaskEventId,
   override val taskId: TaskId,
   override val type: TaskEventType,
   override val projectId: ProjectId,
@@ -22,6 +24,7 @@ data class TaskCreated(
   override val assignee: MemberId?,
   override val fromTime: FromTime?,
   override val toTime: ToTime?,
+  @Contextual
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
 ) : TaskEvent() {
@@ -37,7 +40,7 @@ data class TaskCreated(
       fromTime: FromTime?,
       toTime: ToTime?,
     ) = TaskCreated(
-      taskEventId = TaskEventId.new(),
+      eventId = TaskEventId.new(),
       taskId = taskId,
       projectId = projectId,
       operator = operator,
