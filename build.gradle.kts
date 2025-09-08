@@ -103,16 +103,16 @@ tasks.register("flywayMigrateIdentityAccess", org.flywaydb.gradle.task.FlywayMig
   baselineOnMigrate = true
 }
 
-tasks.register("flywayMigrateTask", org.flywaydb.gradle.task.FlywayMigrateTask::class) {
-  url = System.getenv("TASK_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_task"
-  user = System.getenv("TASK_DATASOURCE_USERNAME") ?: "user"
-  password = System.getenv("TASK_DATASOURCE_PASSWORD") ?: "password"
-  locations = arrayOf("filesystem:src/main/resources/db/migration/task")
+tasks.register("flywayMigrateProject", org.flywaydb.gradle.task.FlywayMigrateTask::class) {
+  url = System.getenv("PROJECT_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_project"
+  user = System.getenv("PROJECT_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("PROJECT_DATASOURCE_PASSWORD") ?: "password"
+  locations = arrayOf("filesystem:src/main/resources/db/migration/project")
   baselineOnMigrate = true
 }
 
 tasks.named("flywayMigrate") {
-  dependsOn(tasks.named("flywayMigrateIdentityAccess"), tasks.named("flywayMigrateTask"))
+  dependsOn(tasks.named("flywayMigrateIdentityAccess"), tasks.named("flywayMigrateProject"))
   enabled = false
 }
 
@@ -123,13 +123,13 @@ tasks.register("flywayCleanIdentityAccess", org.flywaydb.gradle.task.FlywayClean
   password = System.getenv("IDENTITY_ACCESS_DATASOURCE_PASSWORD") ?: "password"
 }
 
-tasks.register("flywayCleanTask", org.flywaydb.gradle.task.FlywayCleanTask::class) {
-  url = System.getenv("TASK_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_task"
-  user = System.getenv("TASK_DATASOURCE_USERNAME") ?: "user"
-  password = System.getenv("TASK_DATASOURCE_PASSWORD") ?: "password"
+tasks.register("flywayCleanProject", org.flywaydb.gradle.task.FlywayCleanTask::class) {
+  url = System.getenv("PROJECT_DATASOURCE_URL") ?: "jdbc:postgresql://localhost:5432/ddd_project"
+  user = System.getenv("PROJECT_DATASOURCE_USERNAME") ?: "user"
+  password = System.getenv("PROJECT_DATASOURCE_PASSWORD") ?: "password"
 }
 
 tasks.named("flywayClean") {
-  dependsOn(tasks.named("flywayCleanIdentityAccess"), tasks.named("flywayCleanTask"))
+  dependsOn(tasks.named("flywayCleanIdentityAccess"), tasks.named("flywayCleanProject"))
   enabled = false
 }

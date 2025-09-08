@@ -11,4 +11,6 @@ data class MemberEventId(
   companion object {
     fun new() = MemberEventId(value = UUID.randomUUID().toString())
   }
+
+  fun get() = value
 }

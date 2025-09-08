@@ -7,11 +7,11 @@ import dev.knarusawa.dddDemo.app.project.application.eventHandler.event.OutboxEv
 import dev.knarusawa.dddDemo.app.project.application.port.OutboxEventInputBoundary
 import dev.knarusawa.dddDemo.app.project.domain.outbox.EventType
 import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxEventRepository
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
+@Transactional(transactionManager = "projectTransactionManager")
 class OutboxEventHandler(
   private val outboxEventRepository: OutboxEventRepository,
   private val taskCreatedPublisher: TaskCreatedPublisher,

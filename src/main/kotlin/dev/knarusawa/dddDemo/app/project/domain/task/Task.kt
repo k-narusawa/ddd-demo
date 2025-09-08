@@ -8,12 +8,12 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 
 class Task private constructor(
   val state: TaskState,
-  private val events: MutableList<TaskEvent> = mutableListOf(),
+  private val taskEvents: MutableList<TaskEvent> = mutableListOf(),
 ) {
   companion object {
     fun handle(cmd: CreateTaskCommand): Task {
       val state = TaskState.init(cmd)
-      val created =
+      val taskCreated =
         TaskCreated.of(
           taskId = state.taskId,
           projectId = cmd.projectId,
@@ -27,18 +27,18 @@ class Task private constructor(
         )
       return Task(
         state = state,
-        events = mutableListOf(created),
+        taskEvents = mutableListOf(taskCreated),
       )
     }
 
-    fun applyFromFirstEvent(events: List<TaskEvent>): Task {
-      val created =
-        events.firstOrNull() as? TaskCreated
+    fun applyFromFirstEvent(taskEvents: List<TaskEvent>): Task {
+      val taskCreated =
+        taskEvents.firstOrNull() as? TaskCreated
           ?: throw IllegalStateException()
 
-      val taskState = TaskState.init(event = created)
+      val taskState = TaskState.init(event = taskCreated)
       val task = Task(state = taskState)
-      events.forEachIndexed { index, event ->
+      taskEvents.forEachIndexed { index, event ->
         if (index == 0) {
           return@forEachIndexed
         }
@@ -53,7 +53,7 @@ class Task private constructor(
       throw IllegalStateException()
     }
 
-    val changed =
+    val taskChanged =
       TaskChanged.of(
         taskId = cmd.taskId,
         projectId = this.state.projectId,
@@ -65,11 +65,11 @@ class Task private constructor(
         fromTime = cmd.fromTime,
         toTime = cmd.toTime,
       )
-    state.apply(changed)
-    events.add(changed)
+    state.apply(taskChanged)
+    taskEvents.add(taskChanged)
   }
 
-  fun getEvents() = this.events.toList()
+  fun getEvents() = this.taskEvents.toList()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

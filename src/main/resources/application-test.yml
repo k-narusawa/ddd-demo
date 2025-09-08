@@ -5,9 +5,9 @@ spring:
       url: jdbc:postgresql://127.0.0.1:5432/ddd_identity_access
       username: user
       password: password
-    task:
+    project:
       driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://127.0.0.1:5432/ddd_task
+      url: jdbc:postgresql://127.0.0.1:5432/ddd_project
       username: user
       password: password
   flyway:

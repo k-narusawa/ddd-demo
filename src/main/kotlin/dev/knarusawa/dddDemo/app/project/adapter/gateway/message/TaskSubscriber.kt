@@ -55,16 +55,16 @@ class TaskSubscriber(
     log.info("タスクサブスクライバーでイベントを受信 Payload: $payload")
 
     try {
-      val event = TaskEvent.fromPayload(payload = payload!!)
-      when (event) {
+      val taskEvent = TaskEvent.fromPayload(payload = payload!!)
+      when (taskEvent) {
         is TaskCreated ->
-          receiveMessageInputBoundary.handle(event = event)
+          receiveMessageInputBoundary.handle(event = taskEvent)
 
         is TaskChanged ->
-          receiveMessageInputBoundary.handle(event = event)
+          receiveMessageInputBoundary.handle(event = taskEvent)
 
         is TaskCompleted ->
-          receiveMessageInputBoundary.handle(event = event)
+          receiveMessageInputBoundary.handle(event = taskEvent)
       }
       message.ack()
     } catch (e: Exception) {

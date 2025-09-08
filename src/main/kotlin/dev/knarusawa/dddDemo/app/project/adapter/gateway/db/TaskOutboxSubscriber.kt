@@ -15,7 +15,7 @@ import javax.sql.DataSource
 
 @Component
 class TaskOutboxSubscriber(
-  @Qualifier("taskDataSource") private val dataSource: DataSource,
+  @Qualifier("projectDataSource") private val dataSource: DataSource,
   private val outboxEventInputBoundary: OutboxEventInputBoundary,
 ) : ApplicationRunner {
   private lateinit var conn: Connection

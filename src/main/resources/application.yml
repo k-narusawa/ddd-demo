@@ -8,10 +8,10 @@ spring:
       url: ${IDENTITY_ACCESS_DATASOURCE_URL}
       username: ${IDENTITY_ACCESS_DATASOURCE_USERNAME:${TASK_DATASOURCE_USERNAME}}
       password: ${IDENTITY_ACCESS_DATASOURCE_PASSWORD:${TASK_DATASOURCE_PASSWORD}}
-    task:
-      url: ${TASK_DATASOURCE_URL}
-      username: ${TASK_DATASOURCE_USERNAME}
-      password: ${TASK_DATASOURCE_PASSWORD}
+    project:
+      url: ${PROJECT_DATASOURCE_URL}
+      username: ${PROJECT_DATASOURCE_USERNAME}
+      password: ${PROJECT_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate

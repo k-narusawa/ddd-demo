@@ -1,90 +1,25 @@
 package dev.knarusawa.dddDemo.app.project.adapter.gateway.db
 
-import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.TaskEventJpaEntity
-import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.TaskEventJpaRepository
-import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
-import dev.knarusawa.dddDemo.app.project.domain.project.ProjectId
-import dev.knarusawa.dddDemo.app.project.domain.task.Description
-import dev.knarusawa.dddDemo.app.project.domain.task.FromTime
+import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaEntity
+import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
-import dev.knarusawa.dddDemo.app.project.domain.task.Title
-import dev.knarusawa.dddDemo.app.project.domain.task.ToTime
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventId
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventRepository
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventType
 import org.springframework.stereotype.Repository
 
 @Repository
 class TaskEventRepositoryImpl(
-  private val taskEventJpaRepository: TaskEventJpaRepository,
+  private val eventJpaRepository: EventJpaRepository,
 ) : TaskEventRepository {
-  override fun save(event: TaskEvent) {
-    val entity = TaskEventJpaEntity.from(event = event)
-    taskEventJpaRepository.save(entity = entity)
+  override fun save(taskEvent: TaskEvent) {
+    val event = EventJpaEntity.of(event = taskEvent)
+    eventJpaRepository.save(event = event)
   }
 
   override fun findByTaskIdOrderByOccurredAtAsc(taskId: TaskId): List<TaskEvent> {
-    val entities = taskEventJpaRepository.findByTaskId(taskId = taskId.get())
+    val entities = eventJpaRepository.findByAggregateId(aggregateId = taskId.get())
     return entities.map {
-      when (it.type) {
-        TaskEventType.TASK_CREATED -> {
-          TaskCreated(
-            eventId = TaskEventId.from(value = it.taskEventId),
-            taskId = taskId,
-            type = it.type,
-            projectId = ProjectId.from(value = it.projectId),
-            operator = MemberId.from(value = it.operator),
-            title = Title.of(value = it.title),
-            description = it.description?.let { Description.of(value = it) },
-            assigner = it.assigner?.let { MemberId.from(value = it) },
-            assignee = it.assignee?.let { MemberId.from(value = it) },
-            fromTime = it.fromTime?.let { FromTime.of(value = it) },
-            toTime = it.toTime?.let { ToTime.of(value = it) },
-            occurredAt = it.occurredAt,
-            completed = it.completed,
-          )
-        }
-
-        TaskEventType.TASK_CHANGED -> {
-          TaskChanged(
-            eventId = TaskEventId.from(value = it.taskEventId),
-            taskId = taskId,
-            type = it.type,
-            projectId = ProjectId.from(value = it.projectId),
-            operator = MemberId.from(value = it.operator),
-            title = Title.of(value = it.title),
-            description = it.description?.let { Description.of(value = it) },
-            assigner = it.assigner?.let { MemberId.from(value = it) },
-            assignee = it.assignee?.let { MemberId.from(value = it) },
-            fromTime = it.fromTime?.let { FromTime.of(value = it) },
-            toTime = it.toTime?.let { ToTime.of(value = it) },
-            occurredAt = it.occurredAt,
-            completed = it.completed,
-          )
-        }
-
-        TaskEventType.TASK_COMPLETED -> {
-          TaskCompleted(
-            eventId = TaskEventId.from(value = it.taskEventId),
-            taskId = taskId,
-            type = it.type,
-            projectId = ProjectId.from(value = it.projectId),
-            operator = MemberId.from(value = it.operator),
-            title = Title.of(value = it.title),
-            description = it.description?.let { Description.of(value = it) },
-            assigner = it.assigner?.let { MemberId.from(value = it) },
-            assignee = it.assignee?.let { MemberId.from(value = it) },
-            fromTime = it.fromTime?.let { FromTime.of(value = it) },
-            toTime = it.toTime?.let { ToTime.of(value = it) },
-            occurredAt = it.occurredAt,
-            completed = it.completed,
-          )
-        }
-      }
+      TaskEvent.fromPayload(payload = it.eventData)
     }
   }
 }

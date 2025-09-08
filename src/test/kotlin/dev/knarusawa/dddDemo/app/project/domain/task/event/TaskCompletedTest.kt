@@ -32,12 +32,12 @@ class TaskCompletedTest {
 
     val payload = sut.toPayload()
 
-    val decodedEvent = TaskEvent.fromPayload(payload)
-    assertIs<TaskCompleted>(decodedEvent)
-    assertEquals(sut.taskId, decodedEvent.taskId)
-    assertEquals(sut.projectId, decodedEvent.projectId)
-    assertEquals(sut.operator, decodedEvent.operator)
-    assertEquals(sut.title, decodedEvent.title)
-    assertEquals(sut.description, decodedEvent.description)
+    val decodedTaskEvent = TaskEvent.fromPayload(payload)
+    assertIs<TaskCompleted>(decodedTaskEvent)
+    assertEquals(sut.taskId, decodedTaskEvent.taskId)
+    assertEquals(sut.projectId, decodedTaskEvent.projectId)
+    assertEquals(sut.operator, decodedTaskEvent.operator)
+    assertEquals(sut.title, decodedTaskEvent.title)
+    assertEquals(sut.description, decodedTaskEvent.description)
   }
 }
