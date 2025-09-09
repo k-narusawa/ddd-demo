@@ -41,9 +41,11 @@ class TaskInteractor(
         fromTime = input.fromTime,
         toTime = input.toTime,
       )
-    val task = Task.handle(cmd = cmd)
+
+    val events = Task.handle(cmd = cmd)
+    val task = Task.applyFromFirstEvent(events = events)
     task.getEvents().forEach {
-      taskEventRepository.save(taskEvent = it)
+      taskEventRepository.save(event = it)
       outboxEventRepository.save(
         event =
           OutboxEvent.of(
@@ -78,16 +80,19 @@ class TaskInteractor(
       )
     val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
 
-    val task = Task.applyFromFirstEvent(taskEvents = events)
-    task.handle(cmd = cmd)
+    val task = Task.applyFromFirstEvent(events = events)
+    val newEvents = task.handle(cmd = cmd)
+    newEvents.forEach { event ->
+      task.apply(event = event)
+    }
 
-    task.getEvents().forEach {
-      taskEventRepository.save(taskEvent = it)
+    task.getEvents().forEach { event ->
+      taskEventRepository.save(event = event)
       outboxEventRepository.save(
         event =
           OutboxEvent.of(
             type = EventType.TASK_CHANGED,
-            payload = it.toPayload(),
+            payload = event.toPayload(),
           ),
       )
     }

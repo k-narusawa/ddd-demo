@@ -72,27 +72,27 @@ class TaskState private constructor(
       )
   }
 
-  fun apply(taskEvent: TaskEvent) {
-    when (taskEvent) {
+  fun apply(event: TaskEvent) {
+    when (event) {
       is TaskChanged -> {
-        this.operator = taskEvent.operator
-        this.title = taskEvent.title
-        this.description = taskEvent.description
-        this.assigner = taskEvent.assigner
-        this.assignee = taskEvent.assignee
-        this.fromTime = taskEvent.fromTime
-        this.toTime = taskEvent.toTime
+        this.operator = event.operator
+        this.title = event.title
+        this.description = event.description
+        this.assigner = event.assigner
+        this.assignee = event.assignee
+        this.fromTime = event.fromTime
+        this.toTime = event.toTime
         this.version += this.version + 1
       }
 
       is TaskCompleted -> {
-        this.operator = taskEvent.operator
-        this.title = taskEvent.title
-        this.description = taskEvent.description
-        this.assigner = taskEvent.assigner
-        this.assignee = taskEvent.assignee
-        this.fromTime = taskEvent.fromTime
-        this.toTime = taskEvent.toTime
+        this.operator = event.operator
+        this.title = event.title
+        this.description = event.description
+        this.assigner = event.assigner
+        this.assignee = event.assignee
+        this.fromTime = event.fromTime
+        this.toTime = event.toTime
         this.completed = true
         this.version += this.version + 1
       }

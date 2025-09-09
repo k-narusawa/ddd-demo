@@ -8,14 +8,13 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 
 class Task private constructor(
   val state: TaskState,
-  private val taskEvents: MutableList<TaskEvent> = mutableListOf(),
+  private val events: MutableList<TaskEvent> = mutableListOf(),
 ) {
   companion object {
-    fun handle(cmd: CreateTaskCommand): Task {
-      val state = TaskState.init(cmd)
-      val taskCreated =
+    fun handle(cmd: CreateTaskCommand): List<TaskEvent> {
+      val created =
         TaskCreated.of(
-          taskId = state.taskId,
+          taskId = TaskId.new(),
           projectId = cmd.projectId,
           operator = cmd.operator,
           title = cmd.title,
@@ -25,20 +24,17 @@ class Task private constructor(
           fromTime = cmd.fromTime,
           toTime = cmd.toTime,
         )
-      return Task(
-        state = state,
-        taskEvents = mutableListOf(taskCreated),
-      )
+      return listOf(created)
     }
 
-    fun applyFromFirstEvent(taskEvents: List<TaskEvent>): Task {
+    fun applyFromFirstEvent(events: List<TaskEvent>): Task {
       val taskCreated =
-        taskEvents.firstOrNull() as? TaskCreated
+        events.firstOrNull() as? TaskCreated
           ?: throw IllegalStateException()
 
       val taskState = TaskState.init(event = taskCreated)
       val task = Task(state = taskState)
-      taskEvents.forEachIndexed { index, event ->
+      events.forEachIndexed { index, event ->
         if (index == 0) {
           return@forEachIndexed
         }
@@ -48,12 +44,18 @@ class Task private constructor(
     }
   }
 
-  fun handle(cmd: ChangeTaskCommand) {
+  fun getEvents() = this.events.toList()
+
+  fun handle(cmd: ChangeTaskCommand): List<TaskEvent> {
     if (cmd.taskId != this.state.taskId) {
       throw IllegalStateException()
     }
 
-    val taskChanged =
+    if (this.state.completed) {
+      throw IllegalStateException("完了状態のタスクは変更不可")
+    }
+
+    val changed =
       TaskChanged.of(
         taskId = cmd.taskId,
         projectId = this.state.projectId,
@@ -65,17 +67,19 @@ class Task private constructor(
         fromTime = cmd.fromTime,
         toTime = cmd.toTime,
       )
-    state.apply(taskChanged)
-    taskEvents.add(taskChanged)
+    return listOf(changed)
   }
 
-  fun getEvents() = this.taskEvents.toList()
+  fun apply(event: TaskEvent) {
+    this.state.apply(event = event)
+    this.events.add(event)
+  }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is Task) return false
 
-    if (state.taskId !== other.state.taskId) return false
+    if (state.taskId != other.state.taskId) return false
 
     return true
   }
