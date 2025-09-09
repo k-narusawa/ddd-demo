@@ -16,8 +16,8 @@ spring:
   cloud:
     gcp:
       project-id: ddd-demo
-      pubsub:
-        emulator-host: localhost:8085
+      #      pubsub:
+      #        emulator-host: localhost:8086
       secretmanager:
         enabled: false
       parametermanager:

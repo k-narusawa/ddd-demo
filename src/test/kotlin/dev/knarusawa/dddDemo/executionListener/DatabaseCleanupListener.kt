@@ -8,11 +8,17 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
   companion object {
     private val targetTables =
       listOf(
+        // identity_access
         "ddd_user",
         "ddd_activity_log",
         "ddd_token",
+        // project
         "ddd_member",
+        "ddd_member_role",
         "ddd_project",
+        "ddd_project_event",
+        "ddd_task_outbox",
+        "ddd_task_read_model",
       )
   }
 
