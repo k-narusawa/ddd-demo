@@ -27,14 +27,14 @@ class Task private constructor(
       return listOf(created)
     }
 
-    fun applyFromFirstEvent(events: List<TaskEvent>): Task {
+    fun from(pastEvents: List<TaskEvent>): Task {
       val taskCreated =
-        events.firstOrNull() as? TaskCreated
+        pastEvents.firstOrNull() as? TaskCreated
           ?: throw IllegalStateException()
 
       val taskState = TaskState.init(event = taskCreated)
       val task = Task(state = taskState)
-      events.forEachIndexed { index, event ->
+      pastEvents.forEachIndexed { index, event ->
         if (index == 0) {
           return@forEachIndexed
         }

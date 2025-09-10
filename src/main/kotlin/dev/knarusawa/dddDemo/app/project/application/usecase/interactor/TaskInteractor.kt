@@ -43,7 +43,7 @@ class TaskInteractor(
       )
 
     val events = Task.handle(cmd = cmd)
-    val task = Task.applyFromFirstEvent(events = events)
+    val task = Task.from(pastEvents = events)
     task.getEvents().forEach {
       taskEventRepository.save(event = it)
       outboxEventRepository.save(
@@ -67,6 +67,9 @@ class TaskInteractor(
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 
+    val pastEvents = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
+    val task = Task.from(pastEvents = pastEvents)
+
     val cmd =
       ChangeTaskCommand(
         taskId = input.taskId,
@@ -78,9 +81,6 @@ class TaskInteractor(
         fromTime = input.fromTime,
         toTime = input.toTime,
       )
-    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
-
-    val task = Task.applyFromFirstEvent(events = events)
     val newEvents = task.handle(cmd = cmd)
     newEvents.forEach { event ->
       task.apply(event = event)
