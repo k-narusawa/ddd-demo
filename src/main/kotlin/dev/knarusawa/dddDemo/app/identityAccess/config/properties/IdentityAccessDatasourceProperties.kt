@@ -1,10 +1,10 @@
-package dev.knarusawa.dddDemo.config.properties
+package dev.knarusawa.dddDemo.app.identityAccess.config.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.ConstructorBinding
 
-@ConfigurationProperties(prefix = "spring.datasource.project")
-data class ProjectDatasourceProperties
+@ConfigurationProperties(prefix = "spring.datasource.identity-access")
+data class IdentityAccessDatasourceProperties
   @ConstructorBinding
   constructor(
     val url: String,

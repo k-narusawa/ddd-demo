@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.config
+package dev.knarusawa.dddDemo.app.project.config
 
 import com.google.cloud.spring.pubsub.core.PubSubTemplate
 import com.google.cloud.spring.pubsub.integration.AckMode
@@ -31,7 +31,7 @@ class GcpPubSubConfig {
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_EVENT_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.Companion.TASK_EVENT_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java
@@ -44,7 +44,7 @@ class GcpPubSubConfig {
   @Bean
   @ServiceActivator(inputChannel = "taskEventChannel")
   fun taskEventSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_EVENT_TOPIC)
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.Companion.TASK_EVENT_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.info("タスク作成イベントの送信に成功 ackId:$ackId")

@@ -1,13 +1,14 @@
-package dev.knarusawa.dddDemo.config
+package dev.knarusawa.dddDemo.app.identityAccess.config
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import dev.knarusawa.dddDemo.config.properties.ProjectDatasourceProperties
+import dev.knarusawa.dddDemo.app.identityAccess.config.properties.IdentityAccessDatasourceProperties
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jpa.EntityManagerFactoryBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
@@ -16,14 +17,15 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableJpaRepositories(
-  basePackages = ["dev.knarusawa.dddDemo.app.project"],
-  entityManagerFactoryRef = "projectEntityManagerFactory",
-  transactionManagerRef = "projectTransactionManager",
+  basePackages = ["dev.knarusawa.dddDemo.app.identityAccess"],
+  entityManagerFactoryRef = "identityAccessEntityManagerFactory",
+  transactionManagerRef = "identityAccessTransactionManager",
 )
-@EnableConfigurationProperties(ProjectDatasourceProperties::class)
-class ProjectDataSourceConfig {
+@EnableConfigurationProperties(IdentityAccessDatasourceProperties::class)
+class IdentityAccessDataSourceConfig {
   @Bean
-  fun projectDataSource(properties: ProjectDatasourceProperties): DataSource {
+  @Primary
+  fun identityAccessDataSource(properties: IdentityAccessDatasourceProperties): DataSource {
     val hikariConfig = HikariConfig()
     hikariConfig.apply {
       jdbcUrl = properties.url
@@ -37,19 +39,21 @@ class ProjectDataSourceConfig {
   }
 
   @Bean
-  fun projectEntityManagerFactory(
+  @Primary
+  fun identityAccessEntityManagerFactory(
     builder: EntityManagerFactoryBuilder,
-    @Qualifier("projectDataSource") dataSource: DataSource,
+    @Qualifier("identityAccessDataSource") dataSource: DataSource,
   ): LocalContainerEntityManagerFactoryBean =
     builder
       .dataSource(dataSource)
-      .packages("dev.knarusawa.dddDemo.app.project")
-      .persistenceUnit("project")
+      .packages("dev.knarusawa.dddDemo.app.identityAccess")
+      .persistenceUnit("identityAccess")
       .build()
 
   @Bean
-  fun projectTransactionManager(
-    @Qualifier("projectEntityManagerFactory") entityManagerFactory:
+  @Primary
+  fun identityAccessTransactionManager(
+    @Qualifier("identityAccessEntityManagerFactory") entityManagerFactory:
       LocalContainerEntityManagerFactoryBean,
   ): PlatformTransactionManager = JpaTransactionManager(entityManagerFactory.`object`!!)
 }
