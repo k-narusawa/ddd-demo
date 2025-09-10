@@ -5,5 +5,5 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 interface TaskRepository {
   fun save(event: TaskEvent)
 
-  fun findByTaskIdOrderByOccurredAtAsc(taskId: TaskId): List<TaskEvent>
+  fun loadEvents(taskId: TaskId): List<TaskEvent>
 }

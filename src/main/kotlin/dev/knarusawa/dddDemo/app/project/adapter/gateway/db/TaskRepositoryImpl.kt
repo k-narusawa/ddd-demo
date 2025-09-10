@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository
 class TaskRepositoryImpl(
   private val eventJpaRepository: EventJpaRepository,
 ) : TaskRepository {
-  override fun save(taskEvent: TaskEvent) {
-    val event = EventJpaEntity.of(event = taskEvent)
+  override fun save(event: TaskEvent) {
+    val event = EventJpaEntity.of(event = event)
     eventJpaRepository.save(event = event)
   }
 
-  override fun findByTaskIdOrderByOccurredAtAsc(taskId: TaskId): List<TaskEvent> {
+  override fun loadEvents(taskId: TaskId): List<TaskEvent> {
     val entities = eventJpaRepository.findByAggregateId(aggregateId = taskId.get())
     return entities.map {
       TaskEvent.fromPayload(payload = it.eventData)

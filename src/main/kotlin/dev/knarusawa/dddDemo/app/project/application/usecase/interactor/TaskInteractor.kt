@@ -66,7 +66,7 @@ class TaskInteractor(
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 
-    val pastEvents = taskRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
+    val pastEvents = taskRepository.loadEvents(taskId = input.taskId)
     val task = Task.from(pastEvents = pastEvents)
 
     val cmd =
