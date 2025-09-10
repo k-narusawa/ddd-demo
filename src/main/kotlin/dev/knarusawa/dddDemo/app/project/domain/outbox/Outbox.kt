@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "ddd_task_outbox")
-class OutboxEvent private constructor(
+class Outbox private constructor(
   @EmbeddedId
   @AttributeOverride(name = "value", column = Column("event_id"))
   val eventId: EventId,
@@ -32,7 +32,7 @@ class OutboxEvent private constructor(
     fun of(
       type: EventType,
       payload: String,
-    ) = OutboxEvent(
+    ) = Outbox(
       eventId = EventId.new(),
       eventType = type,
       payload = payload,

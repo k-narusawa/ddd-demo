@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Lock
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OutboxEventRepository : JpaRepository<OutboxEvent, EventId> {
-  fun save(event: OutboxEvent)
+interface OutboxRepository : JpaRepository<Outbox, EventId> {
+  fun save(event: Outbox)
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  fun findTop50ByProcessedAtIsNullOrderByOccurredAtAsc(): List<OutboxEvent>
+  fun findTop50ByProcessedAtIsNullOrderByOccurredAtAsc(): List<Outbox>
 }

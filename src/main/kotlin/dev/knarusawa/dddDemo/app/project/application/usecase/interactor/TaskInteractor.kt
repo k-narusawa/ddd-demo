@@ -6,8 +6,8 @@ import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.CreateTas
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.ChangeTaskOutputData
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.CreateTaskOutputData
 import dev.knarusawa.dddDemo.app.project.domain.outbox.EventType
-import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxEvent
-import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxEventRepository
+import dev.knarusawa.dddDemo.app.project.domain.outbox.Outbox
+import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxRepository
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.Task
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskRepository
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 class TaskInteractor(
   private val taskRepository: TaskRepository,
   private val projectRepository: ProjectRepository,
-  private val outboxEventRepository: OutboxEventRepository,
+  private val outboxRepository: OutboxRepository,
 ) : TaskInputBoundary {
   override fun handle(input: CreateTaskInputData): CreateTaskOutputData {
     val project =
@@ -45,9 +45,9 @@ class TaskInteractor(
     val task = Task.create(cmd = cmd)
     task.getEvents().forEach {
       taskRepository.save(event = it)
-      outboxEventRepository.save(
+      outboxRepository.save(
         event =
-          OutboxEvent.of(
+          Outbox.of(
             type = EventType.TASK_CREATED,
             payload = it.toPayload(),
           ),
@@ -87,9 +87,9 @@ class TaskInteractor(
 
     task.getEvents().forEach { event ->
       taskRepository.save(event = event)
-      outboxEventRepository.save(
+      outboxRepository.save(
         event =
-          OutboxEvent.of(
+          Outbox.of(
             type = EventType.TASK_CHANGED,
             payload = event.toPayload(),
           ),
