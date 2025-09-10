@@ -4,28 +4,28 @@ import dev.knarusawa.dddDemo.app.project.application.port.ReceiveMessageInputBou
 import dev.knarusawa.dddDemo.app.project.application.readModel.TaskReadModel
 import dev.knarusawa.dddDemo.app.project.application.readModel.TaskReadModelRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.Task
+import dev.knarusawa.dddDemo.app.project.domain.task.TaskRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(transactionManager = "projectTransactionManager")
 class ReceiveMessageEventHandler(
-  private val taskEventRepository: TaskEventRepository,
+  private val taskRepository: TaskRepository,
   private val taskReadModelRepository: TaskReadModelRepository,
 ) : ReceiveMessageInputBoundary {
   override fun handle(event: TaskCreated) {
-    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
+    val events = taskRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.from(pastEvents = events)
     val readModel = TaskReadModel.from(task = task)
     taskReadModelRepository.save(task = readModel)
   }
 
   override fun handle(event: TaskChanged) {
-    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
+    val events = taskRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.from(pastEvents = events)
     val readModel = TaskReadModel.from(task = task)
     taskReadModelRepository.update(
@@ -42,7 +42,7 @@ class ReceiveMessageEventHandler(
   }
 
   override fun handle(event: TaskCompleted) {
-    val events = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
+    val events = taskRepository.findByTaskIdOrderByOccurredAtAsc(taskId = event.taskId)
     val task = Task.from(pastEvents = events)
     val readModel = TaskReadModel.from(task = task)
     taskReadModelRepository.update(

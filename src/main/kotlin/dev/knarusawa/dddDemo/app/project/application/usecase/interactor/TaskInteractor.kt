@@ -10,14 +10,14 @@ import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxEvent
 import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxEventRepository
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.Task
+import dev.knarusawa.dddDemo.app.project.domain.task.TaskRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.command.ChangeTaskCommand
 import dev.knarusawa.dddDemo.app.project.domain.task.command.CreateTaskCommand
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventRepository
 import org.springframework.stereotype.Service
 
 @Service
 class TaskInteractor(
-  private val taskEventRepository: TaskEventRepository,
+  private val taskRepository: TaskRepository,
   private val projectRepository: ProjectRepository,
   private val outboxEventRepository: OutboxEventRepository,
 ) : TaskInputBoundary {
@@ -44,7 +44,7 @@ class TaskInteractor(
 
     val task = Task.create(cmd = cmd)
     task.getEvents().forEach {
-      taskEventRepository.save(event = it)
+      taskRepository.save(event = it)
       outboxEventRepository.save(
         event =
           OutboxEvent.of(
@@ -66,7 +66,7 @@ class TaskInteractor(
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 
-    val pastEvents = taskEventRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
+    val pastEvents = taskRepository.findByTaskIdOrderByOccurredAtAsc(taskId = input.taskId)
     val task = Task.from(pastEvents = pastEvents)
 
     val cmd =
@@ -86,7 +86,7 @@ class TaskInteractor(
     }
 
     task.getEvents().forEach { event ->
-      taskEventRepository.save(event = event)
+      taskRepository.save(event = event)
       outboxEventRepository.save(
         event =
           OutboxEvent.of(

@@ -3,14 +3,14 @@ package dev.knarusawa.dddDemo.app.project.adapter.gateway.db
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaEntity
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
+import dev.knarusawa.dddDemo.app.project.domain.task.TaskRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEventRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class TaskEventRepositoryImpl(
+class TaskRepositoryImpl(
   private val eventJpaRepository: EventJpaRepository,
-) : TaskEventRepository {
+) : TaskRepository {
   override fun save(taskEvent: TaskEvent) {
     val event = EventJpaEntity.of(event = taskEvent)
     eventJpaRepository.save(event = event)
