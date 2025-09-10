@@ -4,7 +4,7 @@ import org.springframework.integration.annotation.Gateway
 import org.springframework.integration.annotation.MessagingGateway
 
 @MessagingGateway
-interface TaskCompletedPublisher {
-  @Gateway(requestChannel = "taskCompletedEventChannel")
+interface TaskEventPublisher {
+  @Gateway(requestChannel = "taskEventChannel")
   fun send(payload: String)
 }

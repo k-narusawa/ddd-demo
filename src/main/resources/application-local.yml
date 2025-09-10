@@ -10,11 +10,8 @@ spring:
       url: jdbc:postgresql://127.0.0.1:5432/ddd_project
       username: user
       password: password
-    jpa:
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
+  jpa:
+    show-sql: true
   flyway:
     user: user
     password: password

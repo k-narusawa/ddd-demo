@@ -44,7 +44,7 @@ data class TaskChanged(
       taskId = taskId,
       projectId = projectId,
       operator = operator,
-      type = TaskEventType.TASK_CREATED,
+      type = TaskEventType.TASK_CHANGED,
       title = title,
       description = description,
       assigner = assigner,

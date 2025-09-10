@@ -44,7 +44,7 @@ data class TaskCompleted(
       taskId = taskId,
       projectId = projectId,
       operator = operator,
-      type = TaskEventType.TASK_CREATED,
+      type = TaskEventType.TASK_COMPLETED,
       title = title,
       description = description,
       assigner = assigner,

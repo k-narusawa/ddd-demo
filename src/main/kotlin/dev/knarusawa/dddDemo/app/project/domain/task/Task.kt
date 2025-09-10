@@ -11,7 +11,7 @@ class Task private constructor(
   private val events: MutableList<TaskEvent> = mutableListOf(),
 ) {
   companion object {
-    fun handle(cmd: CreateTaskCommand): List<TaskEvent> {
+    fun create(cmd: CreateTaskCommand): Task {
       val created =
         TaskCreated.of(
           taskId = TaskId.new(),
@@ -24,7 +24,10 @@ class Task private constructor(
           fromTime = cmd.fromTime,
           toTime = cmd.toTime,
         )
-      return listOf(created)
+
+      val taskState = TaskState.init(event = created)
+      val task = Task(state = taskState, events = mutableListOf(created))
+      return task
     }
 
     fun from(pastEvents: List<TaskEvent>): Task {

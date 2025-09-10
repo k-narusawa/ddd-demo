@@ -22,24 +22,8 @@ class TaskSubscriber(
     private val log = logger()
   }
 
-  @ServiceActivator(inputChannel = "taskCreatedSubscriptionChannel")
-  fun taskCreatedEventReceiver(
-    payload: String?,
-    @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
-  ) {
-    handleEvent(payload = payload!!, message = message)
-  }
-
-  @ServiceActivator(inputChannel = "taskChangedSubscriptionChannel")
-  fun taskChangedEventReceiver(
-    payload: String?,
-    @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
-  ) {
-    handleEvent(payload = payload!!, message = message)
-  }
-
-  @ServiceActivator(inputChannel = "taskCompletedSubscriptionChannel")
-  fun taskCompletedEventReceiver(
+  @ServiceActivator(inputChannel = "taskEventSubscriptionChannel")
+  fun taskEventReceiver(
     payload: String?,
     @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
   ) {
@@ -55,8 +39,7 @@ class TaskSubscriber(
     log.info("タスクサブスクライバーでイベントを受信 Payload: $payload")
 
     try {
-      val taskEvent = TaskEvent.fromPayload(payload = payload!!)
-      when (taskEvent) {
+      when (val taskEvent = TaskEvent.fromPayload(payload = payload)) {
         is TaskCreated ->
           receiveMessageInputBoundary.handle(event = taskEvent)
 

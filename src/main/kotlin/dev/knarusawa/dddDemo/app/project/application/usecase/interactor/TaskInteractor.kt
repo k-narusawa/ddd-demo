@@ -42,8 +42,7 @@ class TaskInteractor(
         toTime = input.toTime,
       )
 
-    val events = Task.handle(cmd = cmd)
-    val task = Task.from(pastEvents = events)
+    val task = Task.create(cmd = cmd)
     task.getEvents().forEach {
       taskEventRepository.save(event = it)
       outboxEventRepository.save(

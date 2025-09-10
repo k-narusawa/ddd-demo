@@ -22,50 +22,16 @@ class GcpPubSubConfig {
   }
 
   @Bean
-  fun taskCreatedSubscriptionChannel() = PublishSubscribeChannel()
+  fun taskEventSubscriptionChannel() = PublishSubscribeChannel()
 
   @Bean
-  fun taskCreatedSubscriptionChannelAdapter(
-    @Qualifier("taskCreatedSubscriptionChannel")
+  fun taskEventSubscriptionChannelAdapter(
+    @Qualifier("taskEventSubscriptionChannel")
     messageChannel: MessageChannel,
     pubSubTemplate: PubSubTemplate,
   ): PubSubInboundChannelAdapter {
     val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CREATED_SUBSCRIPTION)
-    adapter.setOutputChannel(messageChannel)
-    adapter.ackMode = AckMode.MANUAL
-    adapter.payloadType = String::class.java
-    return adapter
-  }
-
-  @Bean
-  fun taskChangedSubscriptionChannel() = PublishSubscribeChannel()
-
-  @Bean
-  fun taskChangedSubscriptionChannelAdapter(
-    @Qualifier("taskChangedSubscriptionChannel")
-    messageChannel: MessageChannel,
-    pubSubTemplate: PubSubTemplate,
-  ): PubSubInboundChannelAdapter {
-    val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_CHANGED_SUBSCRIPTION)
-    adapter.setOutputChannel(messageChannel)
-    adapter.ackMode = AckMode.MANUAL
-    adapter.payloadType = String::class.java
-    return adapter
-  }
-
-  @Bean
-  fun taskCompletedSubscriptionChannel() = PublishSubscribeChannel()
-
-  @Bean
-  fun taskCompletedSubscriptionChannelAdapter(
-    @Qualifier("taskCompletedSubscriptionChannel")
-    messageChannel: MessageChannel,
-    pubSubTemplate: PubSubTemplate,
-  ): PubSubInboundChannelAdapter {
-    val adapter =
-      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_COMPLETED_SUBSCRIPTION)
+      PubSubInboundChannelAdapter(pubSubTemplate, PubSubModel.TASK_EVENT_SUBSCRIPTION)
     adapter.setOutputChannel(messageChannel)
     adapter.ackMode = AckMode.MANUAL
     adapter.payloadType = String::class.java
@@ -82,9 +48,9 @@ class GcpPubSubConfig {
   fun taskCompletedEventChannel() = PublishSubscribeChannel()
 
   @Bean
-  @ServiceActivator(inputChannel = "taskCreatedEventChannel")
-  fun taskCreatedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_CREATED_TOPIC)
+  @ServiceActivator(inputChannel = "taskEventChannel")
+  fun taskEventSender(pubSubTemplate: PubSubTemplate): MessageHandler {
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_EVENT_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.info("タスク作成イベントの送信に成功 ackId:$ackId")
@@ -93,42 +59,6 @@ class GcpPubSubConfig {
 
     adapter.setFailureCallback { cause: Throwable, message: Message<*> ->
       log.error("タスク作成イベントの送信に失敗", cause)
-      log.debug("送信に失敗したメッセージ message:$message")
-    }
-
-    return adapter
-  }
-
-  @Bean
-  @ServiceActivator(inputChannel = "taskChangedEventChannel")
-  fun taskChangedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_CHANGED_TOPIC)
-
-    adapter.setSuccessCallback { ackId: String, message: Message<*> ->
-      log.info("タスク変更イベントの送信に成功 ackId:$ackId")
-      log.debug("送信に成功したメッセージ message:$message")
-    }
-
-    adapter.setFailureCallback { cause: Throwable, message: Message<*> ->
-      log.error("タスク変更イベントの送信に失敗", cause)
-      log.debug("送信に失敗したメッセージ message:$message")
-    }
-
-    return adapter
-  }
-
-  @Bean
-  @ServiceActivator(inputChannel = "taskCompletedEventChannel")
-  fun taskCompletedSender(pubSubTemplate: PubSubTemplate): MessageHandler {
-    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_COMPLETED_TOPIC)
-
-    adapter.setSuccessCallback { ackId: String, message: Message<*> ->
-      log.info("タスク完了イベントの送信に成功 ackId:$ackId")
-      log.debug("送信に成功したメッセージ message:$message")
-    }
-
-    adapter.setFailureCallback { cause: Throwable, message: Message<*> ->
-      log.error("タスク完了イベントの送信に失敗", cause)
       log.debug("送信に失敗したメッセージ message:$message")
     }
 
