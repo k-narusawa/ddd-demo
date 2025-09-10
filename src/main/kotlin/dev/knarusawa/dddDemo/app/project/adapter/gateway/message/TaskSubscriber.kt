@@ -7,12 +7,11 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
+import dev.knarusawa.dddDemo.infrastructure.RequestId
 import dev.knarusawa.dddDemo.util.logger
-import org.slf4j.MDC
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Component
-import java.util.UUID
 
 @Component
 class TaskSubscriber(
@@ -34,8 +33,7 @@ class TaskSubscriber(
     payload: String,
     message: BasicAcknowledgeablePubsubMessage,
   ) {
-    val requestId = UUID.randomUUID().toString()
-    MDC.put("requestId", requestId)
+    RequestId.set()
     log.info("タスクサブスクライバーでイベントを受信 Payload: $payload")
 
     try {
@@ -54,8 +52,8 @@ class TaskSubscriber(
       log.error("タスクサブスクライバーでメッセージの処理に失敗", e)
       message.nack()
     } finally {
-      MDC.clear()
       log.info("タスクサブスクライバーでメッセージの処理が完了")
+      RequestId.clear()
     }
   }
 }

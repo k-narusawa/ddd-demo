@@ -2,6 +2,7 @@ package dev.knarusawa.dddDemo.app.project.adapter.gateway.db
 
 import dev.knarusawa.dddDemo.app.project.application.eventHandler.event.OutboxEvent
 import dev.knarusawa.dddDemo.app.project.application.port.OutboxEventInputBoundary
+import dev.knarusawa.dddDemo.infrastructure.RequestId
 import dev.knarusawa.dddDemo.util.logger
 import jakarta.annotation.PostConstruct
 import org.postgresql.PGConnection
@@ -43,11 +44,18 @@ class TaskOutboxSubscriber(
 
         if (notifications != null) {
           for (i in notifications.indices) {
-            log.info(
-              "PostgresSQLから通知受信 name: ${notifications[i]?.name}, payload: ${notifications[i]?.parameter}",
-            )
-            val event = OutboxEvent.of(payload = notifications[i]?.parameter)
-            outboxEventInputBoundary.handle(event = event)
+            try {
+              RequestId.set()
+              log.info(
+                "PostgresSQLから通知受信 name: ${notifications[i]?.name}, payload: ${notifications[i]?.parameter}",
+              )
+              val event = OutboxEvent.of(payload = notifications[i]?.parameter)
+              outboxEventInputBoundary.handle(event = event)
+            } catch (ex: Exception) {
+              log.error("PostgresSQLからの通知処理に失敗", ex)
+            } finally {
+              RequestId.clear()
+            }
           }
         }
         Thread.sleep(500)
