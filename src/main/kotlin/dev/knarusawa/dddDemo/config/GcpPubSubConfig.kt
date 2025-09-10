@@ -39,13 +39,7 @@ class GcpPubSubConfig {
   }
 
   @Bean
-  fun taskCreatedEventChannel() = PublishSubscribeChannel()
-
-  @Bean
-  fun taskChangedEventChannel() = PublishSubscribeChannel()
-
-  @Bean
-  fun taskCompletedEventChannel() = PublishSubscribeChannel()
+  fun taskEventChannel() = PublishSubscribeChannel()
 
   @Bean
   @ServiceActivator(inputChannel = "taskEventChannel")
