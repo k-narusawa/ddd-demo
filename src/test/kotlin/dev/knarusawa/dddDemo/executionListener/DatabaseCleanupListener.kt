@@ -1,18 +1,20 @@
 package dev.knarusawa.dddDemo.executionListener
 
+import dev.knarusawa.dddDemo.util.logger
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.TestContext
 import org.springframework.test.context.support.AbstractTestExecutionListener
 
 class DatabaseCleanupListener : AbstractTestExecutionListener() {
   companion object {
-    private val targetTables =
+    private val identityAccessTables =
       listOf(
-        // identity_access
         "ddd_user",
         "ddd_activity_log",
         "ddd_token",
-        // project
+      )
+    private val projectTables =
+      listOf(
         "ddd_member",
         "ddd_member_role",
         "ddd_project",
@@ -20,16 +22,32 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
         "ddd_task_outbox",
         "ddd_task_read_model",
       )
+
+    private val log = logger()
   }
 
   override fun beforeTestMethod(testContext: TestContext) {
     val applicationContext = testContext.applicationContext
-    val jdbcTemplate = applicationContext.getBean(JdbcTemplate::class.java)
+    val identityAccessJdbcTemplate =
+      applicationContext.getBean("identityAccessJdbcTemplate", JdbcTemplate::class.java)
+    val projectJdbcTemplate =
+      applicationContext.getBean("projectJdbcTemplate", JdbcTemplate::class.java)
 
-    jdbcTemplate.execute("use ddd_identity_access;")
+    cleanupDatabase(identityAccessJdbcTemplate, identityAccessTables)
+    cleanupDatabase(projectJdbcTemplate, projectTables)
+
+    log.info("データベースクリーニング完了: ${testContext.testMethod.name}")
+
+    super.beforeTestMethod(testContext)
+  }
+
+  private fun cleanupDatabase(
+    jdbcTemplate: JdbcTemplate,
+    tables: List<String>,
+  ) {
     jdbcTemplate.execute("SET session_replication_role = 'replica';") // 外部キー制約を外す
 
-    targetTables.forEach { tableName ->
+    tables.forEach { tableName ->
       try {
         jdbcTemplate.execute("DELETE FROM $tableName")
       } catch (e: Exception) {
@@ -37,8 +55,5 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
       }
     }
     jdbcTemplate.execute("SET session_replication_role = 'origin';")
-    println("データベースクリーニング完了: ${testContext.testMethod.name}")
-
-    super.beforeTestMethod(testContext)
   }
 }
