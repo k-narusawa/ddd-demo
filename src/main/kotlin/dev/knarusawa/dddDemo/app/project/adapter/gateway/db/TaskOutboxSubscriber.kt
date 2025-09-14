@@ -9,12 +9,14 @@ import org.postgresql.PGConnection
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.sql.Connection
 import java.sql.SQLException
 import javax.sql.DataSource
 
 @Component
+@Profile("!test") // FIXME: テスト実行時に動かすとテストできなくなったので一旦の暫定対応
 class TaskOutboxSubscriber(
   @Qualifier("projectDataSource") private val dataSource: DataSource,
   private val outboxEventInputBoundary: OutboxEventInputBoundary,
