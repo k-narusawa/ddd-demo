@@ -14,6 +14,8 @@ angusMail = "2.0.3"
 kotlinResult = "2.1.0"
 ktlint = "13.1.0"
 context-propagation = "1.2.0-M1"
+protobuf = "0.9.5"
+protobuf-kotlin = "4.32.1"
 
 [libraries]
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
@@ -41,6 +43,7 @@ angus-mail = { module = "org.eclipse.angus:angus-mail", version.ref = "angusMail
 kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version.ref = "kotlinResult" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
 context-propagation = { module = "io.micrometer:context-propagation", version.ref = "context-propagation" }
+protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobuf-kotlin" }
 
 # Test dependencies
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
@@ -58,3 +61,4 @@ spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
