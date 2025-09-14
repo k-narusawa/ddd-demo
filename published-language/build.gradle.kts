@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.k-narusawa"
-version = "0.0.1"
+version = "unspecified"
 
 repositories {
   mavenCentral()
