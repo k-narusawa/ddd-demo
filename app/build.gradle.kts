@@ -173,8 +173,6 @@ protobuf {
       }
     }
   }
-
-  generatedFilesBaseDir = "src/main/proto"
 }
 
 sourceSets {
