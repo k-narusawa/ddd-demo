@@ -5,10 +5,10 @@ package dev.knarusawa.dddDemo.app.project;
 import "google/protobuf/timestamp.proto";
 
 option java_multiple_files = true;
-option java_package = "dev.knarusawa.dddDemo.app.project.proto";
-option java_outer_classname = "TaskEventProto";
+option java_package = "dev.knarusawa.dddDemo.publishedLanguage.project.proto";
+option java_outer_classname = "TaskEventMessageProto";
 
-message TaskEvent {
+message TaskEventMessage {
   string event_id = 1;
   string task_id = 2;
   TaskEventType type = 3;

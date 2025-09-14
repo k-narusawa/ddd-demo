@@ -1,6 +1,3 @@
-import com.google.protobuf.gradle.id
-import com.google.protobuf.gradle.proto
-
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.spring)
@@ -10,7 +7,6 @@ plugins {
   alias(libs.plugins.kotlin.jpa)
   alias(libs.plugins.flyway)
   alias(libs.plugins.ktlint)
-  alias(libs.plugins.protobuf)
 }
 
 group = "dev.k-narusawa"
@@ -56,7 +52,8 @@ dependencies {
   runtimeOnly(libs.angus.mail)
   implementation(libs.kotlin.result)
   implementation(libs.context.propagation)
-  implementation(libs.protobuf.kotlin)
+
+  implementation(project(":published-language"))
 
   runtimeOnly(libs.flyway.core)
   runtimeOnly(libs.flyway.database.postgresql)
@@ -144,41 +141,4 @@ tasks.register("flywayCleanProject", org.flywaydb.gradle.task.FlywayCleanTask::c
 tasks.named("flywayClean") {
   dependsOn(tasks.named("flywayCleanIdentityAccess"), tasks.named("flywayCleanProject"))
   enabled = false
-}
-
-tasks.withType<Copy> {
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:4.32.1"
-  }
-  plugins {
-    id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java:1.75.0"
-    }
-    id("grpckt") {
-      artifact = "io.grpc:protoc-gen-grpc-kotlin:1.4.3:jdk8@jar"
-    }
-  }
-  generateProtoTasks {
-    all().forEach {
-      it.plugins {
-        id("grpc")
-        id("grpckt")
-      }
-      it.builtins {
-        id("kotlin")
-      }
-    }
-  }
-}
-
-sourceSets {
-  main {
-    proto {
-      srcDir("src/main/proto")
-    }
-  }
 }

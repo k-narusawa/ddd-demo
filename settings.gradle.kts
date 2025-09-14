@@ -1,6 +1,3 @@
-rootProject.name = "ddd-demo"
-include("app")
-
 pluginManagement {
   repositories {
     maven { url = uri("https://repo.spring.io/milestone") }
@@ -8,3 +5,6 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
+
+rootProject.name = "ddd-demo"
+include("app", "published-language")
