@@ -6,19 +6,12 @@ plugins {
   alias(libs.plugins.protobuf)
 }
 
-group = "dev.k-narusawa"
-version = "unspecified"
-
 repositories {
   mavenCentral()
 }
 
 dependencies {
   implementation(libs.protobuf.kotlin)
-}
-
-tasks.test {
-  useJUnitPlatform()
 }
 
 kotlin {
