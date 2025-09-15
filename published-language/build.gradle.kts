@@ -8,14 +8,12 @@ plugins {
 
 repositories {
   mavenCentral()
+  maven { url = uri("https://repo.spring.io/milestone") }
+  maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
   implementation(libs.protobuf.kotlin)
-}
-
-kotlin {
-  jvmToolchain(21)
 }
 
 tasks.withType<Copy> {

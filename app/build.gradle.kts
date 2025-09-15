@@ -12,12 +12,6 @@ plugins {
 group = "dev.k-narusawa"
 version = "0.0.1-SNAPSHOT"
 
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
 repositories {
   mavenCentral()
   maven { url = uri("https://repo.spring.io/milestone") }
@@ -49,6 +43,7 @@ dependencies {
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.jakarta.mail.api)
   implementation(libs.bouncycastle.prov)
+  implementation(libs.protobuf.kotlin)
   runtimeOnly(libs.angus.mail)
   implementation(libs.kotlin.result)
   implementation(libs.context.propagation)
