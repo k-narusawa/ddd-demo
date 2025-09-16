@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.project.adapter.gateway.db
 
-import dev.knarusawa.dddDemo.app.project.application.eventHandler.event.OutboxEvent
+import dev.knarusawa.dddDemo.app.project.application.eventHandler.event.OutboxUpdatedEvent
 import dev.knarusawa.dddDemo.app.project.application.port.OutboxEventInputBoundary
 import dev.knarusawa.dddDemo.infrastructure.RequestId
 import dev.knarusawa.dddDemo.util.logger
@@ -48,10 +48,11 @@ class TaskOutboxSubscriber(
           for (i in notifications.indices) {
             try {
               RequestId.set()
+              val eventId = notifications[i]?.parameter
               log.info(
-                "PostgresSQLから通知受信 name: ${notifications[i]?.name}, payload: ${notifications[i]?.parameter}",
+                "PostgresSQLから通知受信 name: ${notifications[i]?.name}, eventId: $eventId",
               )
-              val event = OutboxEvent.of(payload = notifications[i]?.parameter)
+              val event = OutboxUpdatedEvent.of(eventId = eventId)
               outboxEventInputBoundary.handle(event = event)
             } catch (ex: Exception) {
               log.error("PostgresSQLからの通知処理に失敗", ex)

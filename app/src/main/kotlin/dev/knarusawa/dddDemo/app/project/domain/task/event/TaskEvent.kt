@@ -31,10 +31,15 @@ sealed class TaskEvent : DomainEvent {
   abstract val completed: Boolean
 
   companion object {
-    fun fromPayload(payload: String): TaskEvent = JsonUtil.json.decodeFromString<TaskEvent>(payload)
+    fun deserialize(serialized: String): TaskEvent =
+      JsonUtil.json.decodeFromString<TaskEvent>(serialized)
 
     fun fromEventMessage(ba: ByteArray): TaskEvent {
       val eventMessage = TaskEventMessage.parseFrom(ba)
+      return fromEventMessage(eventMessage)
+    }
+
+    fun fromEventMessage(eventMessage: TaskEventMessage): TaskEvent {
       val eventType = TaskEventType.valueOf(eventMessage.type.name)
       return when (eventType) {
         TaskEventType.TASK_CREATED ->
@@ -130,7 +135,7 @@ sealed class TaskEvent : DomainEvent {
     }
   }
 
-  fun toPayload(): String = JsonUtil.json.encodeToString(serializer(), this)
+  override fun serialize(): String = JsonUtil.json.encodeToString(serializer(), this)
 
   fun toEventMessage(): TaskEventMessage {
     val builder =

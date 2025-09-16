@@ -18,5 +18,9 @@ sealed class MemberEvent : DomainEvent {
       JsonUtil.json.decodeFromString<MemberEvent>(payload)
   }
 
+  override fun serialize(): String {
+    TODO("Not yet implemented")
+  }
+
   fun toPayload() = JsonUtil.json.encodeToString(MemberEvent.serializer(), this)
 }

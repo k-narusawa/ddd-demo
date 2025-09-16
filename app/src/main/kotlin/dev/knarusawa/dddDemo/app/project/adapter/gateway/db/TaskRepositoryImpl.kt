@@ -19,7 +19,7 @@ class TaskRepositoryImpl(
   override fun loadEvents(taskId: TaskId): List<TaskEvent> {
     val entities = eventJpaRepository.findByAggregateId(aggregateId = taskId.get())
     return entities.map {
-      TaskEvent.fromPayload(payload = it.eventData)
+      TaskEvent.fromEventMessage(ba = it.eventData)
     }
   }
 }

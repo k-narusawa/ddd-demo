@@ -8,6 +8,7 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 import dev.knarusawa.dddDemo.infrastructure.RequestId
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.TaskEventMessage
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.handler.annotation.Header
@@ -23,21 +24,19 @@ class TaskSubscriber(
 
   @ServiceActivator(inputChannel = "taskEventSubscriptionChannel")
   fun taskEventReceiver(
-    payload: String?,
     @Header(GcpPubSubHeaders.ORIGINAL_MESSAGE) message: BasicAcknowledgeablePubsubMessage,
   ) {
-    handleEvent(payload = payload!!, message = message)
+    handleEvent(message = message)
   }
 
-  private fun handleEvent(
-    payload: String,
-    message: BasicAcknowledgeablePubsubMessage,
-  ) {
+  private fun handleEvent(message: BasicAcknowledgeablePubsubMessage) {
     RequestId.set()
-    log.info("タスクサブスクライバーでイベントを受信 Payload: $payload")
+    val messageId = message.pubsubMessage.messageId
+    log.info("タスクサブスクライバーでイベントを受信 Payload: $messageId")
 
     try {
-      when (val taskEvent = TaskEvent.fromPayload(payload = payload)) {
+      val eventMessage = TaskEventMessage.parseFrom(message.pubsubMessage.data)
+      when (val taskEvent = TaskEvent.fromEventMessage(eventMessage = eventMessage)) {
         is TaskCreated ->
           receiveMessageInputBoundary.handle(event = taskEvent)
 

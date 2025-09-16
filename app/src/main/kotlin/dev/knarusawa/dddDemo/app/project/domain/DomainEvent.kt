@@ -5,4 +5,6 @@ import java.time.LocalDateTime
 interface DomainEvent {
   abstract val eventId: EventId
   abstract val occurredAt: LocalDateTime
+
+  abstract fun serialize(): String
 }

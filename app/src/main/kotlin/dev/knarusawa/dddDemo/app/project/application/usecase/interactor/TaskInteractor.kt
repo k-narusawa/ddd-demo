@@ -5,7 +5,6 @@ import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.ChangeTas
 import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.CreateTaskInputData
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.ChangeTaskOutputData
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.CreateTaskOutputData
-import dev.knarusawa.dddDemo.app.project.domain.outbox.EventType
 import dev.knarusawa.dddDemo.app.project.domain.outbox.Outbox
 import dev.knarusawa.dddDemo.app.project.domain.outbox.OutboxRepository
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectRepository
@@ -45,13 +44,7 @@ class TaskInteractor(
     val task = Task.create(cmd = cmd)
     task.getEvents().forEach {
       taskRepository.save(event = it)
-      outboxRepository.save(
-        event =
-          Outbox.of(
-            type = EventType.TASK_CREATED,
-            payload = it.toPayload(),
-          ),
-      )
+      outboxRepository.save(outbox = Outbox.of(event = it))
     }
 
     return CreateTaskOutputData.of(task = task)
@@ -87,13 +80,7 @@ class TaskInteractor(
 
     task.getEvents().forEach { event ->
       taskRepository.save(event = event)
-      outboxRepository.save(
-        event =
-          Outbox.of(
-            type = EventType.TASK_CHANGED,
-            payload = event.toPayload(),
-          ),
-      )
+      outboxRepository.save(outbox = Outbox.of(event = event))
     }
 
     return ChangeTaskOutputData.of(task = task)

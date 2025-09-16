@@ -3,7 +3,7 @@ CREATE TABLE ddd_project_event (
     aggregate_id VARCHAR(36) NOT NULL,
     aggregate_type VARCHAR(255) NOT NULL,
     event_type VARCHAR(255) NOT NULL,
-    event_data JSONB NOT NULL,
+    event_data BYTEA NOT NULL,
     occurred_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),

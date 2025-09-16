@@ -6,5 +6,5 @@ import org.springframework.integration.annotation.MessagingGateway
 @MessagingGateway
 interface TaskEventPublisher {
   @Gateway(requestChannel = "taskEventChannel")
-  fun send(payload: String)
+  fun send(message: ByteArray)
 }
