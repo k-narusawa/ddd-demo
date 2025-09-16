@@ -15,7 +15,7 @@ import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Component
 
 @Component
-class TaskSubscriber(
+class TaskEventSubscriber(
   private val receiveMessageInputBoundary: ReceiveMessageInputBoundary,
 ) {
   companion object {
