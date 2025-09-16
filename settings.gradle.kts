@@ -5,4 +5,6 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
+
 rootProject.name = "ddd-demo"
+include("app", "published-language")

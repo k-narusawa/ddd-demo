@@ -7,5 +7,10 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[**/generated/**]
+generated_code = true
+ij_formatter_enabled = false
+ktlint = disabled
+
 [*.kt]
 max_line_length = 100

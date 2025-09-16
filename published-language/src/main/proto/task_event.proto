@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dev.knarusawa.dddDemo.app.project;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.knarusawa.dddDemo.publishedLanguage.project.proto";
+option java_outer_classname = "TaskEventMessageProto";
+
+message TaskEventMessage {
+  string event_id = 1;
+  string task_id = 2;
+  TaskEventType type = 3;
+  string project_id = 4;
+  string operator_id = 5;
+  string title = 6;
+  optional string description = 7;
+  optional string assigner_id = 8;
+  optional string assignee_id = 9;
+  optional google.protobuf.Timestamp from_time = 10;
+  optional google.protobuf.Timestamp to_time = 11;
+  google.protobuf.Timestamp occurred_at = 12;
+  bool completed = 13;
+}
+
+enum TaskEventType {
+  TASK_EVENT_TYPE_UNSPECIFIED = 0;
+  TASK_CREATED = 1;
+  TASK_CHANGED = 2;
+  TASK_COMPLETED = 3;
+}
