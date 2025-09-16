@@ -9,7 +9,8 @@ CREATE TABLE ddd_activity_log (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   created_by TEXT NOT NULL DEFAULT CURRENT_USER,
-  updated_by TEXT NOT NULL DEFAULT CURRENT_USER
+  updated_by TEXT NOT NULL DEFAULT CURRENT_USER,
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES ddd_user (user_id)
 );
 
 CREATE TRIGGER trigger_set_audit_columns
