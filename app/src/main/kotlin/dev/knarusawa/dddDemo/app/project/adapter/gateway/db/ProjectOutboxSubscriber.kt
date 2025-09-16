@@ -17,7 +17,7 @@ import javax.sql.DataSource
 
 @Component
 @Profile("!test") // FIXME: テスト実行時に動かすとテストできなくなったので一旦の暫定対応
-class TaskOutboxSubscriber(
+class ProjectOutboxSubscriber(
   @Qualifier("projectDataSource") private val dataSource: DataSource,
   private val outboxEventInputBoundary: OutboxEventInputBoundary,
 ) : ApplicationRunner {
@@ -30,13 +30,13 @@ class TaskOutboxSubscriber(
 
   @PostConstruct
   fun init() {
-    log.info("OutboxSubscriberを起動")
+    log.info("ProjectOutboxSubscriberを起動")
     this.conn = dataSource.connection
     this.pgconn = conn.unwrap(PGConnection::class.java)
     val stmt = conn.createStatement()
     stmt.execute("LISTEN outbox_channel;")
     stmt.close()
-    log.info("OutboxSubscriberの起動完了")
+    log.info("ProjectOutboxSubscriberの起動完了")
   }
 
   override fun run(args: ApplicationArguments) {

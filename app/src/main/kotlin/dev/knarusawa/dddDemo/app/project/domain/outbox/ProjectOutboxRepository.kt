@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Lock
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OutboxRepository : JpaRepository<Outbox, EventId> {
+interface ProjectOutboxRepository : JpaRepository<Outbox, EventId> {
   fun save(outbox: Outbox)
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
