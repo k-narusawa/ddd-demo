@@ -49,7 +49,7 @@ class ProjectDataSourceConfig {
 
   @Bean
   fun projectTransactionManager(
-    @Qualifier("projectEntityManagerFactory") entityManagerFactory:
-      LocalContainerEntityManagerFactoryBean,
+    @Qualifier("projectEntityManagerFactory")
+    entityManagerFactory: LocalContainerEntityManagerFactoryBean,
   ): PlatformTransactionManager = JpaTransactionManager(entityManagerFactory.`object`!!)
 }

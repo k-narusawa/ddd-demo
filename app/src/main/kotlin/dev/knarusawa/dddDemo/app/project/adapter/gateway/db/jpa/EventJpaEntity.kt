@@ -1,18 +1,20 @@
 package dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa
 
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
+import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.Version
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "ddd_project_event")
+@Table(name = "ddd_event")
 class EventJpaEntity private constructor(
   @Id
   @Column(nullable = false, name = "event_id")
@@ -29,6 +31,11 @@ class EventJpaEntity private constructor(
   val eventData: ByteArray,
   @Column(nullable = false, name = "occurred_at")
   val occurredAt: LocalDateTime,
+  @Column(nullable = true, name = "published_at")
+  private var publishedAt: LocalDateTime? = null,
+  @Version
+  @AttributeOverride(name = "value", column = Column("version"))
+  private val version: Long? = null,
 ) {
   companion object {
     fun of(event: TaskEvent): EventJpaEntity =
@@ -50,5 +57,9 @@ class EventJpaEntity private constructor(
 //        eventData = event.toPayload(),
 //        occurredAt = event.occurredAt,
 //      )
+  }
+
+  fun published() {
+    this.publishedAt = LocalDateTime.now()
   }
 }

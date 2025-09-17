@@ -17,10 +17,10 @@ CREATE OR REPLACE FUNCTION set_audit_columns()
   END;
   $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION notify_outbox_event()
+CREATE OR REPLACE FUNCTION notify_event()
   RETURNS TRIGGER AS $$
   BEGIN
-      PERFORM pg_notify('outbox_channel', NEW.event_id::text);
+      PERFORM pg_notify('event_channel', NEW.event_id::text);
       RETURN NEW;
   END;
   $$ LANGUAGE plpgsql;
