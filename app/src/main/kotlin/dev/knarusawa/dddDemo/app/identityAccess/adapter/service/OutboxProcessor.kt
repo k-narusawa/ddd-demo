@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.identityAccess.adapter.service
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.outbox.IdentityAccessOutboxRepository
+import dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox.IdentityAccessOutboxRepository
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

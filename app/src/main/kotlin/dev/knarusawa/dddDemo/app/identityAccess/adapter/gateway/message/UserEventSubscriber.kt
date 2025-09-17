@@ -2,7 +2,7 @@ package dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.message
 
 import com.google.cloud.spring.pubsub.support.BasicAcknowledgeablePubsubMessage
 import com.google.cloud.spring.pubsub.support.GcpPubSubHeaders
-import dev.knarusawa.dddDemo.app.identityAccess.domain.outbox.IdentityAccessOutboxRepository
+import dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox.IdentityAccessOutboxRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
 import dev.knarusawa.dddDemo.infrastructure.RequestId
 import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage

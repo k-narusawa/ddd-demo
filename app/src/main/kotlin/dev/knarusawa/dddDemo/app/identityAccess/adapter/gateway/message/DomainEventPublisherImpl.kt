@@ -1,9 +1,9 @@
 package dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.message
 
+import dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox.IdentityAccessOutboxRepository
+import dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox.Outbox
 import dev.knarusawa.dddDemo.app.identityAccess.application.DomainEventPublisher
 import dev.knarusawa.dddDemo.app.identityAccess.domain.DomainEvent
-import dev.knarusawa.dddDemo.app.identityAccess.domain.outbox.IdentityAccessOutboxRepository
-import dev.knarusawa.dddDemo.app.identityAccess.domain.outbox.Outbox
 import org.springframework.stereotype.Component
 
 @Component

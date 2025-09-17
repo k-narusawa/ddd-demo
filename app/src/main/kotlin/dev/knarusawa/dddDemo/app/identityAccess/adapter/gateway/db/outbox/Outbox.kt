@@ -1,4 +1,4 @@
-package dev.knarusawa.dddDemo.app.identityAccess.domain.outbox
+package dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.DomainEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.EventId
