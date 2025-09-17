@@ -6,5 +6,5 @@ import org.springframework.integration.annotation.MessagingGateway
 @MessagingGateway
 interface UserEventPublisher {
   @Gateway(requestChannel = "userEventChannel")
-  fun send(message: ByteArray)
+  fun publish(message: ByteArray)
 }

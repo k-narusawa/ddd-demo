@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db
 
-import dev.knarusawa.dddDemo.app.identityAccess.adapter.service.OutboxSubscribeEventHandler
+import dev.knarusawa.dddDemo.app.identityAccess.adapter.service.OutboxProcessor
 import dev.knarusawa.dddDemo.infrastructure.RequestId
 import dev.knarusawa.dddDemo.util.logger
 import jakarta.annotation.PostConstruct
@@ -17,9 +17,10 @@ import javax.sql.DataSource
 
 @Component
 @Profile("!test") // FIXME: テスト実行時に動かすとテストできなくなったので一旦の暫定対応
-class IdentityAccessOutboxSubscriber(
-  @Qualifier("identityAccessDataSource") private val dataSource: DataSource,
-  private val eventHandler: OutboxSubscribeEventHandler,
+class IdentityAccessOutboxDBListener(
+  @Qualifier("identityAccessDataSource")
+  private val dataSource: DataSource,
+  private val eventProcessor: OutboxProcessor,
 ) : ApplicationRunner {
   private lateinit var conn: Connection
   private lateinit var pgconn: PGConnection
@@ -30,13 +31,13 @@ class IdentityAccessOutboxSubscriber(
 
   @PostConstruct
   fun init() {
-    log.info("IdentityAccessOutboxSubscriberを起動")
+    log.info("IdentityAccessOutboxListenerを起動")
     this.conn = dataSource.connection
     this.pgconn = conn.unwrap(PGConnection::class.java)
     val stmt = conn.createStatement()
     stmt.execute("LISTEN outbox_channel;")
     stmt.close()
-    log.info("IdentityAccessOutboxSubscriberの起動完了")
+    log.info("IdentityAccessOutboxListenerの起動完了")
   }
 
   @Async // NOTE: ApplicationRunnerを実装したクラスを同時に起動しておくために必要
@@ -53,7 +54,7 @@ class IdentityAccessOutboxSubscriber(
               log.info(
                 "PostgresSQLから通知受信 name: ${notifications[i]?.name}, eventId: $eventId",
               )
-              eventHandler.handle()
+              eventProcessor.handle()
             } catch (ex: Exception) {
               log.error("PostgresSQLからの通知処理に失敗", ex)
             } finally {

@@ -16,7 +16,11 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableJpaRepositories(
-  basePackages = ["dev.knarusawa.dddDemo.app.project"],
+  basePackages = [
+    "dev.knarusawa.dddDemo.app.project.adapter.gateway.db",
+    "dev.knarusawa.dddDemo.app.project.application",
+    "dev.knarusawa.dddDemo.app.project.domain",
+  ],
   entityManagerFactoryRef = "projectEntityManagerFactory",
   transactionManagerRef = "projectTransactionManager",
 )

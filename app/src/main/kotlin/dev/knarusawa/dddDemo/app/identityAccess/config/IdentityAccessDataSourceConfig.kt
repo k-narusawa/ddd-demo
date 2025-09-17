@@ -17,7 +17,10 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableJpaRepositories(
-  basePackages = ["dev.knarusawa.dddDemo.app.identityAccess"],
+  basePackages = [
+    "dev.knarusawa.dddDemo.app.identityAccess.domain",
+    "dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db",
+  ],
   entityManagerFactoryRef = "identityAccessEntityManagerFactory",
   transactionManagerRef = "identityAccessTransactionManager",
 )
@@ -53,7 +56,7 @@ class IdentityAccessDataSourceConfig {
   @Bean
   @Primary
   fun identityAccessTransactionManager(
-    @Qualifier("identityAccessEntityManagerFactory") entityManagerFactory:
-      LocalContainerEntityManagerFactoryBean,
+    @Qualifier("identityAccessEntityManagerFactory")
+    entityManagerFactory: LocalContainerEntityManagerFactoryBean,
   ): PlatformTransactionManager = JpaTransactionManager(entityManagerFactory.`object`!!)
 }
