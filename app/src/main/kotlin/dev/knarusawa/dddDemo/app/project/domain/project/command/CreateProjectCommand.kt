@@ -1,4 +1,9 @@
 package dev.knarusawa.dddDemo.app.project.domain.project.command
 
-class CreateProjectCommand {
-}
+import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.project.domain.project.ProjectName
+
+data class CreateProjectCommand(
+  val projectName: ProjectName,
+  val created: MemberId,
+)

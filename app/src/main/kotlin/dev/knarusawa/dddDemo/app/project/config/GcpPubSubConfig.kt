@@ -62,21 +62,42 @@ class GcpPubSubConfig {
   }
 
   @Bean
-  fun taskEventChannel() = PublishSubscribeChannel()
+  fun projectEventPublishChannel() = PublishSubscribeChannel()
 
   @Bean
-  @ServiceActivator(inputChannel = "taskEventChannel")
+  @ServiceActivator(inputChannel = "projectEventPublishChannel")
+  fun projectEventSender(pubSubTemplate: PubSubTemplate): MessageHandler {
+    val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.PROJECT_EVENT_TOPIC)
+
+    adapter.setSuccessCallback { ackId: String, message: Message<*> ->
+      log.debug("送信に成功したメッセージ message:$message")
+      log.info("projectEventの送信に成功 ackId:$ackId")
+    }
+
+    adapter.setFailureCallback { cause: Throwable, message: Message<*> ->
+      log.debug("送信に失敗したメッセージ message:$message")
+      log.error("projectEventの送信に失敗", cause)
+    }
+
+    return adapter
+  }
+
+  @Bean
+  fun taskEventPublishChannel() = PublishSubscribeChannel()
+
+  @Bean
+  @ServiceActivator(inputChannel = "taskEventPublishChannel")
   fun taskEventSender(pubSubTemplate: PubSubTemplate): MessageHandler {
     val adapter = PubSubMessageHandler(pubSubTemplate, PubSubModel.TASK_EVENT_TOPIC)
 
     adapter.setSuccessCallback { ackId: String, message: Message<*> ->
       log.debug("送信に成功したメッセージ message:$message")
-      log.info("TaskEventの送信に成功 ackId:$ackId")
+      log.info("ProjectEventの送信に成功 ackId:$ackId")
     }
 
     adapter.setFailureCallback { cause: Throwable, message: Message<*> ->
       log.debug("送信に失敗したメッセージ message:$message")
-      log.error("TaskEventの送信に失敗", cause)
+      log.error("ProjectEventの送信に失敗", cause)
     }
 
     return adapter

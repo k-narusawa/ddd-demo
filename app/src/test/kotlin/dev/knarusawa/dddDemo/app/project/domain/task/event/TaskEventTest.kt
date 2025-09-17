@@ -31,7 +31,7 @@ class TaskEventTest {
         toTime = null,
       )
 
-    val actual = sut.toEventMessage()
+    val actual = sut.toPublishedLanguage()
 
     assertEquals(sut.taskId.get(), actual.taskId)
     assertEquals(sut.projectId.get(), actual.projectId)
@@ -59,7 +59,7 @@ class TaskEventTest {
         fromTime = FromTime.of(value = LocalDateTime.of(2000, 1, 1, 1, 1)),
         toTime = null,
       )
-    val eventMessage = event.toEventMessage().toByteArray()
+    val eventMessage = event.toPublishedLanguage().toByteArray()
 
     val sut = TaskEvent.fromEventMessage(ba = eventMessage)
 

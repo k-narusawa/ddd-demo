@@ -12,7 +12,7 @@ import dev.knarusawa.dddDemo.publishedLanguage.project.proto.TaskEventMessage
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import java.time.LocalDateTime
 
-sealed class TaskEvent : DomainEvent {
+sealed class TaskEvent : DomainEvent<TaskEventMessage> {
   abstract override val eventId: TaskEventId
   abstract val taskId: TaskId
   abstract val type: TaskEventType
@@ -129,19 +129,17 @@ sealed class TaskEvent : DomainEvent {
     }
   }
 
-  fun toEventMessage(): TaskEventMessage {
-    val builder =
-      TaskEventMessage
-        .newBuilder()
-        .setEventId(eventId.get())
-        .setTaskId(taskId.get())
-        .setType(type.toPublishedType())
-        .setProjectId(projectId.get())
-        .setOperatorId(operator.get())
-        .setTitle(title.get())
-        .setOccurredAt(ProtobufUtil.toTimestamp(occurredAt))
-        .setCompleted(completed)
+  override fun toPublishedLanguage(): TaskEventMessage {
+    val builder = TaskEventMessage.newBuilder()
 
+    builder.setEventId(eventId.get())
+    builder.setTaskId(taskId.get())
+    builder.setType(type.toPublishedType())
+    builder.setProjectId(projectId.get())
+    builder.setOperatorId(operator.get())
+    builder.setTitle(title.get())
+    builder.setOccurredAt(ProtobufUtil.toTimestamp(occurredAt))
+    builder.setCompleted(completed)
     description?.let { builder.setDescription(it.get()) }
     assigner?.let { builder.setAssignerId(it.get()) }
     assignee?.let { builder.setAssigneeId(it.get()) }

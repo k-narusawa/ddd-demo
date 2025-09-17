@@ -8,10 +8,6 @@ import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceeded
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.SignupCompleted
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChanged
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
-import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -49,11 +45,11 @@ object JsonUtil {
   private val serializersModule =
     SerializersModule {
       contextual(LocalDateTimeSerializer)
-      polymorphic(TaskEvent::class) {
-        subclass(TaskCreated::class)
-        subclass(TaskChanged::class)
-        subclass(TaskCompleted::class)
-      }
+//      polymorphic(TaskEvent::class) {
+//        subclass(TaskCreated::class)
+//        subclass(TaskChanged::class)
+//        subclass(TaskCompleted::class)
+//      }
       polymorphic(UserEvent::class) {
         subclass(SignupCompleted::class)
         subclass(UsernameChanged::class)

@@ -1,9 +1,7 @@
 package dev.knarusawa.dddDemo.app.project.domain.task
 
 import jakarta.persistence.Embeddable
-import kotlinx.serialization.Serializable
 
-@Serializable
 @Embeddable
 data class Title(
   private val value: String,

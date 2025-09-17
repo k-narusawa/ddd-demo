@@ -1,5 +1,6 @@
 package dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa
 
+import dev.knarusawa.dddDemo.app.project.domain.project.event.ProjectEvent
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -44,7 +45,17 @@ class EventJpaEntity private constructor(
         aggregateId = event.taskId.get(),
         aggregateType = AggregateType.TASK,
         eventType = event.type.name,
-        eventData = event.toEventMessage().toByteArray(),
+        eventData = event.toPublishedLanguage().toByteArray(),
+        occurredAt = event.occurredAt,
+      )
+
+    fun of(event: ProjectEvent): EventJpaEntity =
+      EventJpaEntity(
+        eventId = event.eventId.get(),
+        aggregateId = event.projectId.get(),
+        aggregateType = AggregateType.PROJECT,
+        eventType = event.type.name,
+        eventData = event.toPublishedLanguage().toByteArray(),
         occurredAt = event.occurredAt,
       )
 

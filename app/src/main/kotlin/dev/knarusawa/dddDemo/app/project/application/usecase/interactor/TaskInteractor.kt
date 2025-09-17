@@ -5,6 +5,7 @@ import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.ChangeTas
 import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.CreateTaskInputData
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.ChangeTaskOutputData
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.CreateTaskOutputData
+import dev.knarusawa.dddDemo.app.project.domain.project.Project
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.Task
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskRepository
@@ -18,10 +19,9 @@ class TaskInteractor(
   private val projectRepository: ProjectRepository,
 ) : TaskInputBoundary {
   override fun handle(input: CreateTaskInputData): CreateTaskOutputData {
-    val project =
-      projectRepository.findByProjectId(projectId = input.projectId)
-        ?: throw RuntimeException()
+    val pastEvents = projectRepository.loadEvents(projectId = input.projectId)
 
+    val project = Project.from(pastEvents = pastEvents)
     if (!project.hasWriteRole(input.operator)) {
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
@@ -47,10 +47,9 @@ class TaskInteractor(
   }
 
   override fun handle(input: ChangeTaskInputData): ChangeTaskOutputData {
-    val project =
-      projectRepository.findByProjectId(projectId = input.projectId)
-        ?: throw RuntimeException()
+    val pastProjectEvents = projectRepository.loadEvents(projectId = input.projectId)
 
+    val project = Project.from(pastEvents = pastProjectEvents)
     if (!project.hasWriteRole(input.operator)) {
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }

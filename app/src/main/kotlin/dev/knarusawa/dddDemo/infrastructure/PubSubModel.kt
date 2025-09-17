@@ -14,6 +14,10 @@ class PubSubModel private constructor(
     const val PROJECT_USER_EVENT_SUBSCRIPTION =
       "$PROJECT_CONTEXT_PREFIX-$USER_EVENT_TOPIC-task-subscription"
 
+    const val PROJECT_EVENT_TOPIC = "project-event-topic"
+    const val PROJECT_PROJECT_EVENT_SUBSCRIPTION =
+      "$PROJECT_CONTEXT_PREFIX-$PROJECT_EVENT_TOPIC-project-subscription"
+
     const val TASK_EVENT_TOPIC = "task-event-topic"
     const val PROJECT_TASK_EVENT_SUBSCRIPTION =
       "$PROJECT_CONTEXT_PREFIX-$TASK_EVENT_TOPIC-task-subscription"
@@ -26,6 +30,13 @@ class PubSubModel private constructor(
             listOf(
               IDENTITY_ACCESS_USER_EVENT_SUBSCRIPTION,
               PROJECT_USER_EVENT_SUBSCRIPTION,
+            ),
+        ),
+        PubSubModel(
+          topic = PROJECT_EVENT_TOPIC,
+          subscriptions =
+            listOf(
+//              PROJECT_PROJECT_EVENT_SUBSCRIPTION,
             ),
         ),
         PubSubModel(

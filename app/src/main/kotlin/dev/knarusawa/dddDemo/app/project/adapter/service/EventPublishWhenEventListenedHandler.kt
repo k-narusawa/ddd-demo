@@ -3,6 +3,7 @@ package dev.knarusawa.dddDemo.app.project.adapter.service
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.AggregateType
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaEntity
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.db.jpa.EventJpaRepository
+import dev.knarusawa.dddDemo.app.project.adapter.gateway.message.ProjectEventPublisher
 import dev.knarusawa.dddDemo.app.project.adapter.gateway.message.TaskEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class EventPublishWhenEventListenedHandler(
   private val eventJpaRepository: EventJpaRepository,
+  private val projectEventPublisher: ProjectEventPublisher,
   private val taskEventPublisher: TaskEventPublisher,
 ) {
   fun handle(event: EventJpaEntity) {
@@ -20,7 +22,7 @@ class EventPublishWhenEventListenedHandler(
       }
 
       AggregateType.PROJECT -> {
-        TODO()
+        projectEventPublisher.publish(message = event.eventData)
       }
 
       AggregateType.TASK -> {

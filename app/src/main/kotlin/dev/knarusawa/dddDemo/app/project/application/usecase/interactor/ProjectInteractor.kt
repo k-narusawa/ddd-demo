@@ -5,7 +5,7 @@ import dev.knarusawa.dddDemo.app.project.application.usecase.inputData.CreatePro
 import dev.knarusawa.dddDemo.app.project.application.usecase.outputData.CreateProjectOutputData
 import dev.knarusawa.dddDemo.app.project.domain.project.Project
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectRepository
-import org.springframework.context.ApplicationEventPublisher
+import dev.knarusawa.dddDemo.app.project.domain.project.command.CreateProjectCommand
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,14 +13,17 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ProjectInteractor(
   private val projectRepository: ProjectRepository,
-  private val applicationEventPublisher: ApplicationEventPublisher,
 ) : ProjectInputBoundary {
   override fun handle(input: CreateProjectInputData): CreateProjectOutputData {
-    val project = Project.of(projectName = input.projectName, memberId = input.memberId)
+    val cmd =
+      CreateProjectCommand(
+        projectName = input.projectName,
+        created = input.memberId,
+      )
 
-    projectRepository.save(project = project)
-    project.getEvents().forEach { event ->
-      applicationEventPublisher.publishEvent(event)
+    val project = Project.create(cmd = cmd)
+    project.getEvents().forEach {
+      projectRepository.save(event = it)
     }
 
     return CreateProjectOutputData.of(project = project)

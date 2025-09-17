@@ -4,7 +4,7 @@ import org.springframework.integration.annotation.Gateway
 import org.springframework.integration.annotation.MessagingGateway
 
 @MessagingGateway
-interface TaskEventPublisher {
-  @Gateway(requestChannel = "taskEventPublishChannel")
+interface ProjectEventPublisher {
+  @Gateway(requestChannel = "projectEventPublishChannel")
   fun publish(message: ByteArray)
 }

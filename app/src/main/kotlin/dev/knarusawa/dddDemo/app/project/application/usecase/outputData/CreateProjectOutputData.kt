@@ -11,8 +11,8 @@ data class CreateProjectOutputData(
       CreateProjectOutputData(
         response =
           CreateProjectResponse(
-            projectId = project.projectId.get(),
-            name = project.getProjectName().get(),
+            projectId = project.state.projectId.get(),
+            name = project.state.projectName.get(),
           ),
       )
   }

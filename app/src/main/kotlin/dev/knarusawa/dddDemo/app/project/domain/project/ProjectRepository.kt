@@ -1,11 +1,9 @@
 package dev.knarusawa.dddDemo.app.project.domain.project
 
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
+import dev.knarusawa.dddDemo.app.project.domain.project.event.ProjectEvent
 
-@Repository
-interface ProjectRepository : JpaRepository<Project, ProjectId> {
-  fun save(project: Project)
+interface ProjectRepository {
+  fun save(event: ProjectEvent)
 
-  fun findByProjectId(projectId: ProjectId): Project?
+  fun loadEvents(projectId: ProjectId): List<ProjectEvent>
 }
