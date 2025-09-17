@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Profile
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import java.sql.Connection
 import java.sql.SQLException
@@ -39,6 +40,7 @@ class ProjectOutboxSubscriber(
     log.info("ProjectOutboxSubscriberの起動完了")
   }
 
+  @Async // NOTE: ApplicationRunnerを実装したクラスを同時に起動しておくために必要
   override fun run(args: ApplicationArguments) {
     try {
       while (true) {

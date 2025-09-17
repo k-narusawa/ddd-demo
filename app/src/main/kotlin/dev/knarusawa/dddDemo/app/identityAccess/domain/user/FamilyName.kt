@@ -1,8 +1,10 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
 import jakarta.persistence.Embeddable
+import kotlinx.serialization.Serializable
 
 @Embeddable
+@Serializable
 data class FamilyName(
   private val value: String,
 ) {

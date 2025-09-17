@@ -3,12 +3,13 @@ package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 import jakarta.mail.internet.AddressException
 import jakarta.mail.internet.InternetAddress
 import jakarta.persistence.Embeddable
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 
 @Embeddable
+@Serializable
 data class Username private constructor(
   private val value: String,
-) : Serializable {
+) {
   init {
     require(value.isNotBlank()) { "Usernameは空にできません" }
     try {

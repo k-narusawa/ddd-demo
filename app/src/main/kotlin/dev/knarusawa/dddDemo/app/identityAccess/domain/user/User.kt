@@ -1,9 +1,9 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserSignupCompletedEvent
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChangedEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.SignupCompleted
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChanged
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -47,7 +47,7 @@ class User private constructor(
   @AttributeOverride(name = "value", column = Column("version"))
   private val version: Long? = null,
   @Transient
-  private val events: MutableList<IdentityAccessEvent> = mutableListOf(),
+  private val events: MutableList<UserEvent> = mutableListOf(),
 ) {
   companion object {
     fun signup(
@@ -66,7 +66,7 @@ class User private constructor(
           familyName = familyName,
           accountStatus = AccountStatus.NORMAL,
         )
-      val event = UserSignupCompletedEvent(user = user)
+      val event = SignupCompleted.of(user = user)
       user.events.add(event)
       return user
     }
@@ -74,9 +74,17 @@ class User private constructor(
 
   fun getUsername() = this.username
 
+  fun getEmailVerified() = this.emailVerified
+
   fun getFamilyName() = this.familyName
 
   fun getGivenName() = this.givenName
+
+  fun getLoginFailureCount() = this.loginFailureCount
+
+  fun getLastLoginFailedAt() = this.lastLoginFailedAt
+
+  fun getAccountStatus() = this.accountStatus
 
   fun getEvents() = this.events.toList()
 
@@ -106,19 +114,9 @@ class User private constructor(
     }
   }
 
-  fun changeUsername(
-    newUsername: Username,
-    userAgent: String,
-    ipAddress: String,
-  ) {
+  fun changeUsername(newUsername: Username) {
     this.username = newUsername
-
-    val event =
-      UsernameChangedEvent(
-        user = this,
-        ipAddress = ipAddress,
-        userAgent = userAgent,
-      )
+    val event = UsernameChanged.of(user = this)
     events.add(element = event)
   }
 

@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.activityLog
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.IdentityAccessDomainException
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceededEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceeded
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
@@ -16,10 +16,10 @@ class RecordLoginSucceededLogWhenLoginSucceededHandler(
 ) {
   @EventListener
   @Async
-  fun handle(event: LoginSucceededEvent) {
+  fun handle(event: LoginSucceeded) {
     val log =
       ActivityLog.new(
-        userId = event.user.userId,
+        userId = event.userId,
         actionType = ActionType.LOGIN_SUCCESS,
         ipAddress = event.ipAddress,
         userAgent = event.userAgent,

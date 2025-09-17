@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.project.application.eventHandler
 
-import dev.knarusawa.dddDemo.app.project.application.port.ReceiveMessageInputBoundary
+import dev.knarusawa.dddDemo.app.project.application.port.TaskEventInputBoundary
 import dev.knarusawa.dddDemo.app.project.application.readModel.TaskReadModel
 import dev.knarusawa.dddDemo.app.project.application.readModel.TaskReadModelRepository
 import dev.knarusawa.dddDemo.app.project.domain.task.Task
@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(transactionManager = "projectTransactionManager")
-class ReceiveMessageEventHandler(
+class TaskEventHandler(
   private val taskRepository: TaskRepository,
   private val taskReadModelRepository: TaskReadModelRepository,
-) : ReceiveMessageInputBoundary {
+) : TaskEventInputBoundary {
   override fun handle(event: TaskCreated) {
     val events = taskRepository.loadEvents(taskId = event.taskId)
     val task = Task.from(pastEvents = events)

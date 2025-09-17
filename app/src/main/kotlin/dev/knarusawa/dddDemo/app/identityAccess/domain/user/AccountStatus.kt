@@ -15,4 +15,16 @@ enum class AccountStatus {
         else -> throw IllegalArgumentException("Invalid AccountStatus value: $value")
       }
   }
+
+  fun toPublished() =
+    when (this) {
+      NORMAL ->
+        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.NORMAL
+
+      ACCOUNT_LOCK ->
+        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.ACCOUNT_LOCK
+
+      DEACTIVATED ->
+        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.DEACTIVATED
+    }
 }

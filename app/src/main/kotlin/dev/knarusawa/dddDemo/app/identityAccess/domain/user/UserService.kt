@@ -1,21 +1,21 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
+import dev.knarusawa.dddDemo.app.identityAccess.application.DomainEventPublisher
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.AccountLock
-import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.Token
 import dev.knarusawa.dddDemo.app.identityAccess.domain.token.TokenService
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailedEvent
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceededEvent
-import org.springframework.context.ApplicationEventPublisher
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailed
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceeded
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed as LoginFailedException
 
 @Service
-@Transactional(noRollbackFor = [LoginFailed::class, AccountLock::class])
+@Transactional(noRollbackFor = [LoginFailedException::class, AccountLock::class])
 class UserService(
   private val userRepository: UserRepository,
   private val tokenService: TokenService,
-  private val eventPublisher: ApplicationEventPublisher,
+  private val eventPublisher: DomainEventPublisher,
 ) {
   fun isExists(username: Username): Boolean {
     val existsUser = userRepository.findByUsername(username = username)
@@ -30,21 +30,21 @@ class UserService(
   ): Token {
     val user =
       userRepository.findByUsername(username = username)
-        ?: throw LoginFailed(message = "認証に失敗しました")
+        ?: throw LoginFailedException(message = "認証に失敗しました")
 
     try {
       user.verifyPassword(rawPassword = password)
-    } catch (ex: LoginFailed) {
+    } catch (ex: LoginFailedException) {
       user.loginFailed()
       userRepository.save(user = user)
 
       val event =
-        LoginFailedEvent(
+        LoginFailed.of(
           user = user,
           userAgent = userAgent,
           ipAddress = ipAddress,
         )
-      eventPublisher.publishEvent(event)
+      eventPublisher.publish(event)
 
       if (user.isLocked()) {
         throw AccountLock()
@@ -56,12 +56,12 @@ class UserService(
     userRepository.save(user = user)
 
     val event =
-      LoginSucceededEvent(
+      LoginSucceeded.of(
         user = user,
         userAgent = userAgent,
         ipAddress = ipAddress,
       )
-    eventPublisher.publishEvent(event)
+    eventPublisher.publish(event)
 
     return tokenService.generateToken(userId = user.userId)
   }

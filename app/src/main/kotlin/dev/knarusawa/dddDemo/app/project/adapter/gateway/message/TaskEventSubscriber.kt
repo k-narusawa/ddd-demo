@@ -2,7 +2,7 @@ package dev.knarusawa.dddDemo.app.project.adapter.gateway.message
 
 import com.google.cloud.spring.pubsub.support.BasicAcknowledgeablePubsubMessage
 import com.google.cloud.spring.pubsub.support.GcpPubSubHeaders
-import dev.knarusawa.dddDemo.app.project.application.port.ReceiveMessageInputBoundary
+import dev.knarusawa.dddDemo.app.project.application.port.TaskEventInputBoundary
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class TaskEventSubscriber(
-  private val receiveMessageInputBoundary: ReceiveMessageInputBoundary,
+  private val taskEventInputBoundary: TaskEventInputBoundary,
 ) {
   companion object {
     private val log = logger()
@@ -32,19 +32,19 @@ class TaskEventSubscriber(
   private fun handleEvent(message: BasicAcknowledgeablePubsubMessage) {
     RequestId.set()
     val messageId = message.pubsubMessage.messageId
-    log.info("タスクサブスクライバーでイベントを受信 Payload: $messageId")
+    log.info("TaskEventを受信 messageId: $messageId")
 
     try {
       val eventMessage = TaskEventMessage.parseFrom(message.pubsubMessage.data)
       when (val taskEvent = TaskEvent.fromEventMessage(eventMessage = eventMessage)) {
         is TaskCreated ->
-          receiveMessageInputBoundary.handle(event = taskEvent)
+          taskEventInputBoundary.handle(event = taskEvent)
 
         is TaskChanged ->
-          receiveMessageInputBoundary.handle(event = taskEvent)
+          taskEventInputBoundary.handle(event = taskEvent)
 
         is TaskCompleted ->
-          receiveMessageInputBoundary.handle(event = taskEvent)
+          taskEventInputBoundary.handle(event = taskEvent)
       }
       message.ack()
     } catch (e: Exception) {

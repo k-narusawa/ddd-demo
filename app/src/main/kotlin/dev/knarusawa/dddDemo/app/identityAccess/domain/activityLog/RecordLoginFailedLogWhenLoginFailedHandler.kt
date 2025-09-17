@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.activityLog
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.IdentityAccessDomainException
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailedEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailed
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -14,10 +14,10 @@ class RecordLoginFailedLogWhenLoginFailedHandler(
   private val activityLogRepository: ActivityLogRepository,
 ) {
   @EventListener
-  fun handle(event: LoginFailedEvent) {
+  fun handle(event: LoginFailed) {
     val log =
       ActivityLog.new(
-        userId = event.user.userId,
+        userId = event.userId,
         actionType = ActionType.LOGIN_FAILED,
         ipAddress = event.ipAddress,
         userAgent = event.userAgent,

@@ -1,8 +1,8 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.IdentityAccessEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChangedEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChanged
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -87,7 +87,7 @@ class UserTest {
           Username.of("taro@example.com"),
         )
       val newUsername = Username.of("jiro@example.com")
-      user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
+      user.changeUsername(newUsername)
 
       assertEquals(newUsername, user.getUsername())
     }
@@ -102,10 +102,10 @@ class UserTest {
         )
       val newUsername = Username.of("jiro@example.com")
 
-      user.changeUsername(newUsername, DUMMY_UA, DUMMY_IP)
+      user.changeUsername(newUsername)
       val events = user.getEvents()
       assertEquals(events.size, 1)
-      assertInstanceOf<UsernameChangedEvent>(events[0])
+      assertInstanceOf<UsernameChanged>(events[0])
     }
   }
 
@@ -159,7 +159,7 @@ class UserTest {
       LastLoginFailedAt.init(),
       AccountStatus.NORMAL,
       1L,
-      mutableListOf<IdentityAccessEvent>(),
+      mutableListOf<UserEvent>(),
     )
   }
 }

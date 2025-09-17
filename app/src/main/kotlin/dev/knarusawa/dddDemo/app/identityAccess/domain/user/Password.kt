@@ -1,10 +1,12 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
 import jakarta.persistence.Embeddable
+import kotlinx.serialization.Serializable
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder
 
 @Embeddable
-data class Password private constructor(
+@Serializable
+data class Password(
   val value: String,
   @Transient()
   private var hashed: Boolean = true,
@@ -39,7 +41,6 @@ data class Password private constructor(
     if (other !is Password) return false
 
     if (this.value === other.value) return true
-    if (this.hashed === other.hashed) return true
     return false
   }
 

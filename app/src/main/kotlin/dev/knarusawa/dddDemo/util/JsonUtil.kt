@@ -3,6 +3,11 @@ package dev.knarusawa.dddDemo.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginFailed
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.LoginSucceeded
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.SignupCompleted
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
+import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
@@ -48,6 +53,12 @@ object JsonUtil {
         subclass(TaskCreated::class)
         subclass(TaskChanged::class)
         subclass(TaskCompleted::class)
+      }
+      polymorphic(UserEvent::class) {
+        subclass(SignupCompleted::class)
+        subclass(UsernameChanged::class)
+        subclass(LoginSucceeded::class)
+        subclass(LoginFailed::class)
       }
     }
 

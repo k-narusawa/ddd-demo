@@ -4,7 +4,7 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
 
-interface ReceiveMessageInputBoundary {
+interface TaskEventInputBoundary {
   fun handle(event: TaskCreated)
 
   fun handle(event: TaskChanged)

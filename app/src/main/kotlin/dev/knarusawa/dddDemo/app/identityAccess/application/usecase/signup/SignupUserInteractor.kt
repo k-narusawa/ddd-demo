@@ -1,11 +1,11 @@
 package dev.knarusawa.dddDemo.app.identityAccess.application.usecase.signup
 
+import dev.knarusawa.dddDemo.app.identityAccess.application.DomainEventPublisher
 import dev.knarusawa.dddDemo.app.identityAccess.application.exception.UsernameAlreadyExists
 import dev.knarusawa.dddDemo.app.identityAccess.application.port.SignupUserInputBoundary
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.User
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserService
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class SignupUserInteractor(
   private val userService: UserService,
   private val userRepository: UserRepository,
-  private val applicationEventPublisher: ApplicationEventPublisher,
+  private val eventPublisher: DomainEventPublisher,
 ) : SignupUserInputBoundary {
   override fun handle(input: SignupUserInputData): SignupUserOutputData {
     val canSignup = userService.isExists(username = input.username)
@@ -30,7 +30,7 @@ class SignupUserInteractor(
     userRepository.save(user)
 
     user.getEvents().forEach {
-      applicationEventPublisher.publishEvent(it)
+      eventPublisher.publish(it)
     }
 
     return SignupUserOutputData.of(
