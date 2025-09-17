@@ -4,7 +4,7 @@ import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Password
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
-import dev.knarusawa.dddDemo.testFactory.TestUserFactory
+import dev.knarusawa.dddDemo.testFactory.TestUserIntegrationFactory
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -22,7 +22,7 @@ class LoginInteractorTest
   @Autowired
   constructor(
     private val loginInteractor: LoginInteractor,
-    private val testUserFactory: TestUserFactory,
+    private val testUserIntegrationFactory: TestUserIntegrationFactory,
   ) {
     @Nested
     inner class UseCaseTest {
@@ -30,7 +30,7 @@ class LoginInteractorTest
       @DisplayName("正しい認証情報でトークンが払い出されること")
       fun token_dispensed_with_correct_credentials() =
         runBlocking {
-          testUserFactory.createUser(
+          testUserIntegrationFactory.createUser(
             username = Username.of("test@example.com"),
             password = Password.of("password"),
           )
@@ -52,7 +52,7 @@ class LoginInteractorTest
       @Test
       @DisplayName("間違った認証情報の場合に例外が投げられること")
       fun exception_thrown_in_case_of_wrong_credentials() {
-        testUserFactory.createUser(
+        testUserIntegrationFactory.createUser(
           username = Username.of("test@example.com"),
           password = Password.of("password"),
         )

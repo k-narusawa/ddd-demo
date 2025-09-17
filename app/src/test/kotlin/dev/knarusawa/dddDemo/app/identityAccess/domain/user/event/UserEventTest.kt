@@ -1,19 +1,9 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user.event
 
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.AccountStatus
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.FamilyName
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.GivenName
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.LastLoginFailedAt
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.LoginFailureCount
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Password
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.User
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserId
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
+import dev.knarusawa.dddDemo.testFactory.TestUserFactory
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
-import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.isAccessible
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -25,7 +15,7 @@ class UserEventTest {
     @Test
     @DisplayName("protobuf形式に変換できること")
     fun can_convert_to_protobuf() {
-      val user = createUserInstance()
+      val user = TestUserFactory.createUserInstance()
       val sut = SignupCompleted.of(user = user)
 
       val actual = sut.toEventMessage()
@@ -46,27 +36,5 @@ class UserEventTest {
         ProtobufUtil.toLocalDateTime(actual.occurredAt),
       )
     }
-  }
-
-  private fun createUserInstance(
-    userId: UserId = UserId.new(),
-    username: Username = Username.of("dummy@example.com"),
-    password: Password = Password.of("!Password0"),
-  ): User {
-    val constructor = User::class.primaryConstructor!!
-    constructor.isAccessible = true
-    return constructor.call(
-      userId,
-      username,
-      password,
-      false,
-      GivenName.of("名"),
-      FamilyName.of("姓"),
-      LoginFailureCount.init(),
-      LastLoginFailedAt.init(),
-      AccountStatus.NORMAL,
-      1L,
-      mutableListOf<UserEvent>(),
-    )
   }
 }

@@ -1,15 +1,13 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
-import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UsernameChanged
+import dev.knarusawa.dddDemo.testFactory.TestUserFactory
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertInstanceOf
-import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.isAccessible
 import kotlin.test.assertEquals
 
 @DisplayName("ドメイン_集約_ユーザ")
@@ -26,12 +24,12 @@ class UserTest {
     fun test_equals_and_hashCode_with_same_ID() {
       val userId = UserId.new()
       val user1 =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           userId,
           Username.of("taro@example.com"),
         )
       val user2 =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           userId,
           Username.of("jiro@example.com"),
         )
@@ -44,12 +42,12 @@ class UserTest {
     @DisplayName("異なるUserIdを持つUserは等価ではない")
     fun test_equals_with_different_IDs() {
       val user1 =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           UserId.new(),
           Username.of("taro@example.com"),
         )
       val user2 =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           UserId.new(),
           Username.of("taro@example.com"),
         )
@@ -82,7 +80,7 @@ class UserTest {
     @DisplayName("ユーザー名を変更できる")
     fun user_can_change_username() {
       val user =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           UserId.new(),
           Username.of("taro@example.com"),
         )
@@ -96,7 +94,7 @@ class UserTest {
     @DisplayName("ユーザー名を変更した場合にイベントが発行される")
     fun when_user_change_username_publish_event() {
       val user =
-        createUserInstance(
+        TestUserFactory.createUserInstance(
           UserId.new(),
           Username.of("taro@example.com"),
         )
@@ -139,27 +137,5 @@ class UserTest {
         user.verifyPassword(anotherRawPassword)
       }
     }
-  }
-
-  private fun createUserInstance(
-    userId: UserId = UserId.new(),
-    username: Username = Username.of("dummy@example.com"),
-    password: Password = Password.of("!Password0"),
-  ): User {
-    val constructor = User::class.primaryConstructor!!
-    constructor.isAccessible = true
-    return constructor.call(
-      userId,
-      username,
-      password,
-      false,
-      GivenName.of("名"),
-      FamilyName.of("姓"),
-      LoginFailureCount.init(),
-      LastLoginFailedAt.init(),
-      AccountStatus.NORMAL,
-      1L,
-      mutableListOf<UserEvent>(),
-    )
   }
 }

@@ -3,7 +3,7 @@ package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.AccountLock
 import dev.knarusawa.dddDemo.app.identityAccess.domain.exception.LoginFailed
 import dev.knarusawa.dddDemo.executionListener.DatabaseCleanupListener
-import dev.knarusawa.dddDemo.testFactory.TestUserFactory
+import dev.knarusawa.dddDemo.testFactory.TestUserIntegrationFactory
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -23,7 +23,7 @@ class UserServiceTest
   constructor(
     private val userRepository: UserRepository,
     private val sut: UserService,
-    private val testUserFactory: TestUserFactory,
+    private val testUserIntegrationFactory: TestUserIntegrationFactory,
   ) {
     @Nested
     @DisplayName("isExistsメソッド")
@@ -32,7 +32,10 @@ class UserServiceTest
       @DisplayName("ユーザーが存在する場合、falseを返す")
       fun is_exists_should_return_false_when_user_exists() {
         val username = Username.of("test@example.com")
-        testUserFactory.createUser(username = username, password = Password.of("password"))
+        testUserIntegrationFactory.createUser(
+          username = username,
+          password = Password.of("password"),
+        )
 
         val result = sut.isExists(username)
 
@@ -61,7 +64,7 @@ class UserServiceTest
       @Test
       @DisplayName("認証情報が正しい場合、トークンを返す")
       fun login_should_return_token_when_credentials_are_valid() {
-        testUserFactory.createUser(username = username, password = password)
+        testUserIntegrationFactory.createUser(username = username, password = password)
 
         val token = sut.login(username, "!Password0", userAgent, ipAddress)
 
@@ -81,7 +84,7 @@ class UserServiceTest
       @Test
       @DisplayName("パスワードが不正な場合、LoginFailed例外をスローする")
       fun login_should_throw_login_failed_when_password_is_incorrect() {
-        val user = testUserFactory.createUser(username = username, password = password)
+        val user = testUserIntegrationFactory.createUser(username = username, password = password)
 
         assertThrows<LoginFailed> {
           sut.login(username, "wrong-password", userAgent, ipAddress)
@@ -94,7 +97,7 @@ class UserServiceTest
       @Test
       @DisplayName("パスワードを5回間違えるとアカウントがロックされる")
       fun login_should_throw_account_lock_when_password_is_incorrect_5_times() {
-        val user = testUserFactory.createUser(username = username, password = password)
+        val user = testUserIntegrationFactory.createUser(username = username, password = password)
 
         repeat(4) {
           assertThrows<LoginFailed> {

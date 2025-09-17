@@ -12,14 +12,14 @@ class DatabaseCleanupListener : AbstractTestExecutionListener() {
         "ddd_user",
         "ddd_activity_log",
         "ddd_token",
+        "ddd_outbox",
       )
     private val projectTables =
       listOf(
         "ddd_member",
         "ddd_member_role",
         "ddd_project",
-        "ddd_project_event",
-        "ddd_task_outbox",
+        "ddd_event",
         "ddd_task_read_model",
       )
 
