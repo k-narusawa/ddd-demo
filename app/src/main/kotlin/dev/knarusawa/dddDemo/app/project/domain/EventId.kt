@@ -1,9 +1,7 @@
 package dev.knarusawa.dddDemo.app.project.domain
 
 import jakarta.persistence.Embeddable
-import kotlinx.serialization.Serializable
 
-@Serializable
 @Embeddable
 open class EventId(
   val eventId: String,

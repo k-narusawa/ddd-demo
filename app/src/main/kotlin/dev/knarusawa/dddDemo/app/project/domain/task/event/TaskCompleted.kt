@@ -8,10 +8,8 @@ import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.project.domain.task.Title
 import dev.knarusawa.dddDemo.app.project.domain.task.ToTime
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-@Serializable
 data class TaskCompleted(
   override val eventId: TaskEventId,
   override val taskId: TaskId,

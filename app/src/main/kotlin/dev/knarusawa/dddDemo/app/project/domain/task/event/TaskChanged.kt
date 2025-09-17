@@ -7,11 +7,8 @@ import dev.knarusawa.dddDemo.app.project.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.project.domain.task.Title
 import dev.knarusawa.dddDemo.app.project.domain.task.ToTime
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-@Serializable
 data class TaskChanged(
   override val eventId: TaskEventId,
   override val taskId: TaskId,
@@ -24,7 +21,6 @@ data class TaskChanged(
   override val assignee: MemberId?,
   override val fromTime: FromTime?,
   override val toTime: ToTime?,
-  @Contextual
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
   override val completed: Boolean,
 ) : TaskEvent() {

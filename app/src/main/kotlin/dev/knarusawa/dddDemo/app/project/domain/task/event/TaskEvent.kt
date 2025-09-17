@@ -9,12 +9,9 @@ import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.project.domain.task.Title
 import dev.knarusawa.dddDemo.app.project.domain.task.ToTime
 import dev.knarusawa.dddDemo.publishedLanguage.project.proto.TaskEventMessage
-import dev.knarusawa.dddDemo.util.JsonUtil
 import dev.knarusawa.dddDemo.util.ProtobufUtil
-import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-@Serializable
 sealed class TaskEvent : DomainEvent {
   abstract override val eventId: TaskEventId
   abstract val taskId: TaskId
@@ -31,9 +28,6 @@ sealed class TaskEvent : DomainEvent {
   abstract val completed: Boolean
 
   companion object {
-    fun deserialize(serialized: String): TaskEvent =
-      JsonUtil.json.decodeFromString<TaskEvent>(serialized)
-
     fun fromEventMessage(ba: ByteArray): TaskEvent {
       val eventMessage = TaskEventMessage.parseFrom(ba)
       return fromEventMessage(eventMessage)
@@ -134,8 +128,6 @@ sealed class TaskEvent : DomainEvent {
       }
     }
   }
-
-  override fun serialize(): String = JsonUtil.json.encodeToString(serializer(), this)
 
   fun toEventMessage(): TaskEventMessage {
     val builder =
