@@ -8,7 +8,7 @@ import dev.knarusawa.dddDemo.app.identityAccess.domain.user.LoginFailureCount
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.User
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserId
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEvent
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -45,7 +45,7 @@ data class SignupCompleted(
         occurredAt = LocalDateTime.now(),
       )
 
-    fun from(eventMessage: UserEventMessage) =
+    fun from(eventMessage: PLUserEvent) =
       SignupCompleted(
         eventId = UserEventId.from(value = eventMessage.eventId),
         userId = UserId.from(value = eventMessage.userId),
@@ -62,7 +62,7 @@ data class SignupCompleted(
       )
   }
 
-  override fun toEventMessage(): UserEventMessage {
+  override fun toEventMessage(): PLUserEvent {
     val eventMessage = super.toEventMessage()
     val builder = eventMessage.toBuilder()
     builder.setUsername(username.get())

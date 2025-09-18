@@ -3,7 +3,7 @@ package dev.knarusawa.dddDemo.app.identityAccess.domain.user.event
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.User
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.UserId
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.Username
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEvent
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -28,7 +28,7 @@ data class UsernameChanged(
         occurredAt = LocalDateTime.now(),
       )
 
-    fun from(eventMessage: UserEventMessage) =
+    fun from(eventMessage: PLUserEvent) =
       UsernameChanged(
         eventId = UserEventId.from(value = eventMessage.eventId),
         userId = UserId.from(value = eventMessage.userId),
@@ -38,7 +38,7 @@ data class UsernameChanged(
       )
   }
 
-  override fun toEventMessage(): UserEventMessage {
+  override fun toEventMessage(): PLUserEvent {
     val message = super.toEventMessage()
     val builder = message.toBuilder()
     builder.setUsername(username.get())

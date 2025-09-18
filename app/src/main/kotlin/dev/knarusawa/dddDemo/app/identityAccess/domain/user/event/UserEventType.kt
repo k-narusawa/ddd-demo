@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user.event
 
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventType as ProtoUserEventType
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEventType
 
 enum class UserEventType {
   SIGNE_UP_COMPLETED,
@@ -11,10 +11,10 @@ enum class UserEventType {
 
   fun toPublishedType() =
     when (this) {
-      SIGNE_UP_COMPLETED -> ProtoUserEventType.SIGNE_UP_COMPLETED
-      USERNAME_CHANGED -> ProtoUserEventType.USERNAME_CHANGED
-      LOGIN_SUCCEEDED -> ProtoUserEventType.LOGIN_SUCCEEDED
-      LOGIN_FAILED -> ProtoUserEventType.LOGIN_FAILED
+      SIGNE_UP_COMPLETED -> PLUserEventType.SIGNE_UP_COMPLETED
+      USERNAME_CHANGED -> PLUserEventType.USERNAME_CHANGED
+      LOGIN_SUCCEEDED -> PLUserEventType.LOGIN_SUCCEEDED
+      LOGIN_FAILED -> PLUserEventType.LOGIN_FAILED
     }
 
   companion object {

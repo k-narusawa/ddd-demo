@@ -8,30 +8,30 @@ option java_multiple_files = true;
 option java_package = "dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto";
 option java_outer_classname = "UserEventMessageProto";
 
-message UserEventMessage {
+message PLUserEvent {
   string event_id = 1;
   string user_id = 2;
-  UserEventType type = 3;
+  PLUserEventType type = 3;
   optional string username = 4;
   optional bool email_verified = 5;
   optional string given_name = 6;
   optional string family_name = 7;
   optional uint32 login_failure_count = 8;
   optional google.protobuf.Timestamp last_login_failed_at = 9;
-  optional AccountStatus account_status = 10;
+  optional PLAccountStatus account_status = 10;
   optional string user_agent = 11;
   optional string ip_address = 12;
   google.protobuf.Timestamp occurred_at = 13;
 }
 
-enum UserEventType {
+enum PLUserEventType {
   SIGNE_UP_COMPLETED = 0;
   USERNAME_CHANGED = 1;
   LOGIN_SUCCEEDED = 2;
   LOGIN_FAILED = 3;
 }
 
-enum AccountStatus {
+enum PLAccountStatus {
   NORMAL = 0;
   ACCOUNT_LOCK = 1;
   DEACTIVATED = 2;
