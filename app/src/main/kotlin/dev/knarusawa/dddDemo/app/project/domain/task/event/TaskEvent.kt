@@ -8,11 +8,11 @@ import dev.knarusawa.dddDemo.app.project.domain.task.FromTime
 import dev.knarusawa.dddDemo.app.project.domain.task.TaskId
 import dev.knarusawa.dddDemo.app.project.domain.task.Title
 import dev.knarusawa.dddDemo.app.project.domain.task.ToTime
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.TaskEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLTaskEvent
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import java.time.LocalDateTime
 
-sealed class TaskEvent : DomainEvent<TaskEventMessage> {
+sealed class TaskEvent : DomainEvent<PLTaskEvent> {
   abstract override val eventId: TaskEventId
   abstract val taskId: TaskId
   abstract val type: TaskEventType
@@ -29,11 +29,11 @@ sealed class TaskEvent : DomainEvent<TaskEventMessage> {
 
   companion object {
     fun fromEventMessage(ba: ByteArray): TaskEvent {
-      val eventMessage = TaskEventMessage.parseFrom(ba)
+      val eventMessage = PLTaskEvent.parseFrom(ba)
       return fromEventMessage(eventMessage)
     }
 
-    fun fromEventMessage(eventMessage: TaskEventMessage): TaskEvent {
+    fun fromEventMessage(eventMessage: PLTaskEvent): TaskEvent {
       val eventType = TaskEventType.valueOf(eventMessage.type.name)
       return when (eventType) {
         TaskEventType.TASK_CREATED ->
@@ -129,8 +129,8 @@ sealed class TaskEvent : DomainEvent<TaskEventMessage> {
     }
   }
 
-  override fun toPublishedLanguage(): TaskEventMessage {
-    val builder = TaskEventMessage.newBuilder()
+  override fun toPublishedLanguage(): PLTaskEvent {
+    val builder = PLTaskEvent.newBuilder()
 
     builder.setEventId(eventId.get())
     builder.setTaskId(taskId.get())

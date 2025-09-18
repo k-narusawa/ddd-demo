@@ -8,10 +8,10 @@ option java_multiple_files = true;
 option java_package = "dev.knarusawa.dddDemo.publishedLanguage.project.proto";
 option java_outer_classname = "TaskEventMessageProto";
 
-message TaskEventMessage {
+message PLTaskEvent {
   string event_id = 1;
   string task_id = 2;
-  TaskEventType type = 3;
+  PLTaskEventType type = 3;
   string project_id = 4;
   string operator_id = 5;
   string title = 6;
@@ -24,7 +24,7 @@ message TaskEventMessage {
   bool completed = 13;
 }
 
-enum TaskEventType {
+enum PLTaskEventType {
   TASK_EVENT_TYPE_UNSPECIFIED = 0;
   TASK_CREATED = 1;
   TASK_CHANGED = 2;

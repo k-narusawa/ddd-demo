@@ -8,7 +8,7 @@ import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskEvent
 import dev.knarusawa.dddDemo.infrastructure.RequestId
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.TaskEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLTaskEvent
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.handler.annotation.Header
@@ -35,7 +35,7 @@ class TaskEventSubscriber(
     log.info("TaskEventを受信 messageId: $messageId")
 
     try {
-      val eventMessage = TaskEventMessage.parseFrom(message.pubsubMessage.data)
+      val eventMessage = PLTaskEvent.parseFrom(message.pubsubMessage.data)
       when (val taskEvent = TaskEvent.fromEventMessage(eventMessage = eventMessage)) {
         is TaskCreated ->
           taskEventInputBoundary.handle(event = taskEvent)
