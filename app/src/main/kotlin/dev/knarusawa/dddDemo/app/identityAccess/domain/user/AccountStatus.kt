@@ -1,5 +1,7 @@
 package dev.knarusawa.dddDemo.app.identityAccess.domain.user
 
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLAccountStatus
+
 enum class AccountStatus {
   NORMAL,
   ACCOUNT_LOCK,
@@ -18,13 +20,8 @@ enum class AccountStatus {
 
   fun toPublished() =
     when (this) {
-      NORMAL ->
-        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.NORMAL
-
-      ACCOUNT_LOCK ->
-        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.ACCOUNT_LOCK
-
-      DEACTIVATED ->
-        dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.AccountStatus.DEACTIVATED
+      NORMAL -> PLAccountStatus.NORMAL
+      ACCOUNT_LOCK -> PLAccountStatus.ACCOUNT_LOCK
+      DEACTIVATED -> PLAccountStatus.DEACTIVATED
     }
 }

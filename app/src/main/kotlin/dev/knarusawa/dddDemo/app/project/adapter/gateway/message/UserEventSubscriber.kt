@@ -4,7 +4,7 @@ import com.google.cloud.spring.pubsub.support.BasicAcknowledgeablePubsubMessage
 import com.google.cloud.spring.pubsub.support.GcpPubSubHeaders
 import dev.knarusawa.dddDemo.app.project.application.port.UserEventInputBoundary
 import dev.knarusawa.dddDemo.infrastructure.RequestId
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEvent
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.handler.annotation.Header
@@ -27,8 +27,8 @@ class UserEventSubscriber(
     log.info("UserEventを受信 messageId: $messageId")
 
     try {
-      val eventMessage = UserEventMessage.parseFrom(message.pubsubMessage.data)
-      userEventInputBoundary.handle(event = eventMessage)
+      val pl = PLUserEvent.parseFrom(message.pubsubMessage.data)
+      userEventInputBoundary.handle(pl = pl)
       message.ack()
     } catch (e: Exception) {
       log.error("メッセージの処理に失敗", e)

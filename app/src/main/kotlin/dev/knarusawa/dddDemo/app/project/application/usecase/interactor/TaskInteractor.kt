@@ -20,9 +20,8 @@ class TaskInteractor(
 ) : TaskInputBoundary {
   override fun handle(input: CreateTaskInputData): CreateTaskOutputData {
     val pastEvents = projectRepository.loadEvents(projectId = input.projectId)
-
     val project = Project.from(pastEvents = pastEvents)
-    if (!project.hasWriteRole(input.operator)) {
+    if (!project.hasWriteRole(memberId = input.operator)) {
       throw RuntimeException() // TODO: 専用の例外クラスを作成する
     }
 

@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.project.application.port
 
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEvent
 
 interface UserEventInputBoundary {
-  fun handle(event: UserEventMessage)
+  fun handle(pl: PLUserEvent)
 }

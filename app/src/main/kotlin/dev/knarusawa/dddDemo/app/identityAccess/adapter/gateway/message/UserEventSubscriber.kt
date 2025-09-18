@@ -5,7 +5,7 @@ import com.google.cloud.spring.pubsub.support.GcpPubSubHeaders
 import dev.knarusawa.dddDemo.app.identityAccess.adapter.gateway.db.outbox.IdentityAccessOutboxRepository
 import dev.knarusawa.dddDemo.app.identityAccess.domain.user.event.UserEvent
 import dev.knarusawa.dddDemo.infrastructure.RequestId
-import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.UserEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.identityAccess.proto.PLUserEvent
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.handler.annotation.Header
@@ -32,7 +32,7 @@ class UserEventSubscriber(
     log.info("UserEventを受信 messageId: $messageId")
 
     try {
-      val eventMessage = UserEventMessage.parseFrom(message.pubsubMessage.data)
+      val eventMessage = PLUserEvent.parseFrom(message.pubsubMessage.data)
       val event = UserEvent.from(pl = eventMessage)
       message.ack()
     } catch (e: Exception) {

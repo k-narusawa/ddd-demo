@@ -2,7 +2,6 @@ package dev.knarusawa.dddDemo.app.project.domain.task
 
 import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectId
-import dev.knarusawa.dddDemo.app.project.domain.task.command.CreateTaskCommand
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskChanged
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCompleted
 import dev.knarusawa.dddDemo.app.project.domain.task.event.TaskCreated
@@ -41,21 +40,6 @@ class TaskState private constructor(
     private set
 
   companion object {
-    fun init(cmd: CreateTaskCommand) =
-      TaskState(
-        taskId = TaskId.new(),
-        projectId = cmd.projectId,
-        operator = cmd.operator,
-        title = cmd.title,
-        description = cmd.description,
-        assigner = cmd.assigner,
-        assignee = cmd.assignee,
-        fromTime = cmd.fromTime,
-        toTime = cmd.toTime,
-        completed = false,
-        version = 1,
-      )
-
     fun init(event: TaskCreated) =
       TaskState(
         projectId = event.projectId,

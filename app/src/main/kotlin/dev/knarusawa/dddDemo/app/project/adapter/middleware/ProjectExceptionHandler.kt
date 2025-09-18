@@ -1,15 +1,38 @@
 package dev.knarusawa.dddDemo.app.project.adapter.middleware
 
 import dev.knarusawa.dddDemo.app.identityAccess.adapter.controller.model.ErrorResponse
+import dev.knarusawa.dddDemo.app.project.domain.exception.ProjectException
+import dev.knarusawa.dddDemo.app.project.domain.exception.ProjectNotFound
 import dev.knarusawa.dddDemo.util.logger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-@RestControllerAdvice(basePackages = ["dev.knarusawa.dddDemo.app.task"])
-class TaskExceptionHandler {
+@RestControllerAdvice(basePackages = ["dev.knarusawa.dddDemo.app.project"])
+class ProjectExceptionHandler {
   companion object {
     private val log = logger()
+  }
+
+  @ExceptionHandler(ProjectException::class)
+  fun handleProjectException(ex: ProjectException): ResponseEntity<ErrorResponse> {
+    log.warn("ProjectException", ex)
+
+    when (ex) {
+      is ProjectNotFound -> {
+        val response =
+          ErrorResponse(
+            title = "ProjectNotFound",
+            detail = "Project NotFound.",
+            code = "PROJECT_NOT_FOUND",
+          )
+
+        return ResponseEntity
+          .status(404)
+          .header("Content-Type", "application/problem+json")
+          .body(response)
+      }
+    }
   }
 
   @ExceptionHandler(IllegalArgumentException::class)
