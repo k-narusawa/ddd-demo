@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.project.domain.project
 
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PublishedLanguageMemberRole
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLProjectMemberRole
 
 enum class MemberRole {
   ADMIN,
@@ -8,10 +8,10 @@ enum class MemberRole {
   READ,
   ;
 
-  fun toPublishedType(): PublishedLanguageMemberRole =
+  fun toPublishedType(): PLProjectMemberRole =
     when (this) {
-      ADMIN -> PublishedLanguageMemberRole.ADMIN
-      WRITE -> PublishedLanguageMemberRole.WRITE
-      READ -> PublishedLanguageMemberRole.READ
+      ADMIN -> PLProjectMemberRole.ADMIN
+      WRITE -> PLProjectMemberRole.WRITE
+      READ -> PLProjectMemberRole.READ
     }
 }

@@ -1,6 +1,6 @@
 package dev.knarusawa.dddDemo.app.project.domain.project.event
 
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PublishedLanguageProjectEventType
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLProjectEventType
 
 enum class ProjectEventType {
   PROJECT_CREATED,
@@ -8,10 +8,10 @@ enum class ProjectEventType {
   PROJECT_MEMBER_ADDED,
   ;
 
-  fun toPublishedType(): PublishedLanguageProjectEventType =
+  fun toPublishedType(): PLProjectEventType =
     when (this) {
-      PROJECT_CREATED -> PublishedLanguageProjectEventType.PROJECT_CREATED
-      PROJECT_NAME_CHANGED -> PublishedLanguageProjectEventType.PROJECT_NAME_CHANGED
-      PROJECT_MEMBER_ADDED -> PublishedLanguageProjectEventType.PROJECT_MEMBER_ADDED
+      PROJECT_CREATED -> PLProjectEventType.PROJECT_CREATED
+      PROJECT_NAME_CHANGED -> PLProjectEventType.PROJECT_NAME_CHANGED
+      PROJECT_MEMBER_ADDED -> PLProjectEventType.PROJECT_MEMBER_ADDED
     }
 }

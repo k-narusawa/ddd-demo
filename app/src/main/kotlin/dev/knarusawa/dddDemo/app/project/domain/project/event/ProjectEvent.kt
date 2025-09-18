@@ -5,11 +5,11 @@ import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectMember
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectName
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.ProjectEventMessage
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLProjectEvent
 import dev.knarusawa.dddDemo.util.ProtobufUtil
 import java.time.LocalDateTime
 
-sealed class ProjectEvent : DomainEvent<ProjectEventMessage> {
+sealed class ProjectEvent : DomainEvent<PLProjectEvent> {
   abstract override val eventId: ProjectEventId
   abstract val projectId: ProjectId
   abstract val type: ProjectEventType
@@ -17,11 +17,11 @@ sealed class ProjectEvent : DomainEvent<ProjectEventMessage> {
 
   companion object {
     fun from(ba: ByteArray): ProjectEvent {
-      val eventMessage = ProjectEventMessage.parseFrom(ba)
+      val eventMessage = PLProjectEvent.parseFrom(ba)
       return fromPublishedLanguage(eventMessage)
     }
 
-    fun fromPublishedLanguage(publishedLang: ProjectEventMessage): ProjectEvent {
+    fun fromPublishedLanguage(publishedLang: PLProjectEvent): ProjectEvent {
       val eventType = ProjectEventType.valueOf(publishedLang.type.name)
       return when (eventType) {
         ProjectEventType.PROJECT_CREATED ->
@@ -47,8 +47,8 @@ sealed class ProjectEvent : DomainEvent<ProjectEventMessage> {
     }
   }
 
-  override fun toPublishedLanguage(): ProjectEventMessage {
-    val builder = ProjectEventMessage.newBuilder()
+  override fun toPublishedLanguage(): PLProjectEvent {
+    val builder = PLProjectEvent.newBuilder()
 
     builder.setEventId(eventId.get())
     builder.setProjectId(projectId.get())

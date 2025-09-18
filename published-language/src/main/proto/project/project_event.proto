@@ -8,28 +8,28 @@ option java_multiple_files = true;
 option java_package = "dev.knarusawa.dddDemo.publishedLanguage.project.proto";
 option java_outer_classname = "ProjectEventMessageProto";
 
-message ProjectEventMessage {
+message PLProjectEvent {
   string event_id = 1;
   string project_id = 2;
-  PublishedLanguageProjectEventType type = 3;
+  PLProjectEventType type = 3;
   optional string project_name = 4;
-  optional PublishedLanguageProjectMember member = 5;
+  optional PLProjectMember member = 5;
   google.protobuf.Timestamp occurred_at = 6;
 }
 
-message PublishedLanguageProjectMember {
+message PLProjectMember {
   string member_id = 1;
-  PublishedLanguageMemberRole role = 2;
+  PLProjectMemberRole role = 2;
 }
 
-enum PublishedLanguageMemberRole {
+enum PLProjectMemberRole {
   MEMBER_ROLE_UNSPECIFIED = 0;
   ADMIN = 1;
   WRITE = 2;
   READ = 3;
 }
 
-enum PublishedLanguageProjectEventType {
+enum PLProjectEventType {
   PROJECT_EVENT_TYPE_UNSPECIFIED = 0;
   PROJECT_CREATED = 1;
   PROJECT_NAME_CHANGED = 2;

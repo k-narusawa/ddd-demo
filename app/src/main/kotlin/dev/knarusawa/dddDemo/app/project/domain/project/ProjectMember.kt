@@ -1,7 +1,7 @@
 package dev.knarusawa.dddDemo.app.project.domain.project
 
 import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
-import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PublishedLanguageProjectMember
+import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLProjectMember
 
 class ProjectMember private constructor(
   val memberId: MemberId,
@@ -26,15 +26,15 @@ class ProjectMember private constructor(
         role = MemberRole.READ,
       )
 
-    fun from(published: PublishedLanguageProjectMember) =
+    fun from(published: PLProjectMember) =
       ProjectMember(
         memberId = MemberId.from(published.memberId),
         role = MemberRole.valueOf(published.role.name),
       )
   }
 
-  fun toPublishedLanguage(): PublishedLanguageProjectMember {
-    val builder = PublishedLanguageProjectMember.newBuilder()
+  fun toPublishedLanguage(): PLProjectMember {
+    val builder = PLProjectMember.newBuilder()
     builder.setMemberId(memberId.get())
     builder.setRole(role.toPublishedType())
     return builder.build()
