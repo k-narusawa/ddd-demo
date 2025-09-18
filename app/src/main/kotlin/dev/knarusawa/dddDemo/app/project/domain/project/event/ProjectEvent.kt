@@ -33,8 +33,8 @@ sealed class ProjectEvent : DomainEvent<PLProjectEvent> {
               publishedLang.projectName?.let {
                 ProjectName.of(value = it)
               } ?: throw IllegalStateException(),
-            member =
-              publishedLang.member?.let {
+            createMember =
+              publishedLang.createMember?.let {
                 ProjectMember.adminMember(memberId = MemberId.from(it.memberId))
               } ?: throw IllegalStateException(),
             occurredAt =

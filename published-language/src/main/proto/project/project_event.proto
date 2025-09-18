@@ -13,8 +13,9 @@ message PLProjectEvent {
   string project_id = 2;
   PLProjectEventType type = 3;
   optional string project_name = 4;
-  optional PLProjectMember member = 5;
-  google.protobuf.Timestamp occurred_at = 6;
+  optional PLProjectMember create_member = 5;
+  repeated PLProjectMember added_members = 6;
+  google.protobuf.Timestamp occurred_at = 7;
 }
 
 message PLProjectMember {

@@ -39,4 +39,13 @@ class ProjectMember private constructor(
     builder.setRole(role.toPublishedType())
     return builder.build()
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is ProjectMember) return false
+    if (memberId != other.memberId) return false
+    return true
+  }
+
+  override fun hashCode() = memberId.hashCode()
 }

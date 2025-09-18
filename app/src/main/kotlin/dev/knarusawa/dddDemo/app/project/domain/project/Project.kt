@@ -2,14 +2,17 @@ package dev.knarusawa.dddDemo.app.project.domain.project
 
 import dev.knarusawa.dddDemo.app.project.domain.exception.ProjectNotFound
 import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
+import dev.knarusawa.dddDemo.app.project.domain.project.command.AddProjectMemberCommand
 import dev.knarusawa.dddDemo.app.project.domain.project.command.CreateProjectCommand
 import dev.knarusawa.dddDemo.app.project.domain.project.event.ProjectCreated
 import dev.knarusawa.dddDemo.app.project.domain.project.event.ProjectEvent
+import dev.knarusawa.dddDemo.app.project.domain.project.event.ProjectMemberAdded
+import dev.knarusawa.dddDemo.util.logger
 
 class Project private constructor(
   val projectId: ProjectId,
   projectName: ProjectName,
-  members: MutableList<ProjectMember>,
+  members: MutableSet<ProjectMember>,
   private val events: MutableList<ProjectEvent> = mutableListOf(),
 ) {
   var projectName = projectName
@@ -17,7 +20,11 @@ class Project private constructor(
   var members = members
     private set
 
+  fun getEvents() = this.events.toList()
+
   companion object {
+    private val log = logger()
+
     fun create(cmd: CreateProjectCommand): Project {
       val created =
         ProjectCreated.of(
@@ -33,7 +40,10 @@ class Project private constructor(
       Project(
         projectId = event.projectId,
         projectName = event.projectName,
-        members = mutableListOf(ProjectMember.adminMember(memberId = event.member.memberId)),
+        members =
+          mutableSetOf(
+            ProjectMember.adminMember(memberId = event.createMember.memberId),
+          ),
       )
 
     fun from(pastEvents: List<ProjectEvent>): Project {
@@ -46,18 +56,43 @@ class Project private constructor(
           as? ProjectCreated
           ?: throw IllegalStateException("初期イベントが作成イベントでない event: ${pastEvents.firstOrNull()}")
       val project = of(created)
-
       pastEvents.sortedBy(ProjectEvent::occurredAt).forEachIndexed { index, event ->
         if (index == 0) {
           return@forEachIndexed
         }
       }
-
       return project
     }
   }
 
-  fun getEvents() = this.events.toList()
+  fun handle(cmd: AddProjectMemberCommand): List<ProjectEvent> {
+    if (cmd.projectId != this.projectId) {
+      throw IllegalStateException("ProjectIdの不一致")
+    }
+
+    cmd.addedMembers.forEach { addedMember ->
+      if (this.members.contains(addedMember)) {
+        log.warn("すでに登録済みのユーザ memberId: ${addedMember.memberId}")
+      }
+    }
+
+    val added =
+      ProjectMemberAdded.of(
+        projectId = cmd.projectId,
+        addedMembers = cmd.addedMembers,
+      )
+    return listOf(added)
+  }
+
+  fun apply(event: ProjectMemberAdded) {
+    event.addedMembers.forEach { addedMember ->
+      if (this.members.contains(addedMember)) {
+        // すでに存在するメンバーはRole変更の対応のために一度削除してから追加
+        this.members.remove(addedMember)
+      }
+      this.members.add(addedMember)
+    }
+  }
 
   fun hasWriteRole(memberId: MemberId): Boolean {
     return this.members.any { member ->

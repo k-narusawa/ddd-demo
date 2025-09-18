@@ -1,36 +1,33 @@
 package dev.knarusawa.dddDemo.app.project.domain.project.event
 
-import dev.knarusawa.dddDemo.app.project.domain.member.MemberId
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectId
 import dev.knarusawa.dddDemo.app.project.domain.project.ProjectMember
-import dev.knarusawa.dddDemo.app.project.domain.project.ProjectName
 import dev.knarusawa.dddDemo.publishedLanguage.project.proto.PLProjectEvent
 import java.time.LocalDateTime
 
-data class ProjectCreated(
+data class ProjectMemberAdded(
   override val eventId: ProjectEventId,
   override val projectId: ProjectId,
-  override val type: ProjectEventType = ProjectEventType.PROJECT_CREATED,
-  val projectName: ProjectName,
-  val createMember: ProjectMember,
+  override val type: ProjectEventType = ProjectEventType.PROJECT_MEMBER_ADDED,
+  val addedMembers: List<ProjectMember>,
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
 ) : ProjectEvent() {
   companion object {
     fun of(
-      projectName: ProjectName,
-      created: MemberId,
-    ) = ProjectCreated(
+      projectId: ProjectId,
+      addedMembers: List<ProjectMember>,
+    ) = ProjectMemberAdded(
       eventId = ProjectEventId.new(),
-      projectId = ProjectId.new(),
-      projectName = projectName,
-      createMember = ProjectMember.adminMember(memberId = created),
+      projectId = projectId,
+      addedMembers = addedMembers,
     )
   }
 
   override fun toPublishedLanguage(): PLProjectEvent {
     val builder = super.toPublishedLanguage().toBuilder()
-    builder.setProjectName(projectName.get())
-    builder.setCreateMember(createMember.toPublishedLanguage())
+    addedMembers.forEach {
+      builder.addAddedMembers(it.toPublishedLanguage())
+    }
     return builder.build()
   }
 }
