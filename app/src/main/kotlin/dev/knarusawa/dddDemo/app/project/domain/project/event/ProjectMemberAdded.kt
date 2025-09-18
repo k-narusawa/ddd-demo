@@ -9,13 +9,13 @@ data class ProjectMemberAdded(
   override val eventId: ProjectEventId,
   override val projectId: ProjectId,
   override val type: ProjectEventType = ProjectEventType.PROJECT_MEMBER_ADDED,
-  val addedMembers: List<ProjectMember>,
+  val addedMembers: Set<ProjectMember>,
   override val occurredAt: LocalDateTime = LocalDateTime.now(),
 ) : ProjectEvent() {
   companion object {
     fun of(
       projectId: ProjectId,
-      addedMembers: List<ProjectMember>,
+      addedMembers: Set<ProjectMember>,
     ) = ProjectMemberAdded(
       eventId = ProjectEventId.new(),
       projectId = projectId,

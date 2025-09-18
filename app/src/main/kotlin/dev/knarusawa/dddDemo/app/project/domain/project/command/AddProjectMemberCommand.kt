@@ -5,5 +5,5 @@ import dev.knarusawa.dddDemo.app.project.domain.project.ProjectMember
 
 data class AddProjectMemberCommand(
   val projectId: ProjectId,
-  val addedMembers: List<ProjectMember>,
+  val addedMembers: Set<ProjectMember>,
 )

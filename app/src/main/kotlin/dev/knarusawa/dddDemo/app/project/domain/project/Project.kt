@@ -12,13 +12,13 @@ import dev.knarusawa.dddDemo.util.logger
 class Project private constructor(
   val projectId: ProjectId,
   projectName: ProjectName,
-  members: MutableSet<ProjectMember>,
+  private val members: MutableSet<ProjectMember>,
   private val events: MutableList<ProjectEvent> = mutableListOf(),
 ) {
   var projectName = projectName
     private set
-  var members = members
-    private set
+
+  fun getMembers() = this.members.toList()
 
   fun getEvents() = this.events.toList()
 
