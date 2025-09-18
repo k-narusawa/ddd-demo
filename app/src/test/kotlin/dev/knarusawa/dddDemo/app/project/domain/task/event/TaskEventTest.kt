@@ -61,7 +61,7 @@ class TaskEventTest {
       )
     val eventMessage = event.toPublishedLanguage().toByteArray()
 
-    val sut = TaskEvent.fromEventMessage(ba = eventMessage)
+    val sut = TaskEvent.fromPublishedLanguage(ba = eventMessage)
 
     assertEquals(event.eventId, sut.eventId)
     assertEquals(event.taskId, sut.taskId)

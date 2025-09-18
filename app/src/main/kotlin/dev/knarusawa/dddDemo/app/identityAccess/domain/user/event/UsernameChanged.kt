@@ -28,19 +28,19 @@ data class UsernameChanged(
         occurredAt = LocalDateTime.now(),
       )
 
-    fun from(eventMessage: PLUserEvent) =
+    fun from(pl: PLUserEvent) =
       UsernameChanged(
-        eventId = UserEventId.from(value = eventMessage.eventId),
-        userId = UserId.from(value = eventMessage.userId),
-        type = UserEventType.valueOf(eventMessage.type.name),
-        username = Username.of(value = eventMessage.username),
-        occurredAt = ProtobufUtil.toLocalDateTime(eventMessage.occurredAt)!!,
+        eventId = UserEventId.from(value = pl.eventId),
+        userId = UserId.from(value = pl.userId),
+        type = UserEventType.valueOf(pl.type.name),
+        username = Username.of(value = pl.username),
+        occurredAt = ProtobufUtil.toLocalDateTime(pl.occurredAt)!!,
       )
   }
 
-  override fun toEventMessage(): PLUserEvent {
-    val message = super.toEventMessage()
-    val builder = message.toBuilder()
+  override fun toPublishedLanguage(): PLUserEvent {
+    val pl = super.toPublishedLanguage()
+    val builder = pl.toBuilder()
     builder.setUsername(username.get())
     return builder.build()
   }

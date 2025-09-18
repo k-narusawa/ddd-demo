@@ -33,7 +33,7 @@ class UserEventSubscriber(
 
     try {
       val eventMessage = UserEventMessage.parseFrom(message.pubsubMessage.data)
-      val event = UserEvent.from(eventMessage = eventMessage)
+      val event = UserEvent.from(pl = eventMessage)
       message.ack()
     } catch (e: Exception) {
       log.error("メッセージの処理に失敗", e)

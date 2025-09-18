@@ -8,5 +8,5 @@ interface DomainEvent<T> {
 
   abstract fun serialize(): String
 
-  abstract fun toEventMessage(): T
+  abstract fun toPublishedLanguage(): T
 }

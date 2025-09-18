@@ -36,7 +36,7 @@ class TaskEventSubscriber(
 
     try {
       val eventMessage = PLTaskEvent.parseFrom(message.pubsubMessage.data)
-      when (val taskEvent = TaskEvent.fromEventMessage(eventMessage = eventMessage)) {
+      when (val taskEvent = TaskEvent.fromPublishedLanguage(eventMessage = eventMessage)) {
         is TaskCreated ->
           taskEventInputBoundary.handle(event = taskEvent)
 

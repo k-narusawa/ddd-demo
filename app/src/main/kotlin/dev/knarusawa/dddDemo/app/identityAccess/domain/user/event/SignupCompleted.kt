@@ -45,26 +45,26 @@ data class SignupCompleted(
         occurredAt = LocalDateTime.now(),
       )
 
-    fun from(eventMessage: PLUserEvent) =
+    fun from(pl: PLUserEvent) =
       SignupCompleted(
-        eventId = UserEventId.from(value = eventMessage.eventId),
-        userId = UserId.from(value = eventMessage.userId),
-        type = UserEventType.valueOf(eventMessage.type.name),
-        username = Username.of(value = eventMessage.username),
-        emailVerified = eventMessage.emailVerified,
-        givenName = GivenName.of(value = eventMessage.givenName!!),
-        familyName = FamilyName.of(value = eventMessage.familyName!!),
-        loginFailureCount = LoginFailureCount.of(value = eventMessage.loginFailureCount),
+        eventId = UserEventId.from(value = pl.eventId),
+        userId = UserId.from(value = pl.userId),
+        type = UserEventType.valueOf(pl.type.name),
+        username = Username.of(value = pl.username),
+        emailVerified = pl.emailVerified,
+        givenName = GivenName.of(value = pl.givenName!!),
+        familyName = FamilyName.of(value = pl.familyName!!),
+        loginFailureCount = LoginFailureCount.of(value = pl.loginFailureCount),
         lastLoginFailedAt =
-          LastLoginFailedAt(ProtobufUtil.toLocalDateTime(eventMessage.lastLoginFailedAt)),
-        accountStatus = AccountStatus.valueOf(eventMessage.accountStatus.name),
-        occurredAt = ProtobufUtil.toLocalDateTime(eventMessage.occurredAt)!!,
+          LastLoginFailedAt(ProtobufUtil.toLocalDateTime(pl.lastLoginFailedAt)),
+        accountStatus = AccountStatus.valueOf(pl.accountStatus.name),
+        occurredAt = ProtobufUtil.toLocalDateTime(pl.occurredAt)!!,
       )
   }
 
-  override fun toEventMessage(): PLUserEvent {
-    val eventMessage = super.toEventMessage()
-    val builder = eventMessage.toBuilder()
+  override fun toPublishedLanguage(): PLUserEvent {
+    val pl = super.toPublishedLanguage()
+    val builder = pl.toBuilder()
     builder.setUsername(username.get())
     builder.setEmailVerified(emailVerified)
     builder.setGivenName(givenName.get())

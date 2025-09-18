@@ -18,7 +18,7 @@ class UserEventTest {
       val user = TestUserFactory.createUserInstance()
       val sut = SignupCompleted.of(user = user)
 
-      val actual = sut.toEventMessage()
+      val actual = sut.toPublishedLanguage()
 
       assertEquals(sut.eventId.get(), actual.eventId)
       assertEquals(sut.userId.get(), actual.userId)

@@ -18,20 +18,20 @@ sealed class UserEvent : DomainEvent<PLUserEvent> {
   companion object {
     fun deserialize(serialized: String) = JsonUtil.json.decodeFromString(serializer(), serialized)
 
-    fun from(eventMessage: PLUserEvent): UserEvent {
-      val eventType = UserEventType.valueOf(eventMessage.type.name)
+    fun from(pl: PLUserEvent): UserEvent {
+      val eventType = UserEventType.valueOf(pl.type.name)
       return when (eventType) {
-        UserEventType.SIGNE_UP_COMPLETED -> SignupCompleted.from(eventMessage)
-        UserEventType.USERNAME_CHANGED -> UsernameChanged.from(eventMessage)
-        UserEventType.LOGIN_SUCCEEDED -> LoginSucceeded.from(eventMessage)
-        UserEventType.LOGIN_FAILED -> LoginFailed.from(eventMessage)
+        UserEventType.SIGNE_UP_COMPLETED -> SignupCompleted.from(pl)
+        UserEventType.USERNAME_CHANGED -> UsernameChanged.from(pl)
+        UserEventType.LOGIN_SUCCEEDED -> LoginSucceeded.from(pl)
+        UserEventType.LOGIN_FAILED -> LoginFailed.from(pl)
       }
     }
   }
 
   override fun serialize() = JsonUtil.json.encodeToString(serializer(), this)
 
-  override fun toEventMessage(): PLUserEvent {
+  override fun toPublishedLanguage(): PLUserEvent {
     val builder = PLUserEvent.newBuilder()
     builder.setEventId(eventId.get())
     builder.setUserId(userId.get())

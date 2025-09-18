@@ -28,12 +28,12 @@ sealed class TaskEvent : DomainEvent<PLTaskEvent> {
   abstract val completed: Boolean
 
   companion object {
-    fun fromEventMessage(ba: ByteArray): TaskEvent {
-      val eventMessage = PLTaskEvent.parseFrom(ba)
-      return fromEventMessage(eventMessage)
+    fun fromPublishedLanguage(ba: ByteArray): TaskEvent {
+      val pl = PLTaskEvent.parseFrom(ba)
+      return fromPublishedLanguage(pl)
     }
 
-    fun fromEventMessage(eventMessage: PLTaskEvent): TaskEvent {
+    fun fromPublishedLanguage(eventMessage: PLTaskEvent): TaskEvent {
       val eventType = TaskEventType.valueOf(eventMessage.type.name)
       return when (eventType) {
         TaskEventType.TASK_CREATED ->

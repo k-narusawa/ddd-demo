@@ -41,24 +41,24 @@ data class LoginFailed(
       occurredAt = LocalDateTime.now(),
     )
 
-    fun from(eventMessage: PLUserEvent) =
+    fun from(pl: PLUserEvent) =
       LoginFailed(
-        eventId = UserEventId.from(value = eventMessage.eventId),
-        userId = UserId.from(value = eventMessage.userId),
-        type = UserEventType.valueOf(eventMessage.type.name),
-        loginFailureCount = LoginFailureCount.of(value = eventMessage.loginFailureCount),
+        eventId = UserEventId.from(value = pl.eventId),
+        userId = UserId.from(value = pl.userId),
+        type = UserEventType.valueOf(pl.type.name),
+        loginFailureCount = LoginFailureCount.of(value = pl.loginFailureCount),
         lastLoginFailedAt =
-          LastLoginFailedAt(ProtobufUtil.toLocalDateTime(eventMessage.lastLoginFailedAt)),
-        accountStatus = AccountStatus.valueOf(eventMessage.accountStatus.name),
-        userAgent = eventMessage.userAgent,
-        ipAddress = eventMessage.ipAddress,
-        occurredAt = ProtobufUtil.toLocalDateTime(eventMessage.occurredAt)!!,
+          LastLoginFailedAt(ProtobufUtil.toLocalDateTime(pl.lastLoginFailedAt)),
+        accountStatus = AccountStatus.valueOf(pl.accountStatus.name),
+        userAgent = pl.userAgent,
+        ipAddress = pl.ipAddress,
+        occurredAt = ProtobufUtil.toLocalDateTime(pl.occurredAt)!!,
       )
   }
 
-  override fun toEventMessage(): PLUserEvent {
-    val message = super.toEventMessage()
-    val builder = message.toBuilder()
+  override fun toPublishedLanguage(): PLUserEvent {
+    val pl = super.toPublishedLanguage()
+    val builder = pl.toBuilder()
     builder.setLoginFailureCount(loginFailureCount.get())
     lastLoginFailedAt.get()?.let {
       builder.setLastLoginFailedAt(ProtobufUtil.toTimestamp(it))

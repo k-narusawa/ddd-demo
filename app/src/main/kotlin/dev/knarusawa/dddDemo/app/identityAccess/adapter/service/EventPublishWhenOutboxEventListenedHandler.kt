@@ -18,7 +18,7 @@ class EventPublishWhenOutboxEventListenedHandler(
     when {
       UserEventType.isUserEventType(outbox.eventType) -> {
         val event = UserEvent.deserialize(serialized = outbox.event)
-        userEventPublisher.publish(event.toEventMessage().toByteArray())
+        userEventPublisher.publish(event.toPublishedLanguage().toByteArray())
       }
 
       else -> throw IllegalStateException("予期せぬイベント: ${outbox.eventType}")
